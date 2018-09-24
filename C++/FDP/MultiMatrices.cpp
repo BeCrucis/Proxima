@@ -25,8 +25,8 @@ int main() {
 	cout << "Su matriz es: " << endl;
 	for (int i = 1; i <= lx; ++i) {
 		for (int j = 1; j <= cx; ++j) {
-			cout << left << setw(2) << "| "
-				<< left << setw(5) << x[i][j] << " |";
+			cout << right << setw(2) << "| "
+				<< right << setw(5) << x[i][j] << " |";
 		}
 
 		cout << endl;
@@ -60,8 +60,8 @@ int main() {
 	cout << "Su matriz es: " << endl;
 	for (int i = 1; i <= ly; ++i) {
 		for (int j = 1; j <= cy; ++j) {
-			cout << left << setw(2) << "| "
-				<< left << setw(5)<< y[i][j] << " |";
+			cout << right << setw(2) << "| "
+				<< right << setw(5)<< y[i][j] << " |";
 		}
 
 		cout << endl;
@@ -98,8 +98,8 @@ int main() {
 	cout << "Su matriz resultado es: " << endl;
 	for (int i = 1; i <= lz; ++i) {
 		for (int j = 1; j <= cz; ++j) {
-			cout << left << setw(2) << "| "
-				<< left << setw(5) << z[i][j] << " |";
+			cout << right << setw(2) << "| "
+				<< right << setw(5) << z[i][j] << " |";
 		}
 
 		cout << endl;
