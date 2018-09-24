@@ -8,7 +8,7 @@ using namespace std;
 int main() {
 	int x[10][10], y[10][10], z[10][10], lx, cx, ly, cy, lz, cz, vc;
 
-	//Esto es un cambio2
+	//Esto es un cambio3
 
 	cout << "Inserte la cantidad de filas de su matriz x: ";
 	cin >> lx;
