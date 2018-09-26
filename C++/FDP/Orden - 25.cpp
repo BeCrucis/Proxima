@@ -71,41 +71,9 @@ void menor(int x[], int len) {
 
 }
 
-void binar(int x[], int len){
-	int bc = 2, lenc = len;
 
-	auto compare = [](int x[], int pos){ if(x[pos] < x[pos+1]){ return pos;}else{return pos+1;}};
 
-	while(bc < len){
-		bc = bc * 2;
-	}
 
-	while(bc > lenc){
-		x[lenc] = 999;
-		lenc += 1;
-	}
-
-	int y[lenc/2];
-	int compos = 0;
-
-	for(int i = 0;i < lenc/2; i +=1){
-		y[i] = compare(x,compos);
-		compos +=2;
-	}
-
-	cout << y[0] << " y " << y[1] << endl;
-}
-
-int recur(int x[], int lenc, int pos){
-
-	auto compare = [](int x[], int pos){ if(x[pos] < x[pos+1]){ return pos;}else{return pos+1;}};
-	int y[lenc];
-
-	if(lenc <= 2){
-		return compare(x, pos);
-	}
-
-}
 int main() {
 
 	int len, input, d;
@@ -145,8 +113,7 @@ int main() {
 		break;
 	case 2: inter(x, len);
 		break;
-	case 3: binar(x, len);
-		break;
+	
 
 	default: goto in;
 	}
