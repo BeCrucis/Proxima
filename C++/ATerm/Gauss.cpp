@@ -39,6 +39,7 @@ int main(){
 //WIP
     cc = 1; //Columna clave, columna en que debe aparecer un 1 en la matriz en funcion de la fila analizada
     for(int i = 1; i <= lx;++i ){
+
         if(cc == i || x[i][cc] != 1){ // Verifico si la coordenada es 1, si no lo es, multiplico toda la fila por su inversa
 
             di = 1/x[i][cc]; //Inversa del punto de la matriz que debe convertirse en 1
@@ -55,7 +56,10 @@ int main(){
 
             if(n != i){
                 nm = x[i][cc] * x[n][cc] * -1;
-                x[n][cc] = (x[i][cc] * nm) + x[n][cc];
+
+                for(int c = 1; c <= cx; ++c){
+                    x[n][c] = (x[i][c] * nm) + x[n][c];
+                }             
             }
         }
     cc += 1;
