@@ -27,11 +27,11 @@ void mostrar(long double x[][10], int cx, int lx, string prompt = "Resultado: ")
 }
 int main(){
 
-    long double x[10][10], di, nm, t[10];
-    int lx, cx, cc;
-    bool found;
+    long double x[10][10], di, nm, t[10]; // Establece valores como numeros reales, el long double indica que deben ser de alta precision
+    int lx, cx, cc; //Los enteros seran usados para contar filas y columnas
+    bool found; //Y un booleano para verificar parametros en un futuro
 
-    cout << "Inserte la cantidad de filas de su matriz x: ";
+    cout << "Inserte la cantidad de filas de su matriz x: "; //Empezamos pidiendo parametros de la matriz
 	cin >> lx;
 	cout << "Inserte la cantidad de columnas de su matriz x: ";
 	cin >> cx;
@@ -61,16 +61,16 @@ int main(){
         system("pause");
         return 0;
     }
-//WIP
-    cc = 1; //Columna clave, columna en que debe aparecer un 1 en la matriz en funcion de la fila analizada
+
+    cc = 1; //Columna clave, columna en que debe aparecer un 1 en la matriz en funcion de la fila analizada, para crear una matriz identidad
 
     for(int i = 1; i <= lx;++i ){
         
         if(cc == i && x[i][cc] == 0){ //Trata de arreglar las cosas si la variable que debe ser 1 es 0
 
-            found = false;
+            found = false; //Establece en una variable que la fila actual tiene un 0 donde no deberia estar
 
-            if(i < lx){ // Verifica si la fila con el 0 es la ultima, si no, busca filas para intercambiar
+            if(i < lx){ // Verifica si la fila con el 0 es la ultima, si no, busca filas para intercambiar y areglar el problema
                 for( int j = i + 1; j <= lx; ++j){
 
                     if(x[j][cc] > 0){
@@ -80,12 +80,12 @@ int main(){
                             x[i][k] = x[j][k];
                             x[j][k] = t[k];
                         }
-                    found = true;
+                    found = true; //Si logra arreglar el problema, establece en la varaible "found" que puede continuar normalmente
                     }
                 }
             }
 
-            if(found == false){  //Si no encuentra una fila sin 0 o esta en la ultima fila, o no hay soluciones o hay infinitas
+            if(found == false){  //Si no encuentra una fila para intercambiar valida (sin un 0 en la columna clave), o no hay soluciones o hay infinitas
                 cout << "Problema encontrado en la fila " << i << endl;
                 cout << "La matriz o tiene soluciones infinitas, o no tiene, verificando . . ." << endl;
 
@@ -107,7 +107,7 @@ int main(){
 
             for(int j = 1; j <= cx; ++j){
 
-                x[i][j] = x[i][j] * di; //Se multiplica toda la fila por esta inversa
+                x[i][j] = x[i][j] * di; //Se multiplica toda la fila por esta inversa, de manera que ahora tenemos el 1 que necesitamos
 
             }
    
