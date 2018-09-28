@@ -39,7 +39,7 @@ int main(){
     cx = cx + 1; // Esto añade una columna, que sera la que almacena las constantes
 
 	for (int i = 1; i <= lx; i++) { //Pide que se inserte la matriz
-        cc = 0;
+        
 		for (int j = 1; j <= cx; j++) {
             
             if(j != cx){
