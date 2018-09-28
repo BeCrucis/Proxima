@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void mostrar(double x[][10], int cx, int lx, string prompt = "Resultado: "){
+void mostrar(long double x[][10], int cx, int lx, string prompt = "Resultado: "){
 
     cout << endl << endl << prompt << endl;
     for (int i = 1; i <= lx; ++i) {
@@ -27,7 +27,7 @@ void mostrar(double x[][10], int cx, int lx, string prompt = "Resultado: "){
 }
 int main(){
 
-    double x[10][10], di, nm, t[10];
+    long double x[10][10], di, nm, t[10];
     int lx, cx, cc;
     bool found;
 
@@ -59,26 +59,36 @@ int main(){
     cc = 1; //Columna clave, columna en que debe aparecer un 1 en la matriz en funcion de la fila analizada
     for(int i = 1; i <= lx;++i ){
         
-        if(cc == i && x[i][cc] == 0 && i < lx){ //Trata de arreglar las cosas si la variable que debe ser 1 es 0
+        if(cc == i && x[i][cc] == 0){ //Trata de arreglar las cosas si la variable que debe ser 1 es 0
 
             found = false;
 
-            for( int j = i + 1; j <= lx; ++j){
+            if(i < lx){ // Verifica si la fila con el 0 es la ultima, si no, busca filas para intercambiar
+                for( int j = i + 1; j <= lx; ++j){
 
-                if(x[j][cc] > 0){
-                    for(int k = 1; k <= cx; ++k){
+                    if(x[j][cc] > 0){
+                        for(int k = 1; k <= cx; ++k){
 
-                        t[k] = x[i][k];
-                        x[i][k] = x[j][k];
-                        x[j][k] = t[k];
+                            t[k] = x[i][k];
+                            x[i][k] = x[j][k];
+                            x[j][k] = t[k];
+                        }
+                    found = true;
                     }
-                found = true;
                 }
             }
 
-            if(found == false){
+            if(found == false){  //Si no encuentra una fila sin 0 o esta en la ultima fila, o no hay soluciones o hay infinitas
                 cout << "Problema encontrado en la fila " << i << endl;
                 cout << "La matriz o tiene soluciones infinitas, o no tiene, verificando . . ." << endl;
+
+                if(x[lx][cx] != 0){
+                    cout << "El sistema no tiene soluciones! " << endl;
+                }
+
+                else{
+                    cout << "El sistema tiene infinitas soluciones!" << endl;
+                }
                 system("pause");
                 return 0;
             }
@@ -108,15 +118,9 @@ int main(){
         }
     cc += 1;
 
-    cout << endl << endl << "Paso numero "<< i << " : " << endl;
-    for (int i = 1; i <= lx; ++i) {
-		for (int j = 1; j <= cx; ++j) {
-			cout << right << setw(2) << "| "
-				<< right << setw(9) << x[i][j] << " |";
-		}
+    string paso = string("Paso numero ") + to_string(i);
 
-		cout << endl;
-    }
+    mostrar(x, cx, lx , paso);
 
     }
 
