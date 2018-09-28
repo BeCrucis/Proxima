@@ -7,7 +7,7 @@ using namespace std;
 
 int main(){
 
-    double x[10][10], y[10][10];
+    double x[10][10], di, nm;
     int lx, cx, cc;
 
     cout << "Inserte la cantidad de filas de su matriz x: ";
@@ -37,24 +37,36 @@ int main(){
 		cout << endl;
     }
 //WIP
-    for(int i = 1; i <= lx; ++i){
-        for(int j = 1; j <= cx; ++j){
+    cc = 1; //Columna clave, columna en que debe aparecer un 1 en la matriz en funcion de la fila analizada
+    for(int i = 1; i <= lx;++i ){
+        if(cc == i || x[i][cc] != 1){ // Verifico si la coordenada es 1, si no lo es, multiplico toda la fila por su inversa
 
-            if(i == j || x[i][j] != 1){
+            di = 1/x[i][cc]; //Inversa del punto de la matriz que debe convertirse en 1
 
-                for(int k = 1; k <= cx; ++k){
-                    x[i][k] = x[i][k] * (1/x[i][j]);
-                    
-                }
+            for(int j = 1; j <= cx; ++j){
+
+                x[i][j] = x[i][j] * di; //Se multiplica toda la fila por esta inversa
+
+            }
+   
+        }
+
+        for (int n = 1;n <= lx; ++n ){
+
+            if(n != i){
+                nm = x[i][cc] * x[n][cc] * -1;
+                x[n][cc] = (x[i][cc] * nm) + x[n][cc];
             }
         }
+    cc += 1;
     }
+
 
     cout << endl << endl << "Resultado: " << endl;
     for (int i = 1; i <= lx; ++i) {
 		for (int j = 1; j <= cx; ++j) {
 			cout << right << setw(2) << "| "
-				<< right << setw(5) << x[i][j] << " |";
+				<< right << setw(9) << x[i][j] << " |";
 		}
 
 		cout << endl;
