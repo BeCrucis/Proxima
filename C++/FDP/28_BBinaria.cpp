@@ -24,10 +24,23 @@ int main() {
 		vm = (vi + vf) / 2;
 
 		if (v[vm] == y) {
-			cout << "He encontrado y!!!!: " << y << endl;
+			cout << "He encontrado y en la posicion: " << vm << endl;
 			system("pause");
 			return 0;
 		}
+
+		else if (v[vm + 1] == y) {
+			cout << "He encontrado y en la posicion: " << vm + 1 << endl;
+			system("pause");
+			return 0;
+		}
+
+		else if (v[vm - 1] == y) {
+			cout << "He encontrado y en la posicion: " << vm - 1 << endl;
+			system("pause");
+			return 0;
+		}
+
 		else if (y < v[vm]) {
 			vf = vm;
 		}

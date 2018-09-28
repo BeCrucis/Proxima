@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void mostrar(long double x[][10], int cx, int lx, string prompt = "Resultado: "){ //Esta es una funcion que muestra matrices, por ahora puede ser ignorada
+void mostrar(long double x[][10], int cx, int lx, string prompt = "Resultado: "){ //Esta es una funcion que muestra matrices
 
     cout << endl << endl << prompt << endl;
     for (int i = 1; i <= lx; ++i) {
@@ -80,7 +80,7 @@ int main(){
                             x[i][k] = x[j][k];
                             x[j][k] = t[k];
                         }
-                    found = true; //Si logra arreglar el problema, establece en la varaible "found" que puede continuar normalmente
+                    found = true; //Si logra arreglar el problema, establece en la variable "found" que puede continuar normalmente
                     }
                 }
             }
