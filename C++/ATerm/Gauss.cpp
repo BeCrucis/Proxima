@@ -6,6 +6,7 @@
 
 using namespace std;
 
+
 void mostrar(long double x[][10], int cx, int lx, string prompt = "Resultado: "){ //Esta es una funcion que muestra matrices
 
     cout << endl << endl << prompt << endl;
@@ -27,7 +28,7 @@ void mostrar(long double x[][10], int cx, int lx, string prompt = "Resultado: ")
 }
 int main(){
 
-    long double x[10][10], di, nm, t[10]; // Establece valores como numeros reales, el long double indica que deben ser de alta precision
+    long double x[10][10], di, nm, t[10], de; // Establece valores como numeros reales, el long double indica que deben ser de alta precision
     int lx, cx, cc; //Los enteros seran usados para contar filas y columnas
     bool found; //Y un booleano para verificar parametros en un futuro
 
@@ -65,7 +66,9 @@ int main(){
     cc = 1; //Columna clave, columna en que debe aparecer un 1 en la matriz en funcion de la fila analizada, para crear una matriz identidad
 
     for(int i = 1; i <= lx;++i ){
-        
+
+        string paso = string("Paso numero ") + to_string(i);
+
         if(cc == i && x[i][cc] == 0){ //Trata de arreglar las cosas si la variable que debe ser 1 es 0
 
             found = false; //Establece en una variable que la fila actual tiene un 0 donde no deberia estar
@@ -104,10 +107,11 @@ int main(){
         if(cc == i && x[i][cc] != 1){ // Verifico si la coordenada es 1, si no lo es, multiplico toda la fila por su inversa
 
             di = 1/x[i][cc]; //Inversa del punto de la matriz que debe convertirse en 1
-
+            de  = x[i][cc];
             for(int j = 1; j <= cx; ++j){
 
                 x[i][j] = x[i][j] * di; //Se multiplica toda la fila por esta inversa, de manera que ahora tenemos el 1 que necesitamos
+                cout << "Divido " << x[i][j] << " entre " << de << endl;
 
             }
    
@@ -120,15 +124,16 @@ int main(){
 
                 for(int c = 1; c <= cx; ++c){
                     x[n][c] = (x[i][c] * nm) + x[n][c]; //nm veces la fila fi + la fila fn
-                }             
+                }
+                mostrar(x, cx, lx , paso);             
             }
         }
     cc += 1; //Pasa a la siguiente columna clave, en resumen, hace que los 1 esten en diagonal, 
              //creando una matriz identidad con las constantes a la derecha
 
-    string paso = string("Paso numero ") + to_string(i); //Muestra la matriz con la fila i despejada
+    
 
-    mostrar(x, cx, lx , paso);
+    mostrar(x, cx, lx , paso);  //Muestra la matriz con la fila i despejada
     cout << endl;
     }
 
