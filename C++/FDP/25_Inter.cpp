@@ -2,7 +2,7 @@
 #include <math.h>
 #include <iomanip>
 #include <string>
-#include <mpirxx.h>
+
 
 using namespace std;
 

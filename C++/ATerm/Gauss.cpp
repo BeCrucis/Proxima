@@ -5,7 +5,7 @@
 #include <string>
 #include <quadmath.h>
 
-
+#define __float128 long double //Arreglo para VSCode, quitar para mayor precision al compilar
 
 using namespace std;
 
@@ -17,8 +17,9 @@ void mostrar(__float128 x[][10], int cx, int lx, string prompt = "Resultado: "){
 		for (int j = 1; j <= cx; ++j) {
 
       long double temp = static_cast<long double>(x[i][j]);
-			std::cout << right << setw(2) << "| "
-				<< right << setw(13) << temp << " |";
+      cout.precision(10);
+			cout << right << setw(2) << "| "
+				<< right << setw(10) << temp << " |";
 		}
 
 		cout <<  endl;
@@ -133,6 +134,9 @@ int main(){
 
                 for(int c = 1; c <= cx; ++c){
                     x[n][c] = (x[i][c] * nm) + x[n][c]; //nm veces la fila fi + la fila fn
+                    if(x[n][c] < 1e-10 && x[n][c] > -1e-10){
+                      x[n][c] = 0;
+                    }
                 }
                 mostrar(x, cx, lx , paso);
             }
