@@ -2,6 +2,7 @@
 #include <math.h>
 #include <iomanip>
 #include <string>
+#include <mpirxx.h>
 
 using namespace std;
 
@@ -113,7 +114,7 @@ int main() {
 		break;
 	case 2: inter(x, len);
 		break;
-	
+
 
 	default: goto in;
 	}

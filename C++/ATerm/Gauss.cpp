@@ -3,17 +3,22 @@
 #include <windows.h>
 #include <iomanip>
 #include <string>
+#include <quadmath.h>
+
+
 
 using namespace std;
 
 
-void mostrar(long double x[][10], int cx, int lx, string prompt = "Resultado: "){ //Esta es una funcion que muestra matrices
+void mostrar(__float128 x[][10], int cx, int lx, string prompt = "Resultado: "){ //Esta es una funcion que muestra matrices
 
     cout << endl << endl << prompt << endl;
     for (int i = 1; i <= lx; ++i) {
 		for (int j = 1; j <= cx; ++j) {
-			cout << right << setw(2) << "| "
-				<< right << setw(9) << x[i][j] << " |";
+
+      long double temp = static_cast<long double>(x[i][j]);
+			std::cout << right << setw(2) << "| "
+				<< right << setw(13) << temp << " |";
 		}
 
 		cout <<  endl;
@@ -24,13 +29,15 @@ void mostrar(long double x[][10], int cx, int lx, string prompt = "Resultado: ")
 			cout << "---------";
 		}
 		cout << endl;
-    
+
 }
 int main(){
 
-    long double x[10][10], di, nm, t[10], de; // Establece valores como numeros reales, el long double indica que deben ser de alta precision
+    __float128 x[10][10], t[10];
+    long double di, nm, temp; // Establece valores como numeros reales, el long double indica que deben ser de alta precision
     int lx, cx, cc; //Los enteros seran usados para contar filas y columnas
     bool found; //Y un booleano para verificar parametros en un futuro
+    string stemp;
 
     cout << "Inserte la cantidad de filas de su matriz x: "; //Empezamos pidiendo parametros de la matriz
 	cin >> lx;
@@ -40,16 +47,18 @@ int main(){
     cx = cx + 1; // Esto añade una columna, que sera la que almacena las constantes
 
 	for (int i = 1; i <= lx; i++) { //Pide que se inserte la matriz
-        
+
 		for (int j = 1; j <= cx; j++) {
-            
+
             if(j != cx){
                 cout << "Inserte la variable en [" << i << "][" << j << "] : ";
-                cin >> x[i][j];
+                cin >> temp;
+                x[i][j] = temp;
             }
             else{
                 cout << "Inserte la solucion en la coordenada [" << i << "][" << j << "] : ";
-                cin >> x[i][j];
+                cin >> temp;
+                x[i][j] = temp;
             }
 
 		}
@@ -107,14 +116,14 @@ int main(){
         if(cc == i && x[i][cc] != 1){ // Verifico si la coordenada es 1, si no lo es, multiplico toda la fila por su inversa
 
             di = 1/x[i][cc]; //Inversa del punto de la matriz que debe convertirse en 1
-            de  = x[i][cc];
+
             for(int j = 1; j <= cx; ++j){
 
                 x[i][j] = x[i][j] * di; //Se multiplica toda la fila por esta inversa, de manera que ahora tenemos el 1 que necesitamos
-                cout << "Divido " << x[i][j] << " entre " << de << endl;
+
 
             }
-   
+
         }
 
         for (int n = 1;n <= lx; ++n ){ // Ahora reduzco el resto de elementos de la columna a 0 para obtener la forma escalonada completa
@@ -125,13 +134,13 @@ int main(){
                 for(int c = 1; c <= cx; ++c){
                     x[n][c] = (x[i][c] * nm) + x[n][c]; //nm veces la fila fi + la fila fn
                 }
-                mostrar(x, cx, lx , paso);             
+                mostrar(x, cx, lx , paso);
             }
         }
-    cc += 1; //Pasa a la siguiente columna clave, en resumen, hace que los 1 esten en diagonal, 
+    cc += 1; //Pasa a la siguiente columna clave, en resumen, hace que los 1 esten en diagonal,
              //creando una matriz identidad con las constantes a la derecha
 
-    
+
 
     mostrar(x, cx, lx , paso);  //Muestra la matriz con la fila i despejada
     cout << endl;
