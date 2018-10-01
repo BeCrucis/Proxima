@@ -86,7 +86,7 @@ int main(){
             if(i < lx){ // Verifica si la fila con el 0 es la ultima, si no, busca filas para intercambiar y areglar el problema
                 for( int j = i + 1; j <= lx; ++j){
 
-                    if(x[j][cc] > 0){
+                    if(x[j][cc] != 0){
                         for(int k = 1; k <= cx; ++k){
 
                             t[k] = x[i][k];
