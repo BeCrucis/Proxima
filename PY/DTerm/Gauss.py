@@ -15,7 +15,7 @@ def mostrar(x, fx, cx, prompt):
       print("|{:^9}|".format(s), end = "")
     print()
     for c in range(cx+1):
-      print("".rjust(8, "-"), end = "-")
+      print("".rjust(8, "-"), end = "")
     print()
     
   espacio(1)  
@@ -53,8 +53,8 @@ def main():
 
             if found == False:
                 print("La matriz o no tiene soluciones o tiene infinitas soluciones, imprimiendo . . .")
-                mostrar(x, fx)
-                os.system("pause")
+                mostrar(x, fx, cx, "Matriz resultante:")
+                return 0
 
         if x[f][cc] != 1 and cc == f: #Verifica la coordenada que deberia ser 1, sino, la convierte en 1
 
@@ -87,3 +87,4 @@ def main():
 
 
 main()
+os.system("pause")
