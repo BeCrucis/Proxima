@@ -1,13 +1,24 @@
 import os
-import sys
 import fractions as fs
 
-def mostrar(x, fx):
-    for f in range(fx):
-        print(x[f])
-    print()
+def espacio(x = 1):
+  for _ in range(x):
     print()
 
+def mostrar(x, fx, cx, prompt):
+  print(prompt)
+  espacio(1)
+
+  for f in range(fx):
+    for c in range(cx):
+      s = str(x[f][c])
+      print("|{:^9}|".format(s), end = "")
+    print()
+    for c in range(cx+1):
+      print("".rjust(8, "-"), end = "-")
+    print()
+    
+  espacio(1)  
 
 def main():
 
@@ -23,7 +34,7 @@ def main():
 
     cx = cx + 1
 
-    mostrar(x, fx)
+    mostrar(x, fx, cx, "Su matriz es :")
 
     cc = 0
 
@@ -59,15 +70,19 @@ def main():
 
                 mu = fs.Fraction(-1 * x[f2][cc], 1)
 
-                print(mu)
+               
 
                 for c2 in range(cx):
                     x[f2][c2] = fs.Fraction(x[f][c2] * mu, 1) + fs.Fraction(x[f2][c2], 1)
-                    print(x[f2])
-                    print("-----------")
+                    
+                    
         cc = cc + 1
 
-    mostrar(x, fx)
+    mostrar(x, fx, cx, "Resultado:")
+
+    for c in range(cc):
+      print("X{} = {}".format(c+1, x[c][cx-1]))
+
 
 
 
