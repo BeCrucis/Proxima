@@ -1,8 +1,6 @@
 // Arboles  bien crack
 
 #include <iostream>
-#include <mpir.h>
-#include <mpirxx.h>
 #include <quadmath.h>
 
 using namespace std;
@@ -11,9 +9,12 @@ using namespace std;
 
 int main() {
 
-__float128 a;
+int a = 10;
+int b = 20;
 
-cout << sizeof(a) << endl;
+swap(a,b);
+
+cout << a << endl;
 
 
   return 0;

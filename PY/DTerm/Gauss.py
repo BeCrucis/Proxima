@@ -82,6 +82,7 @@ def main():
 
         cc = cc + 1
 
+
     mostrar(x, fx, cx, "Resultado:")
 
     for c in range(cc):
