@@ -10,7 +10,6 @@ def icreator(largo,min=0,max=99):
 
 def sort(input):
     print(input)
-    pasos = 0
 
     ilength = len(input)
     for x in range(ilength):

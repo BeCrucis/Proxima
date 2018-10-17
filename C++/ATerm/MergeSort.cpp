@@ -16,7 +16,7 @@ void mostrar(int c[], int lc){
 
 void sort(int c[], int l, int m, int h){
 
-  int t[100], lc, p, hc;
+  int t[h], lc, p, hc;
 
   lc = l;
   p = l;
