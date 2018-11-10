@@ -1,21 +1,19 @@
 // Arboles  bien crack
 
 #include <iostream>
-#include <quadmath.h>
+#include <iomanip>
+#include <windows.h>
 
 using namespace std;
 
+int main(){ 
+  
+  int n = 1;
+  int b = 2;
 
+  swap(n,b);
 
-int main() {
-
-int a = 10;
-int b = 20;
-
-swap(a,b);
-
-cout << a << endl;
-
-
-  return 0;
+  cout << b << endl;
+  
 }
+
