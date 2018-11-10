@@ -1,13 +1,27 @@
 import os, sys
 import fractions as fs
+import numpy as np
+import pprint as pr
+import FunctionHolder as fh
+import configparser as cpr
 
 
-x = fs.Fraction(1 , 1)
+config = cpr.ConfigParser()
 
-print(x)
+if not os.path.exists("test.ini"):
+    config["PARTE1"] = {"TESTBOOL" : 1, "TESTVAR" : "19", "TESTSTRING" : "Hola!"} 
 
-if x == 1:
-    print("Soy gran soldador")
+    with open("test.ini", "w") as configfile:
+        config.write(configfile)
 
-for x in range(8):
-    print(x)
+
+config.read("test.ini")
+print (config.sections())
+
+config["PARTE1"]["TESTBOOL"] = "5"
+print(config["PARTE1"]["TESTBOOL"])
+
+with open("test.ini", "w") as configfile:
+    config.write(configfile)
+
+print(config["PARTE1"]["TESTVAR"])

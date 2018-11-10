@@ -41,6 +41,14 @@ def main():
 
     mostrar(x, fx, cx, "Su matriz es :")
 
+
+    if fx + 1 < cx:
+        print("Filas menores que columnas detectadas")
+        print("La matriz tiene infinitas soluciones")
+        mostrar(x, fx, cx, "Matriz resultado: ")
+        return 0
+
+
     cc = 0
 
     for f in range(fx):  # Va por cada fila de la matriz
@@ -57,8 +65,12 @@ def main():
                         found = True
 
             if found == False:
-                print(
-                    "La matriz o no tiene soluciones o tiene infinitas soluciones, imprimiendo . . .")
+                print("La matriz o no tiene soluciones o tiene infinitas soluciones, detectando . . .\n")
+
+                if x[f][cx-1] == 0:
+                    print("La matriz tiene infinitos resultados")
+                else:
+                    print("La matriz no tiene resultados")
                 mostrar(x, fx, cx, "Matriz resultante:")
                 return 0
 
