@@ -13,7 +13,9 @@ int main(){
 
   outfile.close();
 
-cout << remove("Test.txt") << endl;
+  system("pause");
+
+  remove("Test.txt");
 
 
 

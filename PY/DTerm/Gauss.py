@@ -16,6 +16,7 @@ def mostrar(x, fx, cx, prompt):
             s = str(x[f][c])
             print("|{:^9}|".format(s), end="")
         print()
+        
         for c in range(cx + 1):
             print("".rjust(8, "-"), end="")
         print()

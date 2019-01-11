@@ -2,6 +2,8 @@ import os
 import sys
 import random
 
+dados = 3
+
 
 def generador(dados=2):
     result = []
@@ -11,13 +13,13 @@ def generador(dados=2):
     return result
 
 
-def main(intentos = 10000):
+def main(intentos = 100000):
     print("Calculador de probabilidades con dados!")
     success = 0
     for _ in range(intentos):
 
         try:
-            generador(4).index(random.randint(1, 6))
+            generador(dados).index(random.randint(1, 6))
             success += 1
         except:
             pass

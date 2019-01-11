@@ -60,6 +60,6 @@ int main(){
 
   }
 
-  _getwch();
+  cin.get();
   return 0;
   }

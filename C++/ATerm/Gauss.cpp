@@ -19,7 +19,7 @@ void mostrar(__float128 x[][10], int cx, int lx, string prompt = "Resultado: "){
       long double temp = static_cast<long double>(x[i][j]);
       cout.precision(10);
 			cout << right << setw(2) << "| "
-				<< right << setw(10) << temp << " |";
+			<< right << setw(10) << temp << " |";
 		}
 
 		cout <<  endl;
@@ -27,40 +27,41 @@ void mostrar(__float128 x[][10], int cx, int lx, string prompt = "Resultado: "){
 
     for (int n = 1; n <= cx; ++n) {
 
-			cout << "---------";
+		cout << "---------";
 		}
 		cout << endl;
 
 }
 int main(){
 
-    __float128 x[10][10], t[10];
-    long double di, nm, temp; // Establece valores como numeros reales, el long double indica que deben ser de alta precision
-    int lx, cx, cc; //Los enteros seran usados para contar filas y columnas
-    bool found; //Y un booleano para verificar parametros en un futuro
-    string stemp;
+  __float128 x[10][10], t[10];
+  long double di, nm, temp; // Establece valores como numeros reales, el long double indica que deben ser de alta precision
+  int lx, cx, cc; //Los enteros seran usados para contar filas y columnas
+  bool found; //Y un booleano para verificar parametros en un futuro
+  string stemp;
 
-    cout << "Inserte la cantidad de filas de su matriz x: "; //Empezamos pidiendo parametros de la matriz
+  cout << "Inserte la cantidad de filas de su matriz x: "; //Empezamos pidiendo parametros de la matriz
 	cin >> lx;
 	cout << "Inserte la cantidad de columnas de su matriz x: ";
 	cin >> cx;
 
-    cx = cx + 1; // Esto añade una columna, que sera la que almacena las constantes
+  cx = cx + 1; // Esto añade una columna, que sera la que almacena las constantes
 
 	for (int i = 1; i <= lx; i++) { //Pide que se inserte la matriz
 
 		for (int j = 1; j <= cx; j++) {
 
-            if(j != cx){
-                cout << "Inserte la variable en [" << i << "][" << j << "] : ";
-                cin >> temp;
-                x[i][j] = temp;
-            }
-            else{
-                cout << "Inserte la solucion en la coordenada [" << i << "][" << j << "] : ";
-                cin >> temp;
-                x[i][j] = temp;
-            }
+      if(j != cx){
+        cout << "Inserte la variable en [" << i << "][" << j << "] : ";
+        cin >> temp;
+        x[i][j] = temp;
+      }
+
+      else{
+        cout << "Inserte la solucion en la coordenada [" << i << "][" << j << "] : ";
+        cin >> temp;
+        x[i][j] = temp;
+      }
 
 		}
 	}
