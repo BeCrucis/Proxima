@@ -9,19 +9,26 @@ using namespace std;
 void mostrar(long double x[][10], int cx, int lx, string prompt = "Resultado: "){ //Esta es una funcion que muestra matrices
 
     cout << endl << endl << prompt << endl;
+    for (int n = 1; n <= cx; ++n) {
+
+		cout << "--------------";
+		}
+		cout << endl;
+
     for (int i = 1; i <= lx; ++i) {
 		for (int j = 1; j <= cx; ++j) {
 			cout << right << setw(2) << "| "
 			<< right << setw(10) << x[i][j] << " |";
 		}
 
-		cout <<  endl;
-    }
-
-    for (int n = 1; n <= cx; ++n) {
+        cout << endl;
+        for (int n = 1; n <= cx; ++n) {
 
 		cout << "--------------";
 		}
+
+		cout << endl;
+    }
 		cout << endl;
 
 }
@@ -91,7 +98,7 @@ int main(){
 
                             filatemp[z] = identidad[i][z];
                             identidad[i][z] = identidad[j][z];
-                            identidad[j][i] = filatemp[z];
+                            identidad[j][z] = filatemp[z];
                         }
                     }
 
