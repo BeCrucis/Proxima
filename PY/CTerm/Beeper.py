@@ -1,20 +1,22 @@
 import winsound
+import urllib.request as ulib
 import os
 import sys
 import time
 
 defaultTime = 100
-pathOutput = "c++.txt"
+pathOutput = "G:/Programs/c++.txt"
+url = "https://pianoletternotes.blogspot.com/2018/07/fortnite-default-dance.html"
+play = "1"
 
-frequencies = {
-"c0" : 16, 
+frequencies = {"c0" : 16, 
 "C0" : 17, 
 "d0" : 18, 
 "D0" : 19, 
 "e0" : 20, 
 "f0" : 21, 
 "F0" : 23, 
-"G0" : 24, 
+"g0" : 24, 
 "G0" : 25, 
 "a0" : 27, 
 "A0" : 29, 
@@ -114,13 +116,18 @@ frequencies = {
 "G8" : 6644, 
 "a8" : 7040, 
 "A8" : 7458, 
-"b8" : 7902}
+"b8" : 7902
+}
 
 def blockextractor(path):
     blocks = []
-    with open(path) as f:
-        text = f.read().splitlines()
-        temp = []
+    temp = []
+
+    try:
+        with open(path) as f:
+            text = f.read().splitlines()
+    except:
+        text = path
 
         for line in text:
             if line:
@@ -138,30 +145,86 @@ def block2letter(block):
         octave = str(line[:1])
         characters = line[2:-1]
         for charIndex in range(len(characters)):
-            if characters[charIndex] != "-":
+            if characters[charIndex] != "-" and letters[charIndex] == "-":
                 letters[charIndex] = f"{characters[charIndex]}{octave}"
     return letters
 
+def url2string(url):
 
-blocks = blockextractor("F:/Downloads/Carpetas/Programs/Programming/PY/CTerm/Music.txt")
+    html = ulib.urlopen(url).read().splitlines()
+    searchParam = "<br />"
+    emptyParam = "b'<br />'"
+    foundLines = []
+    parsedLines = []
 
+    for line in html:
+        line = str(line)
+        if searchParam in line:
+            foundLines.append(line)
+        
+    for line in foundLines:
 
-#for block in blocks:
-#    letters = block2letter(block)
-#    for letter in letters:
-#        if letter != "-":
-#            winsound.Beep(frequencies[letter], defaultTime)
-#        else:
-#            time.sleep(defaultTime/1000)
+        if line != emptyParam:
+            firstSweep = line.split("<")
+            secondSweep = firstSweep[1].split(">")
 
-with open(pathOutput, "w") as f:
+            parsedLine = secondSweep[1]
+            parsedLines.append(parsedLine)
+       
+        else:
+            parsedLines.append("")
+    
+    return parsedLines
 
-    for block in blocks:
-        letters = block2letter(block)
-        for letter in letters:
-            if letter != "-":
-                f.write(f"Beep({frequencies[letter]},{defaultTime});\n")
-            else:
-                f.write(f"Sleep({defaultTime});\n")
+def main():
+    #blocks = blockextractor("F:/Downloads/wii.txt")
+    while True:
+        os.system("cls")
+        print(r"""
+        _______  _______  _______  _______  __   __  
+        |  _    ||       ||       ||       ||  | |  |
+        | |_|   ||    ___||    ___||    _  ||  |_|  |
+        |       ||   |___ |   |___ |   |_| ||       |
+        |  _   | |    ___||    ___||    ___||_     _|
+        | |_|   ||   |___ |   |___ |   |      |   |  
+        |_______||_______||_______||___|      |___|  
 
+        [URL IMPORTADAS DE PIANOLETTERNOTES.BLOGSPOT]
+                    """)
 
+        play = input("0 = Exportar archivo de texto para C++ | 1 = Tocar cancion: ")
+        if play == "0":
+            outputName = input("Inserte el camino a donde exportar el archivo: ")
+            pathOutput = f"{os.path.dirname(os.path.realpath(__file__))}/{outputName}.txt"
+            print(f"El archivo sera importado a {pathOutput}")
+
+        path = input("Inserte el camino o URL de la cancion: ")
+
+        if path[:4] == "http":
+            blocks = blockextractor(url2string(path))
+        else:
+            blocks = blockextractor(path)
+
+        if play == "1":
+            for block in blocks:
+                letters = block2letter(block)
+                for letter in letters:
+                    if letter != "-":
+                        winsound.Beep(frequencies[letter], defaultTime)
+                    else:
+                        time.sleep(defaultTime/1000)
+
+        elif play == "0":
+            with open(pathOutput, "w") as f:
+
+                for block in blocks:
+                    letters = block2letter(block)
+                    for letter in letters:
+                        if letter != "-":
+                            f.write(f"Beep({frequencies[letter]},{defaultTime});\n")
+                        else:
+                            f.write(f"Sleep({defaultTime});\n")
+        else:
+            break
+
+main()
