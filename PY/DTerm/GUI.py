@@ -14,7 +14,7 @@ def main():
     root.title("REGISTRADORA <{}>  [Versión {} ({})]\n".format(WBNAME, VER, VERDATE))
     root.minsize(900, 600)
 
-    def sound():
+    def sound():asds
 
         mixer.init()
         mixer.music.load('sound.mp3')
@@ -24,7 +24,6 @@ def main():
     button = ttk.Button(root, text = "Tocadme", command = sound)
     button.grid(column = 1, row = 1)
 
-    
     for n in range(2, 30):
 
         label = ttk.Label(root, text = "Linea #{}".format(n))
