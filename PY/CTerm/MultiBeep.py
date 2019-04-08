@@ -1,13 +1,18 @@
-import winsound
-import urllib.request as ulib
 import os
 import sys
 import time
+import urllib.request as ulib
+import winsound
+from multiprocessing.dummy import Pool as ThreadPool
+
+import math
+import wave
+import struct
 
 defaultTime = 100
 pathOutput = "G:/Programs/c++.txt"
-url = "https://pianoletternotes.blogspot.com/2018/07/fortnite-default-dance.html"
-play = "1"
+sample_rate = 44100.0
+
 
 frequencies = {"c0" : 16, 
 "C0" : 17, 
@@ -138,16 +143,32 @@ def blockextractor(path):
         
     return blocks
 
-def block2letter(block):
-    letters = ["-"] * 26
+def block2letter(block, multiVoices = False):
 
-    for line in block:
-        octave = str(line[:1])
-        characters = line[2:-1]
-        for charIndex in range(len(characters)):
-            if characters[charIndex] != "-" and letters[charIndex] == "-":
-                letters[charIndex] = f"{characters[charIndex]}{octave}"
-    return letters
+    if not multiVoices:
+        letters = ["-"]*26
+
+        for line in block:
+            octave = str(line[:1])
+            characters = line[2:-1]
+            for charIndex in range(len(characters)):
+                if characters[charIndex] != "-" and letters[charIndex] == "-":
+                    letters[charIndex] = f"{characters[charIndex]}{octave}"
+        return letters
+    
+    else:
+        letters = [["-"]*26 for voice in range(len(block))]
+
+        voiceIndex = 0
+        for line in block:
+            octave = str(line[:1])
+            characters = line[2:-1]
+            for charIndex in range(len(characters)):
+                if characters[charIndex] != "-":
+                    letters[voiceIndex][charIndex] = f"{characters[charIndex]}{octave}"
+            voiceIndex += 1
+        return letters
+
 
 def url2string(url):
 
@@ -176,8 +197,72 @@ def url2string(url):
     
     return parsedLines
 
+def letters2sound(letters):
+    for letter in letters:
+            if letter != "-":                       
+                winsound.Beep(frequencies[letter], defaultTime)
+            else:
+                time.sleep(defaultTime/1000)
+
+#################################################################################################
+
+def append_silence(audio, duration_milliseconds=500):
+    """
+    Adding silence is easy - we add zeros to the end of our array
+    """
+    num_samples = duration_milliseconds * (sample_rate / 1000.0)
+
+    for x in range(int(num_samples)): 
+        audio.append(0.0)
+
+def append_sinewave(audio, freq=440.0, duration_milliseconds=500, volume=1.0):
+    """
+    The sine wave generated here is the standard beep.  If you want something
+    more aggresive you could try a square or saw tooth waveform.   Though there
+    are some rather complicated issues with making high quality square and
+    sawtooth waves... which we won't address here :) 
+    """ 
+
+    #global audio # using global variables isn't cool.
+
+    num_samples = duration_milliseconds * (sample_rate / 1000.0)
+
+    for x in range(int(num_samples)):
+        audio.append(volume * math.sin(2 * math.pi * freq * ( x / sample_rate )))
+
+
+def save_wav(audio, file_name):
+    # Open up a wav file
+    wav_file=wave.open(file_name,"w")
+
+    # wav params
+    nchannels = 1
+
+    sampwidth = 2
+
+    # 44100 is the industry standard sample rate - CD quality.  If you need to
+    # save on file size you can adjust it downwards. The stanard for low quality
+    # is 8000 or 8kHz.
+    nframes = len(audio)
+    comptype = "NONE"
+    compname = "not compressed"
+    wav_file.setparams((nchannels, sampwidth, sample_rate, nframes, comptype, compname))
+
+    # WAV files here are using short, 16 bit, signed integers for the 
+    # sample size.  So we multiply the floating point data we have by 32767, the
+    # maximum value for a short integer.  NOTE: It is theortically possible to
+    # use the floating point -1.0 to 1.0 data directly in a WAV file but not
+    # obvious how to do that using the wave module in python.
+    for sample in audio:
+        wav_file.writeframes(struct.pack('h', int( sample * 32767.0 )))
+
+    wav_file.close()
+
+#################################################################################################
+
 def main():
     #blocks = blockextractor("F:/Downloads/wii.txt")
+
     while True:
         os.system("cls")
         print(r"""
@@ -206,17 +291,14 @@ def main():
             blocks = blockextractor(path)
 
         if play == "1":
-            
-
+        
             for block in blocks:
                 letters = block2letter(block)
-                for letter in letters:
-                    if letter != "-":
-                        
-                        winsound.Beep(frequencies[letter], defaultTime)
-                    else:
-                        time.sleep(defaultTime/1000)
-
+                voices = block2letter(block, True)
+                
+                pool = ThreadPool(len(voices))
+                pool.map(letters2sound, voices)
+                
         elif play == "0":
             with open(pathOutput, "w") as f:
 
@@ -227,6 +309,19 @@ def main():
                             f.write(f"Beep({frequencies[letter]},{defaultTime});\n")
                         else:
                             f.write(f"Sleep({defaultTime});\n")
+        elif play == "2":
+            
+            audio = []
+
+            for block in blocks:
+                voices = block2letter(block, True)
+
+            append_sinewave(audio, 1000, 500)
+            append_silence(audio, 600)
+            append_sinewave(audio, 1000, 500)
+            append_sinewave(audio, 1500, 500)
+            save_wav(audio, "sugfa.wav")
+
         else:
             break
 

@@ -1,0 +1,1 @@
+print(list([10, 100 for n in range(5)]))

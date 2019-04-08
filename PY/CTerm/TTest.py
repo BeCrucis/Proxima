@@ -38,11 +38,6 @@ def main():
     pizzator(bob, d)
     bob.ht()
 
-    bob.penup()
-    bob.setx(turtle.screensize()[0]/1.2)
-    bob.sety(turtle.screensize()[1]/1.2)
-    write(bob, "Eficiencia: {} cm2/1k".format(e))
-
 
 
     screen.exitonclick()
