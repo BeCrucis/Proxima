@@ -88,14 +88,14 @@ def main():
 
     printer = "POS-58"
 
-    win32api.ShellExecute (
-            0,
-            "printto",
-            f"{rpath}",
-            f"{printer}",
-            ".",
-            0
-            )
+    # win32api.ShellExecute (
+    #         0,
+    #         "printto",
+    #         f"{rpath}",
+    #         f"{printer}",
+    #         ".",
+    #         0
+    #         )
     
     os.remove(rpath)
 

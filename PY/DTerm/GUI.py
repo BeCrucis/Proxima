@@ -14,7 +14,7 @@ def main():
     root.title("REGISTRADORA <{}>  [Versión {} ({})]\n".format(WBNAME, VER, VERDATE))
     root.minsize(900, 600)
 
-    def sound():asds
+    def sound():
 
         mixer.init()
         mixer.music.load('sound.mp3')

@@ -12,7 +12,7 @@ import sys
 move_to_rainmeter = 1
 'Solo funciona si la variable de arriba es 0'
 check_rainmeter = 0
-honeycomb = "E:\Rainmeter\Skins\Honeycomb"
+honeycomb = "F:\Rainmeter\Skins\Honeycomb"
 
 def espacio(x=1):
     for _ in range(x):
@@ -50,7 +50,7 @@ def main():
     name = input()
 
     normalpaths = [os.getcwd() + "\\{}.ini".format(name), os.getcwd() + "\\{0}\\{0}.ini".format(name)]
-    rainmeterpaths = ["E:/Rainmeter/Skins/Honeycomb/{0}/{0}.ini".format(name)]
+    rainmeterpaths = ["F:/Rainmeter/Skins/Honeycomb/{0}/{0}.ini".format(name)]
 
     possiblepaths = []
 
