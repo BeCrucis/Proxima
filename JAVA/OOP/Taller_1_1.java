@@ -61,6 +61,6 @@ class Taller_1_1{
     double notaFinal = notaExamen + notaProyecto + notaTaller + notaQuiz;
 
     System.out.println("Su nota final es: " + notaFinal);
-
+    sc.close();
   }
 }

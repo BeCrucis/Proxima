@@ -22,6 +22,8 @@ class Taller_1_5{
     }
 
     System.out.println("El factorial de " + n + " es: " + fact);
+
+    sc.close();
   }
 }
 

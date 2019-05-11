@@ -44,8 +44,8 @@ class Taller_1_2{
     }
 
     System.out.println("La menor apuesta fue por el jugador " + minPlayer + " Con una apuesta de $" + min);
-
     System.out.println("La mayor apuesta fue por el jugador " + maxPlayer + " Con una apuesta de $" + max);
 
+    sc.close();
   }
 }

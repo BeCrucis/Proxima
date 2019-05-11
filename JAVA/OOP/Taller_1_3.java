@@ -31,6 +31,6 @@ class Taller_1_3{
         break;
       }
     }
-    
+    sc.close();
   }
 }
