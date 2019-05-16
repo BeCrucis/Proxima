@@ -6,7 +6,7 @@ Lo mismo pero para la sucesión de Fibonacci.Por ejemplo: Serie Fibonacci de 7 =
 El algoritmo debe terminar cuando selea un número negativo o cero.
  */
 
-public class Main {
+public class Taller_1_6 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
