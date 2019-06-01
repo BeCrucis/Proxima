@@ -28,7 +28,7 @@ public class Taller_1_6 {
             System.out.println(X2);
 
             temp = X2; //Almaceno el X3 antiguo (X2 en este instante)
-            X2 = X2 + X1; //Aplico la sucecion X3 = X2 + X1
+            X2 = X2 + X1; //Aplico la sucesion X3 = X2 + X1
             X1 = temp; //Asigno el antiguo valor de X3 a la variable de manera que X1 = X2
         }   
        
