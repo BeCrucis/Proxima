@@ -23,14 +23,20 @@ public class Taller_1_6 {
         long X2 = 1;
         long temp;
 
-        for (int i = 0; i < fibbCounter; i++) {
+        for (int i = 1; i <= fibbCounter; i++) {
 
-            System.out.println(X2);
+          if(i == fibbCounter){
+             System.out.println(X2); //Si es el ultimo numero, no colocar coma
+          } else {
+            System.out.print(X2 + ", "); //Colocar coma pra el siguiente numero
+          }
+
+            
 
             temp = X2; //Almaceno el X3 antiguo (X2 en este instante)
             X2 = X2 + X1; //Aplico la sucesion X3 = X2 + X1
             X1 = temp; //Asigno el antiguo valor de X3 a la variable de manera que X1 = X2
         }   
-       
+       sc.close();
     }
 }

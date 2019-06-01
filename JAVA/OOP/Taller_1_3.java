@@ -1,5 +1,4 @@
 import java.util.Scanner;
-
 /*
 Los usuarios de una página web, al momento de registrarse, se les pide registrar también una 
 clave numérica para poder ingresar posteriormente a la página. La clave de acceso debe tener 
@@ -7,30 +6,38 @@ exactamente tres cifras. Hacer un programa que valide que la clave que teclea el
 realmente tenga tres cifras, si el número tecleado no es de tres cifras marcar el error y 
 volver a pedirlo hasta que tenga tres cifras. 
 */
-
-class Taller_1_3{
+class Main {
   public static void main(String[] args) {
 
     Scanner sc = new Scanner(System.in);
-    int password = 0;
 
-    System.out.println("Bienvenido al passwords inseguras de porodo!");
-    System.out.println();
+    Boolean foundPassword = false;
+    
+    while(!foundPassword){
 
-    while(password < 99 || password > 999){
+      System.out.printf("Inserte su contraseña: ");
+      String password = sc.nextLine();
 
-      System.out.printf("Inserte su password de 3 cifras: ");
-      password = sc.nextInt();
-
-      if(password < 99 || password > 999){
-      System.out.println("ERROR: La password debe ser de 3 cifras");
-
+      //Verifico que la contraseña consista en 3 caracteres
+      if(password.length() != 3){
+        System.out.println("ERROR: La contraseña debe ser de 3 caracteres");
       } else {
-        System.out.println("password aceptada!");
-
-        break;
+        foundPassword = true;
       }
-    }
-    sc.close();
+
+      //Ahora verifico si la contraseña es numerica
+      try{
+      Integer.parseInt(password);
+      }
+
+      catch (Exception e){
+      System.out.println("ERROR: La contraseña debe ser numerica");
+      foundPassword = false;
+      }
+
+      if(foundPassword){
+        System.out.println("Contraseña aceptada!");
+      }
+    }  
   }
 }
