@@ -187,19 +187,37 @@ public class Clock {
     public void alarma(){
 
         Scanner sc = new Scanner(System.in);
+        int alarmHours, alarmMinutes, alarmSeconds;
 
-        System.out.printf("Inserte dentro de cuantas horas desea la alarma: ");
-        int alarmHours = Integer.parseInt(sc.nextLine());
+        try {
 
-        System.out.printf("Inserte dentro de cuantos minutos desea la alarma: ");
-        int alarmMinutes = Integer.parseInt(sc.nextLine());
+            System.out.printf("Inserte dentro de cuantas horas desea la alarma: ");
+            alarmHours = Integer.parseInt(sc.nextLine());
+        } catch (Exception e) {
+            alarmHours = 0;
+        }
+        
+        try {
+            
+            System.out.printf("Inserte dentro de cuantos minutos desea la alarma: ");
+            alarmMinutes = Integer.parseInt(sc.nextLine());
+        } catch (Exception e) {
+            alarmMinutes = 0;
+        }
 
-        System.out.printf("Inserte dentro de cuantos segundos desea la alarma: ");
-        int alarmSeconds = Integer.parseInt(sc.nextLine());
+        try {
+            
+            System.out.printf("Inserte dentro de cuantos segundos desea la alarma: ");
+            alarmSeconds = Integer.parseInt(sc.nextLine());
+        } catch (Exception e) {
+            alarmSeconds = 0;
+        }
+        
 
+        
         int totalTimeDelta = alarmHours*3600 + alarmMinutes*60 + alarmSeconds;
 
-        //Se crea un objeto reloj cuyo tiempo no avanza, hecho a partir del reloj referencia mas la diferencia de tiempo en segundos
+        //Se crea un objeto reloj cuyo tiempo no avanza, hecho a partir del reloj actual mas la diferencia de tiempo en segundos
 
         Clock alarm = new Clock(year, month, day, time);
         alarm.setTime(getTime() + totalTimeDelta);
@@ -217,6 +235,9 @@ public class Clock {
                                 //System.out.println("ALARMA");
                                 Toolkit.getDefaultToolkit().beep();
                                 break;
+                            } else {
+                                alarm.updateCalendar();
+                                updateCalendar();
                             }
                         }
                         
