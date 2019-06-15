@@ -6,9 +6,22 @@ class Main {
 
   public static void main(String[] args) {
 
-    Libreria libr = null;
-    ArrayList<Autor> autores = new ArrayList<Autor>();
+    Libreria libreria;
+
     ArrayList<CasaPublicacion> casas = new ArrayList<CasaPublicacion>();
+    ArrayList<Autor> autores = new ArrayList<Autor>();
+
+    libreria = new Libreria(1, "Turbay");
+
+    Estanteria estanteDemo = new Estanteria(1, "Fantasia");
+    libreria.addEstanteria(estanteDemo);
+
+    CasaPublicacion bdv = new CasaPublicacion("Barco de vapor", "A", "123", "www.a.com");
+    casas.add(bdv);
+
+    Autor yuri = new Autor("Yuri M", "Yurmel1701@gmail.com", "www.yuri.com");
+    autores.add(yuri);
+
     int option = 0;
 
     while(true){
@@ -16,15 +29,15 @@ class Main {
     System.out.println("Bienvenido a la Biblioteca virtual!");
     System.out.println("A continuacion escoja la opcion que desea realizar");
     
-    System.out.println("1. Crear libreria");
+    System.out.println("1. Modificar libreria");
     System.out.println("2. Crear estanteria");
     System.out.println("3. Crear casa de publicacion");
     System.out.println("4. Crear autor");
     System.out.println("5. Crear libro");
-    System.out.println("6. Crear capitulo");
-    System.out.println("7. Listar libros de autor");
+    System.out.println("6. Agregar capitulo a libro");
+    System.out.println("7. Buscar autor y listar libros");
     System.out.println("8. Listar libros de casa editorial");
-    System.out.println("9. Buscar autor");
+    System.out.println("9. Eliminar libros de estanterias");
     System.out.println("99. Salir del programa");
     System.out.println();
     System.out.print("Inserte su opcion: ");
@@ -47,7 +60,7 @@ class Main {
      System.out.print("Inserte el id de la libreria: ");
      int idLibreria = Integer.parseInt(sc.nextLine());
      
-     libr = new Libreria(idLibreria, nomLibreria);
+     libreria = new Libreria(idLibreria, nomLibreria);
 
      System.out.println();
      System.out.println("Libreria creada, Enter para continuar");
@@ -57,7 +70,7 @@ class Main {
  
     if (option == 2) { //Crear estanteria dentro de la libreria
 
-      if(libr == null){
+      if(libreria == null){
         clearScreen();  
         continue;
       }
@@ -69,13 +82,13 @@ class Main {
       String temaEstanteria = sc.nextLine();
 
       Estanteria temp = new Estanteria(idEstanteria, temaEstanteria);
-      libr.addEstanteria(temp);
+      libreria.addEstanteria(temp);
 
-      System.out.println("Autor creado, Enter para continuar");
+      System.out.println("Estanteria creada, Enter para continuar");
       sc.nextLine();
     }
 
-    if (option == 3) {
+    if (option == 3) { //Crear casa de publicacion
 
       System.out.print("Inserte el nombre de la casa: ");
       String nomCasa = sc.nextLine();
@@ -96,7 +109,7 @@ class Main {
       sc.nextLine();
     }
 
-    if (option == 4) {
+    if (option == 4) { //Crear autor
       
       System.out.print("Inserte el nombre del autor: ");
       String nomAutor = sc.nextLine();
@@ -114,12 +127,107 @@ class Main {
       sc.nextLine();
     }
 
-    if (option == 5) {
+    if (option == 5) { //Crear libro
+
+      if(autores.isEmpty() || casas.isEmpty()){
+        System.out.println("No existen autores o casas de publicaciones disponibles, respetad los derechos de autor!");
+        System.out.println("Enter para continuar . . .");
+        sc.nextLine();
+        continue;
+      }
+
+      System.out.print("Inserte el titulo del libro: ");
+      String titulo = sc.nextLine();
+      
+      System.out.print("Inserte el ISBN del libro: ");
+      String iSBN = sc.nextLine();
+
+      System.out.print("Inserte las paginas del libro: ");
+      int paginas = Integer.parseInt(sc.nextLine());
+      
+      System.out.print("Inserte ano de publicacion: ");
+      int anoPublicacion = Integer.parseInt(sc.nextLine());
+      
+      System.out.print("Inserte el numero de edicion: ");
+      int numeroEdicion = Integer.parseInt(sc.nextLine());
+      
+      System.out.println("Seleccione el autor del libro: ");
+      Autor autor = selectFromArrayList(autores);
+
+      System.out.println("Seleccione la casa de publicacion del libro: ");
+      CasaPublicacion casaPublicacion = selectFromArrayList(casas);
+
+      System.out.println("Seleccione la ID de estanteria donde colocar el libro: ");
+      Estanteria estanteria = selectFromArrayList(libreria.estanterias);
+
+      Libro tmp = new Libro(titulo, iSBN, paginas, anoPublicacion, numeroEdicion, autor, casaPublicacion);
+      libreria.libros.add(tmp);
+
+      System.out.println("Libro " + tmp.toString() + " creado y asignado");
+      System.out.println("Libro asignado a la estanteria " + estanteria.toString());
+      
+      System.out.println("Enter para continuar . . .");
+      sc.nextLine();    
+    }
+
+    if (option == 6) {
     
-      selectFromArrayList(autores);
+      System.out.println("Seleccione el libro al cual agregar un capitulo: ");
+      Libro libroSeleccionado = selectFromArrayList(libreria.libros);
+
+      libroSeleccionado.addCapitulo();
       
     }
 
+    if (option == 7) {
+
+      if (autores.isEmpty()) {
+        System.out.println("No existen autores disponibles");
+        System.out.println("Enter para continuar . . .");
+        sc.nextLine();
+        continue;
+      }
+      
+      System.out.println("Seleccione el autor al cual listar libros: ");
+      Autor autorSeleccionado = selectFromArrayList(autores);
+      
+      autorSeleccionado.ImprimirLibros();
+
+      System.out.println();
+      System.out.println("Enter para continuar . . .");
+      sc.nextLine();
+    }
+
+    if (option == 8) {
+
+      if (casas.isEmpty()) {
+        System.out.println("No existen casas de publicacion disponibles");
+        System.out.println("Enter para continuar . . .");
+        sc.nextLine();
+        continue;
+      }
+      
+      System.out.println("Seleccione la casa editorial a la cual listar libros: ");
+      CasaPublicacion casaSeleccionada = selectFromArrayList(casas);
+
+      casaSeleccionada.ImprimirLibros();
+
+      System.out.println();
+      System.out.println("Enter para continuar . . .");
+      sc.nextLine();
+    }
+
+    if (option == 9) {
+      
+      System.out.println("Seleccione la estanteria a modificar: ");
+      Estanteria estanteriaSeleccionada = selectFromArrayList(libreria.estanterias);
+
+      estanteriaSeleccionada.deleteLibro();
+      
+      System.out.println();
+      System.out.println("Enter para continuar . . .");
+      sc.nextLine();
+    }
     if (option == 99) {
 
       clearScreen();
@@ -139,7 +247,7 @@ class Main {
       return null;
     }
 
-    Scanner sc = new Scanner(System.in);
+    Scanner tmpsc = new Scanner(System.in);
 
     for (Obj var : list) {
       System.out.println((list.indexOf(var)+1) +". "+ var.toString());
@@ -147,7 +255,7 @@ class Main {
 
     System.out.println();
     System.out.print("Inserte su opcion: ");
-    int opt = Integer.parseInt(sc.nextLine());
+    int opt = Integer.parseInt(tmpsc.nextLine());
     
     return list.get(opt-1);
   }

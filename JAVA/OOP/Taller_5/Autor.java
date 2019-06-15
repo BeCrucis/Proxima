@@ -10,7 +10,7 @@ public class Autor {
         this.nombre = nombre;
         this.email = email;
         this.website = website;
-        libros = new ArrayList<Libro>();
+        this.libros = new ArrayList<Libro>();
     }
 
     public void addLibro(Libro libro){
@@ -22,10 +22,7 @@ public class Autor {
 
         for (Libro libro : libros) {
             System.out.println();
-            System.out.println(libro.titulo);
-            System.out.println(libro.casaPublicacion.nombre);
-            System.out.println(libro.capitulos.size());
-
+            System.out.println(libro.getFormattedInfo());
         }
 
     }

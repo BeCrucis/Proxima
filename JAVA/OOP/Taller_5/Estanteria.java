@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -10,6 +9,7 @@ public class Estanteria {
     public Estanteria(int id, String tema) {
         this.id = id;
         this.tema = tema;
+        this.libros = new ArrayList<Libro>();
     }
 
     public void addLibro(Libro libro) {
@@ -17,34 +17,36 @@ public class Estanteria {
         libros.add(libro);
     }
 
-    public void deleteLibro() throws IOException {
-        
-        Scanner sc = new Scanner(System.in);
+    public void deleteLibro(){
 
-        System.out.println("Seleccione el libro a eliminar: ");
-
-        for (int i = 0; i < libros.size(); i++) {
-            System.out.println((i+1) +"."+ libros.get(i).toString());
-        }
-
-        System.out.print("Inserte su opción: ");
-        int opt = Integer.parseInt(sc.nextLine()) - 1;
+        if (libros.isEmpty()) {
+            System.out.println("Estanteria vacia, saliendo . . .");
+            return;
+          }
+      
+          Scanner sc = new Scanner(System.in);
+      
+          for (Libro var : libros) {
+            System.out.println((libros.indexOf(var)+1) +". "+ var.toString());
+          }
+      
+          System.out.println();
+          System.out.print("Inserte su opcion: ");
+          int opt = Integer.parseInt(sc.nextLine());
         
         try {
             libros.remove(opt);
         }
         catch (Exception err) {
             System.out.println("Error al eliminar, Enter para continuar . . .");
-            System.in.read();
-        }
-
-        finally{
-            sc.close();
+            sc.nextLine();
         }
        
     }
 
     public String toString() {
-        return Integer.toString(id);
+
+        String formattedData = String.format("ID: %d con tema %s", id, tema);
+        return formattedData;
     }
 }

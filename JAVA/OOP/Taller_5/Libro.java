@@ -17,7 +17,7 @@ public class Libro {
         this.paginas = paginas;
         this.anoPublicacion = anoPublicacion;
         this.numeroEdicion = numeroEdicion;
-        capitulos = new ArrayList<Capitulo>();
+        this.capitulos = new ArrayList<Capitulo>();
         autor.addLibro(this);
         casaPublicacion.addLibro(this);
     }
@@ -56,7 +56,8 @@ public class Libro {
         Capitulo temp = new Capitulo(nombreCap, inCap, finCap, numCap);
 
         capitulos.add(temp);
-        sc.close();
+        System.out.println("Capitulo agregado, Enter para continuar . . .");
+        sc.nextLine();
     }
 
     public void listarCapitulos(){
@@ -69,9 +70,9 @@ public class Libro {
     public String getFormattedInfo(){
 
         String formattedTitle = "Titulo: " + titulo + "\n";
-        String formattedAutor = "Titulo: " + autor + "\n";
+        String formattedAutor = "Autor: " + autor + "\n";
         String casa = "Casa de publicacion: " + casaPublicacion.nombre + "\n";
-        String numeroCapitulos = "Casa de publicacion: " + Integer.toString(capitulos.size()) + "\n";
+        String numeroCapitulos = "Numero de capitulos: " + Integer.toString(capitulos.size()) + "\n";
 
         String formattedInfo =  formattedTitle + formattedAutor + casa + numeroCapitulos;
 
@@ -80,7 +81,7 @@ public class Libro {
 
     public String toString() {
         
-        String basicInfo = String.format("%s %d edición por %s (%d)", titulo, numeroEdicion, autor, anoPublicacion);
+        String basicInfo = String.format("%s %d edicion por %s (%d)", titulo, numeroEdicion, autor, anoPublicacion);
         return basicInfo;
     }
 

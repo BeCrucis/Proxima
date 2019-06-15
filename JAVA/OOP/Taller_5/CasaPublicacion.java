@@ -12,6 +12,7 @@ public class CasaPublicacion {
         this.email = email;
         this.telefono = telefono;
         this.website = website;
+        this.libros = new ArrayList<Libro>();
     }
     
     public void addLibro(Libro libro){
@@ -19,6 +20,15 @@ public class CasaPublicacion {
         libro.setCasaPublicacion(this);
     }
 
+    public void ImprimirLibros(){
+
+        for (Libro libro : libros) {
+            System.out.println();
+            System.out.println(libro.getFormattedInfo());
+        }
+
+    }
+    
     public String toString() {
         return nombre;
     }
