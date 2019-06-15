@@ -78,9 +78,10 @@ public class Libro {
         return formattedInfo;
     }
 
-    public String toString() { 
-        return "Libro [autor=" + autor + ", casaPublicacion=" + casaPublicacion + ", numeroEdicion=" + numeroEdicion
-                + ", paginas=" + paginas + ", titulo=" + titulo + "]";
+    public String toString() {
+        
+        String basicInfo = String.format("%s %d edición por %s (%d)", titulo, numeroEdicion, autor, anoPublicacion);
+        return basicInfo;
     }
 
     

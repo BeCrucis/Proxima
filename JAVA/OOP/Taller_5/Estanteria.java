@@ -43,4 +43,8 @@ public class Estanteria {
         }
        
     }
+
+    public String toString() {
+        return Integer.toString(id);
+    }
 }

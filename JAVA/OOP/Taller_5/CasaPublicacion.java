@@ -18,4 +18,8 @@ public class CasaPublicacion {
         libros.add(libro);
         libro.setCasaPublicacion(this);
     }
+
+    public String toString() {
+        return nombre;
+    }
 }

@@ -114,6 +114,12 @@ class Main {
       sc.nextLine();
     }
 
+    if (option == 5) {
+    
+      selectFromArrayList(autores);
+      
+    }
+
     if (option == 99) {
 
       clearScreen();
@@ -124,6 +130,26 @@ class Main {
     clearScreen();
     }
     
+  }
+
+  public static <Obj> Obj selectFromArrayList(ArrayList<Obj> list){
+
+    if (list.isEmpty()) {
+      System.out.println("Lista vacia, saliendo . . .");
+      return null;
+    }
+
+    Scanner sc = new Scanner(System.in);
+
+    for (Obj var : list) {
+      System.out.println((list.indexOf(var)+1) +". "+ var.toString());
+    }
+
+    System.out.println();
+    System.out.print("Inserte su opcion: ");
+    int opt = Integer.parseInt(sc.nextLine());
+    
+    return list.get(opt-1);
   }
 
   public static void clearScreen(){
