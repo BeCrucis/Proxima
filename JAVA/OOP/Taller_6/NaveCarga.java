@@ -1,6 +1,6 @@
 public class NaveCarga extends Nave {
 
-    int precioPorCarga;
+    public int precioPorCarga;
     private int maximaCarga;
 
     NaveCarga(String matricula, int maximaCarga) {
@@ -8,7 +8,7 @@ public class NaveCarga extends Nave {
         this.maximaCarga = maximaCarga;
     }
 
-    int precioAlquiler(int dias) {
+    public double precioAlquiler(int dias) {
 
         return dias * (super.precioPorDia + precioPorCarga * maximaCarga);
     }

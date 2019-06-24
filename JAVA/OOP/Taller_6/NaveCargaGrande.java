@@ -6,7 +6,7 @@ public class NaveCargaGrande extends NaveCarga{
         precioPorCarga = 40;
     }
     
-    int precioAlquiler(int dias) {
+    public double precioAlquiler(int dias) {
         return dias * precioPorCarga;
     }
 }

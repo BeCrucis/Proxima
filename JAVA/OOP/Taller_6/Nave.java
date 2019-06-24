@@ -8,7 +8,7 @@ class Nave {
         this.matriculaNave = matricula;
     }
 
-    int precioAlquiler(int dias){
+    public double precioAlquiler(int dias){
         
         return dias * precioPorDia;
     }
