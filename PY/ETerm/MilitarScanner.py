@@ -13,16 +13,17 @@ def importObserverInfo(driver, observerLink, observerName, courseName):
 	searchBox = driver.find_elements_by_id("people_search")[0]
 	searchBox.send_keys("Comportamiento " + courseName)
 
-	driver.implicitly_wait(2)
+	time.sleep(2)
 
-	aRandomElement = driver.find_elements_by_class_name("audience_result") #No se por que, pero sin esto no funciona
+	moreElements = driver.find_elements_by_class_name("result_type_course")
 
-	searchResult = driver.find_element_by_id("people_results")
-	searchResult.click()
+	moreElements[0].click()
 
-	time.sleep(1)
+	time.sleep(2)
 
 	searchBox.send_keys(u"\ue007")
+
+	time.sleep(2)
 	
 	elements = driver.find_elements_by_tag_name("a")
 
@@ -62,8 +63,9 @@ def importObserverInfo(driver, observerLink, observerName, courseName):
 					rawFecha = entryData[2].text
 					formattedFecha = rawFecha[:10]
 					listaFechas.append(formattedFecha)
-				
-			listaFechas.append(observerName)
+
+			if listaFechas:	
+				listaFechas.append(observerName)
 
 		students[studentName] = listaFechas
 
@@ -88,8 +90,12 @@ passwordBox.send_keys(u"\ue007")
 
 courses = {}
 
-courses["PRIMERO"] = ["PRIMERO 1"]
-courses["SEGUNDO"] = ["SEGUNDO 1"]
+#courses["OCTAVO"] = ["OCTAVO 2"]
+#courses["NOVENO"] = ["NOVENO 1", "NOVENO 2"]
+courses["DECIMO"] = ["DECIMO 1"]
+#courses["UNDECIMO"] = ["UNDECIMO 1", "UNDECIMO 2"]
+
+
 
 for courseGrade in courses:
 
@@ -97,12 +103,20 @@ for courseGrade in courses:
 
 		courseName = F"{courseGrade} {course}"
 
-		print(courseName)
+		with open(F"{courseName}.txt", "w") as f:
 
-		observerInfo = importObserverInfo(driver, "https://colmilgeneralsantander.phidias.co/poll/consolidate/people?poll=23", "OED", courseName)
+			print(courseName)
 
-		for student in observerInfo:
-			print(F"{student}: {observerInfo[student]}")
-			print()
+			observerInfo = importObserverInfo(driver, "https://colmilgeneralsantander.phidias.co/poll/consolidate/people?poll=23", "OED", courseName)
+
+			for student in observerInfo:
+				print(F"{student}: {observerInfo[student]}")
+				print()
+
+				if len(observerInfo[student]) > 1:
+
+					f.write(F"{student} : {98-(len(observerInfo[student])*3)} : {' '.join(observerInfo[student]) }\n")
+				else:
+					f.write(F"{student} : {95} : {' '.join(observerInfo[student]) }\n")
 
 
