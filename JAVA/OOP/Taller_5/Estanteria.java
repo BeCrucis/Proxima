@@ -35,7 +35,7 @@ public class Estanteria {
           int opt = Integer.parseInt(sc.nextLine());
         
         try {
-            libros.remove(opt);
+            libros.remove(opt-1);
         }
         catch (Exception err) {
             System.out.println("Error al eliminar, Enter para continuar . . .");

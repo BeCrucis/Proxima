@@ -10,8 +10,10 @@ public class Libro {
     ArrayList<Capitulo> capitulos;
     CasaPublicacion casaPublicacion;
     Autor autor;
+    Estanteria estanteria;
 
-    public Libro(String titulo, String iSBN, int paginas, int anoPublicacion, int numeroEdicion, Autor autor, CasaPublicacion casaPublicacion) {
+    public Libro(String titulo, String iSBN, int paginas, int anoPublicacion,
+     int numeroEdicion, Autor autor, CasaPublicacion casaPublicacion, Estanteria estanteria) {
         this.titulo = titulo;
         ISBN = iSBN;
         this.paginas = paginas;
@@ -20,6 +22,7 @@ public class Libro {
         this.capitulos = new ArrayList<Capitulo>();
         autor.addLibro(this);
         casaPublicacion.addLibro(this);
+        estanteria.addLibro(this);
     }
 
     public void setAutor(Autor autor) {
