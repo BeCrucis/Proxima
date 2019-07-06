@@ -4,6 +4,7 @@ class NaveCarreras extends NavePasajero{
         super(matricula, hangar);
         
         super.precioDiaHangar = 1.5;
+        modeloNave = "Nave de carreras Kestrel";
     }
 
     

@@ -17,4 +17,8 @@ public class NavePasajero extends Nave{
     public String getHangar() {
         return hangar;
     }
+
+    public String toString() {
+        return String.format("Modelo de nave: %s - Matricula: %s - Nombre hangar: %s", getModeloNave(), getMatricula(), getHangar());
+    }
 }

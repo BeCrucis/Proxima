@@ -1,9 +1,10 @@
 import os
 import selenium
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
-import pandas as pd
 import time
+import timeit
 
 
 def importObserverInfo(driver, observerLink, observerName, courseName):
@@ -39,84 +40,106 @@ def importObserverInfo(driver, observerLink, observerName, courseName):
 	
 	for link in links:
 
-		driver.get(link)
+		studentInfoOED = importStudentInfoOED(driver, link)
+		studentName = studentInfoOED[0]
+		studentDates = studentInfoOED[1]
 
-		studentInfo = driver.find_elements_by_css_selector("span[person_role=\"estudiante\"]")[0]
-
-		studentName = studentInfo.get_attribute("innerHTML")
-
-		students[studentName] = []
-		listaFechas = []
-
-		fechas = driver.find_elements_by_css_selector("td[class =\"poll record fixedrow sel\"]")
-		
-		if fechas:
-
-			soup = BeautifulSoup(driver.page_source, features="lxml")
-			elements = soup.find_all("tr")
-
-			observerEntries = elements[4:]
-			
-			for entry in observerEntries:
-				entryData = entry.findChildren("td" , recursive=False)
-				if entryData[5].text.upper() == "Segundo Periodo".upper():
-					rawFecha = entryData[2].text
-					formattedFecha = rawFecha[:10]
-					listaFechas.append(formattedFecha)
-
-			if listaFechas:	
-				listaFechas.append(observerName)
-
-		students[studentName] = listaFechas
+		students[studentName] = studentDates
 
 	return students
 
+def importStudentInfoOED(driver, link):
+
+	driver.get(link)
+
+	studentInfo = driver.find_elements_by_css_selector("span[person_role=\"estudiante\"]")[0]
+
+	studentName = studentInfo.get_attribute("innerHTML")
+
+	studentInfo = []
+
+	studentInfo.append(studentName)
+
+	dateList = []
+
+	fechas = driver.find_elements_by_css_selector("td[class =\"poll record fixedrow sel\"]")
+	
+	if fechas:
+
+		soup = BeautifulSoup(driver.page_source, features="lxml")
+		elements = soup.find_all("tr")
+
+		observerEntries = elements[4:]
 		
-username = "william.parada81"
-password = "Caballeria1972" 
+		for entry in observerEntries:
+			entryData = entry.findChildren("td" , recursive=False)
+			if entryData[5].text.upper() == "Segundo Periodo".upper():
+				rawFecha = entryData[2].text
+				formattedFecha = rawFecha[:10]
+				dateList.append(formattedFecha)
 
-global driver
+		if dateList:	
+			dateList.append("OED")
 
-driver = webdriver.Chrome("F:/Downloads/Carpetas/Utility/Temp/chromedriver.exe")
-driver.get("https://colmilgeneralsantander.phidias.co/")
+	studentInfo.append(dateList)
 
-userBox = driver.find_element_by_id("autofocus")
-userBox.send_keys(username)
-
-passwordBox = driver.find_elements_by_xpath("//*[@id=\"login_form\"]/fieldset/div[2]/input")[0]
-passwordBox.send_keys(password)
-
-passwordBox.send_keys(u"\ue007")
-
-courses = {}
-
-#courses["OCTAVO"] = ["OCTAVO 2"]
-#courses["NOVENO"] = ["NOVENO 1", "NOVENO 2"]
-courses["DECIMO"] = ["DECIMO 1"]
-#courses["UNDECIMO"] = ["UNDECIMO 1", "UNDECIMO 2"]
+	return studentInfo
 
 
+def main(headless = False):
+	
+	username = "william.parada81"
+	password = "Caballeria1972" 
 
-for courseGrade in courses:
+	if headless:
 
-	for course in courses[courseGrade]:
+		options = Options()
+		options.headless = True
+		driver = webdriver.Chrome("F:/Downloads/Carpetas/Utility/Temp/chromedriver.exe", options=options)
+	
+	else:
+		driver = webdriver.Chrome("F:/Downloads/Carpetas/Utility/Temp/chromedriver.exe")
+		print("Usando Chrome con cabeza")
 
-		courseName = F"{courseGrade} {course}"
+	driver.get("https://colmilgeneralsantander.phidias.co/")
 
-		with open(F"{courseName}.txt", "w") as f:
+	userBox = driver.find_element_by_id("autofocus")
+	userBox.send_keys(username)
 
-			print(courseName)
+	passwordBox = driver.find_elements_by_xpath("//*[@id=\"login_form\"]/fieldset/div[2]/input")[0]
+	passwordBox.send_keys(password)
 
-			observerInfo = importObserverInfo(driver, "https://colmilgeneralsantander.phidias.co/poll/consolidate/people?poll=23", "OED", courseName)
+	passwordBox.send_keys(u"\ue007")
 
-			for student in observerInfo:
-				print(F"{student}: {observerInfo[student]}")
-				print()
+	courses = {}
 
-				if len(observerInfo[student]) > 1:
-
-					f.write(F"{student} : {98-(len(observerInfo[student])*3)} : {' '.join(observerInfo[student]) }\n")
-				else:
-					f.write(F"{student} : {95} : {' '.join(observerInfo[student]) }\n")
+	#courses["OCTAVO"] = ["OCTAVO 2"]
+	#courses["NOVENO"] = ["NOVENO 1", "NOVENO 2"]
+	courses["DECIMO"] = ["DECIMO 1"]
+	#courses["UNDECIMO"] = ["UNDECIMO 1", "UNDECIMO 2"]
 
 
+
+	for courseGrade in courses:
+
+		for course in courses[courseGrade]:
+
+			courseName = F"{courseGrade} {course}"
+
+			with open(F"{courseName}.txt", "w") as f:
+
+				print(courseName)
+
+				observerInfo = importObserverInfo(driver, "https://colmilgeneralsantander.phidias.co/poll/consolidate/people?poll=23", "OED", courseName)
+
+				for student in observerInfo:
+					print(F"{student}: {observerInfo[student]}")
+					print()
+
+					if len(observerInfo[student]) > 1:
+
+						f.write(F"{student} : {98-(len(observerInfo[student])*3)} : {' '.join(observerInfo[student]) }\n")
+					else:
+						f.write(F"{student} : {95} : {' '.join(observerInfo[student]) }\n")
+
+main()

@@ -20,7 +20,7 @@ public class GestionNaves {
             System.out.println("3. Mostrar todos los precios");
             System.out.println("99. Salir del programa");
             System.out.println();
-            System.out.println("Inserte su opcion: ");
+            System.out.print("Inserte su opcion: ");
 
             String op = sc.nextLine();
 
@@ -36,14 +36,46 @@ public class GestionNaves {
                 System.out.println("3. Nave de carga M1N1");
                 System.out.println("4. Nave de carga M3G4");
                 System.out.println();
-                System.out.println("Inserte su opcion: ");
+                System.out.print("Inserte su opcion: ");
 
                 String naveSeleccionada = sc.nextLine();
 
                 Nave naveCreada = crearNaveSeleccionada(Integer.parseInt(naveSeleccionada));
 
-                naves.add(naveCreada);
+                if(naveCreada != null){
+                    naves.add(naveCreada);
+                }
 
+            }
+
+            if (op.equals("2")){
+
+                Nave navePreguntada = selectFromArrayList(naves);
+
+                System.out.println();   
+                System.out.println("El precio por dia de la nave es de: " + navePreguntada.precioAlquiler(1) + " Dactarios");
+
+                System.out.print("Inserte la cantidad de dias de prestamo de la nave: ");
+                int diasPrestamo = Integer.parseInt(sc.nextLine()); 
+                System.out.println("Precio total: " + navePreguntada.precioAlquiler(diasPrestamo) + " Dactarios");
+
+                System.out.println("Presione Enter para continuar . . .");
+                sc.nextLine();
+            }
+
+            if (op.equals("3")){
+
+                System.out.println("Lista de precios por dia");
+                System.out.println();
+
+                for(Nave nave : naves){
+
+                    System.out.println(nave.toString() + " - Precio: " + nave.precioAlquiler(1) + " Dactarios");
+                }
+
+                System.out.println();
+                System.out.println("Presione Enter para continuar . . .");
+                sc.nextLine();
             }
 
             if (op.equals("99")) {
@@ -66,6 +98,11 @@ public class GestionNaves {
 
             System.out.print("Inserte la matricula de la nave: ");
             String matriculaNave = sc.nextLine();
+
+            if(matriculaNave.length() != 8){
+                System.out.println("La matricula de la nave debe tener 8 caracteres, Enter para continuar . . .");
+                sc.nextLine();
+            }
             
             System.out.print("Inserte el nombre del hangar de la nave: ");
             String hangarNave = sc.nextLine();
@@ -83,6 +120,11 @@ public class GestionNaves {
             System.out.print("Inserte la matricula de la nave: ");
             String matriculaNave = sc.nextLine();
             
+            if(matriculaNave.length() != 8){
+                System.out.println("La matricula de la nave debe tener 8 caracteres, Enter para continuar . . .");
+                sc.nextLine();
+            }
+
             System.out.print("Inserte el nombre del hangar de la nave: ");
             String hangarNave = sc.nextLine();
             
@@ -99,6 +141,11 @@ public class GestionNaves {
             System.out.print("Inserte la matricula de la nave: ");
             String matriculaNave = sc.nextLine();
             
+            if(matriculaNave.length() != 8){
+                System.out.println("La matricula de la nave debe tener 8 caracteres, Enter para continuar . . .");
+                sc.nextLine();
+            }
+
             System.out.print("Inserte la capacidad maxima de la nave (En toneladas): ");
             int maximaCarga = Integer.parseInt(sc.nextLine());
             
@@ -114,6 +161,11 @@ public class GestionNaves {
 
             System.out.print("Inserte la matricula de la nave: ");
             String matriculaNave = sc.nextLine();
+            
+            if(matriculaNave.length() != 8){
+                System.out.println("La matricula de la nave debe tener 8 caracteres, Enter para continuar . . .");
+                sc.nextLine();
+            }
             
             System.out.print("Inserte la capacidad maxima de la nave (En toneladas): ");
             int maximaCarga = Integer.parseInt(sc.nextLine());
@@ -131,6 +183,27 @@ public class GestionNaves {
         }
         
     }
+
+
+    public static <Obj> Obj selectFromArrayList(ArrayList<Obj> list){
+
+        if (list.isEmpty()) {
+          System.out.println("Lista vacia, saliendo . . .");
+          return null;
+        }
+    
+        Scanner tmpsc = new Scanner(System.in);
+    
+        for (Obj var : list) {
+          System.out.println((list.indexOf(var)+1) +". "+ var.toString());
+        }
+    
+        System.out.println();
+        System.out.print("Inserte su opcion: ");
+        int opt = Integer.parseInt(tmpsc.nextLine());
+        
+        return list.get(opt-1);
+      }
 
     public static void clearScreen(){
 

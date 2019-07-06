@@ -2,6 +2,7 @@ class Nave {
 
     protected int precioPorDia = 50;
     private String matriculaNave;
+    protected String modeloNave;
 
     Nave(String matricula){
 
@@ -15,5 +16,9 @@ class Nave {
 
     public String getMatricula() {
         return matriculaNave;
+    }
+
+    public String getModeloNave(){
+        return modeloNave;
     }
 }

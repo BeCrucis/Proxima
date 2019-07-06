@@ -4,5 +4,7 @@ public class NaveCargaPequena extends NaveCarga {
 
         super(matricula, maximaCarga);
         precioPorCarga = 20;
+        modeloNave = "Nave de carga M1N1";
     }
+ 
 }

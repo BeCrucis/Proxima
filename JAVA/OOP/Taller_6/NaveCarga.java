@@ -12,5 +12,12 @@ public class NaveCarga extends Nave {
 
         return dias * (super.precioPorDia + precioPorCarga * maximaCarga);
     }
+
+    public int getMaximaCarga(){
+        return maximaCarga;
+    }
     
+    public String toString() {
+        return String.format("Modelo de nave: %s - Matricula: %s - Carga maxima: %s", getModeloNave(), getMatricula(), getMaximaCarga());
+    }
 }
