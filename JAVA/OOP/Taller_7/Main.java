@@ -4,12 +4,15 @@ import java.util.*;
 public class Main {
   public static void main(String[] args){
 
-   // while(true){
+    ArrayList<Animal> animales = new ArrayList<Animal>(); 
+
+    while(true){
 
       System.out.println("Bienvenido al Zoologico de Javed City, a continuacion digite la opcion que desea realizar: ");
 
       System.out.println("1. Obtener informacion de un animal");
       System.out.println("2. Registrar un nuevo animal");
+      System.out.println("99. Salir del programa");
 
       Scanner sc = new Scanner(System.in);
       int option = Integer.parseInt(sc.nextLine());
@@ -18,8 +21,10 @@ public class Main {
     
       if(option == 1){ //Obtiene informacion de un animal
 
-        System.out.print("Inserte el nombre del animal: ");
-        String nombre = sc.nextLine();  
+        Animal animalSeleccionado = selectFromArrayList(animales);
+        
+        System.out.println("Has elegido a " + animalSeleccionado.toString());
+
 
       }
 
@@ -75,7 +80,8 @@ public class Main {
 
             if(op == 1){
               
-              Canino fido = new Canino(tamanio, ojos, raza, edad, tomaLeche);
+              Canino fido = new Canino(tamanio, ojos, raza, nombre, edad, tomaLeche);
+              animales.add(fido);
 
             }
 
@@ -94,40 +100,76 @@ public class Main {
 
               clearScreen();
 
-              Felino michi = new Felino(tamanio, ojos, edad, raza, pelo, tomaLeche);
+              Felino michi = new Felino(tamanio, ojos, edad, raza, nombre, pelo, tomaLeche);
+              animales.add(michi);
 
             }
         }
 
         if (opt == 2) {
 
-          Anfibio kkk = new Anfibio(tamanio, ojos, edad, raza);
+          Anfibio sop = new Anfibio(tamanio, ojos, edad, raza, nombre);
+          animales.add(sop);
 
         }
 
         if (opt == 3) {
 
-          Ave fufu = new Ave(tamanio, ojos, edad, raza);
+          Ave fufu = new Ave(tamanio, ojos, edad, raza, nombre);
+          animales.add(fufu);
           
         }
 
         if (opt == 4) {
 
-          
+          Reptil sis = new Reptil(tamanio, ojos, edad, raza, nombre);   
+          animales.add(sis);       
           
         }
 
         if (opt == 5) {
           
+          Pez pip = new Pez(tamanio, ojos, edad, raza, nombre);
+          animales.add(pip);
+
         }
 
       }
 
+
+      if (option == 99) {
+        System.exit(0);
+      }
+
       clearScreen();
 
-    //}
+
+    }
+
+    
+    
   }
 
+  public static <Obj> Obj selectFromArrayList(ArrayList<Obj> list){
+
+    if (list.isEmpty()) {
+      System.out.println("Lista vacia, saliendo . . .");
+      return null;
+    }
+
+    Scanner tmpsc = new Scanner(System.in);
+
+    for (Obj var : list) {
+      System.out.println((list.indexOf(var)+1) +". "+ var.toString());
+    }
+
+    System.out.println();
+    System.out.print("Inserte su opcion: ");
+    int opt = Integer.parseInt(tmpsc.nextLine());
+    
+    return list.get(opt-1);
+  }
+  
   public static void clearScreen(){
 
     try {
