@@ -22,13 +22,17 @@ public class Empleado extends Persona{
     private double sueldoFinal;
     private int nivelARL;
 
-    public Empleado(String nombre, double sueldoBase, int nivelARL) {
-        super(nombre);
+    public Empleado(String nombre, String documentoId, double sueldoBase, int nivelARL) {
+        super(nombre, documentoId);
 
         this.sueldoBase = sueldoBase;
         this.nivelARL = nivelARL;
         this.sueldoFinal = getSueldoFinalEmpleado();
 
+    }
+
+    public static double getSueldominimo() {
+        return sueldoMinimo;
     }
     
     private double getSaludEmpleado(){
@@ -106,10 +110,10 @@ public class Empleado extends Persona{
 
     public String infoPagosTotales() {
         String infoEmpleado = String.format("Empleado : %s, ID: %d", getNombre(), getID());
-        String infoSueldo = String.format("Sueldo base: %s, Sueldo real: %s", sueldoBase, sueldoFinal);
-        String infoEmpleador = String.format("Pago a administradoras y fondos por parte del empleador: %s", getPagosEmpleador());
+        String infoSueldo = String.format("Sueldo base: %d, Sueldo real: %d", (int)sueldoBase, (int)sueldoFinal);
+        String infoEmpleador = String.format("Pago a administradoras y fondos por parte del empleador: %d", (int)getPagosEmpleador());
 
-        String infoTotal = String.format("%s \n $s \n %s \n", infoEmpleado, infoSueldo, infoEmpleador);
+        String infoTotal = String.format("%s \n%s \n%s \n", infoEmpleado, infoSueldo, infoEmpleador);
 
         return infoTotal;
     }

@@ -1,7 +1,5 @@
 public class NaveCargaGrande extends NaveCarga{
 
-    static private String modeloNave = "Nave de carga M3G4";
-
     NaveCargaGrande(String matricula, int maximaCarga) {
 
         super(matricula, maximaCarga);
