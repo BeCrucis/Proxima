@@ -17,7 +17,12 @@ public class Mamifero extends Animal{
     }
 
     public void comunicarse(){
-        System.out.println("Hacen sonidos o hablan");
+        System.out.println("Producen los sonidos en el cuello, con sus cuerdas vocales");
+    }
+
+    public void completeInfo(){
+        imprimirInfo();
+        System.out.println("Cuerpo cubierto de pelo \nNacen del vientre de la madre \nCuando son pequenos maman leche \nSon vertebrados ");
     }
     
 }

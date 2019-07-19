@@ -14,7 +14,12 @@ public class Pez extends Animal{
     }
 
     public void comunicarse(){
-        System.out.println("Emiten sonidos para comunicarse");
+        System.out.println("Emiten sonidos con la vejiga natatoria");
+    }
+
+    public void completeInfo(){
+        imprimirInfo();
+        System.out.println("Cuerpo cubierto de escamas \nNacen de huevos \nTienen aletas para nadar \nViven y respiran dentro del agua \nSon vertebrados ");
     }
     
 }

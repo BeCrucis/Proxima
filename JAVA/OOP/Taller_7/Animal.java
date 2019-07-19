@@ -27,8 +27,21 @@ public class Animal {
 
     @Override
     public String toString() {
-        String animalInfo = String.format("Nombre: %s, Tipo: %s, Raza: %s", nombre, getClass(), raza);
+        String animalInfo = String.format("Nombre: %s, %s, Raza: %s", nombre, getClass(), raza);
         return animalInfo;
+    }
+
+    public void imprimirInfo(){
+        System.out.println(toString());
+        String info = String.format("Tamanio: %s, Ojos: %s, Edad: %s años", tamanio, ojos, edad);
+        System.out.print(info);
+        comer();
+        mover();
+        comunicarse();
+    }
+
+    public void completeInfo(){
+        
     }
 
 }

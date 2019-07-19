@@ -5,15 +5,20 @@ public class Anfibio extends Animal{
     }
 
     public void comer(){
-        System.out.println("Los anfibios comen insectos");
+        System.out.println("Los anfibios comen insectos y vegetales");
     }
 
     public void mover(){
-        System.out.println("Se desplazan de diversas formas: caminan, nadan, serpentean o saltan");
+        System.out.println("Se desplazan en al campo semiterrestre");
     }
 
     public void comunicarse(){
-        System.out.println("Hacen BSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS o RIBIT");
+        System.out.println("Hacen sonidos a traves de sus sacos vocales");
+    }
+
+    public void completeInfo(){
+        imprimirInfo();
+        System.out.println("Viven en la tierra y en el agua \nTienen la piel humeda \nNacen de huevos \nSon vertebrados ");
     }
     
 }

@@ -23,10 +23,15 @@ public class Main {
 
         Animal animalSeleccionado = selectFromArrayList(animales);
         
-        System.out.println("Has elegido a " + animalSeleccionado.toString());
+        System.out.println("Has elegido a " + animalSeleccionado.nombre);
+        System.out.println("La informacion se mostrara a continuacion: ");
+        animalSeleccionado.completeInfo();
 
+        sc.nextLine();
 
       }
+      
+      clearScreen();
 
       if (option == 2) { //Registra un nuevo animal
         

@@ -14,7 +14,12 @@ public class Ave extends Animal{
     }
 
     public void comunicarse(){
-        System.out.println("GUCUUUUUUUUUUUUUUUUU o KYAAAA");
+        System.out.println("Emiten sonidos haciendo circular el aire por la siringe");
+    }
+
+    public void completeInfo(){
+        imprimirInfo();
+        System.out.println("Cuerpo cubierto de plumas \nNacen de huevos \nSon vertebrados ");
     }
 
 }
