@@ -17,12 +17,13 @@ public class Empleado extends Persona{
     static private final double porcentajeARLtipo5Empleador = 0.03219;
 
     protected boolean tieneAuxilio = true;
+    protected boolean isActivo = true;
 
-    private double sueldoBase;
+    protected double sueldoBase;
+    protected int nivelARL;
     private double sueldoFinal;
-    private int nivelARL;
 
-    public Empleado(String nombre, String documentoId, double sueldoBase, int nivelARL) {
+    public Empleado(String nombre, String documentoId, double sueldoBase, int nivelARL){
         super(nombre, documentoId);
 
         this.sueldoBase = sueldoBase;
@@ -31,42 +32,64 @@ public class Empleado extends Persona{
 
     }
 
-    public static double getSueldominimo() {
+    public static double getSueldominimo(){
         return sueldoMinimo;
     }
+
+    private double getAuxiliaturas(){
+        if(tieneAuxilio){
+            return auxilioTransporte;
+        } else return 0;
+    }
+
+    public double getSueldoBase(){
+        return sueldoBase;
+    }
+
+    public void retirarEmpleado(){
+        isActivo = false;
+    }
+
+    public void activarEmpleado(){
+        isActivo = true;
+    }
+
+    public boolean isActivo(){
+        return isActivo;
+    }
     
-    private double getSaludEmpleado(){
+    public double getSaludEmpleado(){
 
 
         return sueldoBase*porcentajeSaludEmpleado;
     }
 
-    private double getSaludEmpleador(){
+    public double getSaludEmpleador(){
 
         return sueldoBase*porcentajeSaludEmpleador;
     }
 
-    private double getPensionEmpleado(){
+    public double getPensionEmpleado(){
         return sueldoBase*porcentajePensionEmpleado;
     }
 
-    private double getPensionEmpleador(){
+    public double getPensionEmpleador(){
         return sueldoBase*porcentajePensionEmpleador;
     }
 
-    private double getSENAEmpleador(){
+    public double getSENAEmpleador(){
         return sueldoBase*porcentajeSENAEmpleador;
     }
 
-    private double getCajaCompensacionEmpleador(){
+    public double getCajaCompensacionEmpleador(){
         return sueldoBase*porcentajeCajaCompensacionEmpleador;
     }
 
-    private double getICBFEmpleador(){
+    public double getICBFEmpleador(){
         return sueldoBase*porcentajeICBFEmpleador;
     }
 
-    private double getARLEmpleador(){
+    public double getARLEmpleador(){
 
         if(nivelARL == 1) return sueldoBase*porcentajeARLtipo1Empleador;
 
@@ -76,7 +99,12 @@ public class Empleado extends Persona{
 
         else if (nivelARL == 4) return sueldoBase*porcentajeARLtipo4Empleador;
 
-        else return sueldoBase*porcentajeARLtipo5Empleador;
+        else if (nivelARL == 5) return sueldoBase*porcentajeARLtipo5Empleador;
+
+        else {
+            System.out.println("Nivel ARL no valido");
+            return 0;
+        }
 
     }
 
@@ -110,11 +138,15 @@ public class Empleado extends Persona{
 
     public String infoPagosTotales() {
         String infoEmpleado = String.format("Empleado : %s, ID: %d", getNombre(), getID());
-        String infoSueldo = String.format("Sueldo base: %d, Sueldo real: %d", (int)sueldoBase, (int)sueldoFinal);
-        String infoEmpleador = String.format("Pago a administradoras y fondos por parte del empleador: %d", (int)getPagosEmpleador());
+
+        String infoSueldo = String.format("Sueldo base: %f\nPagos de salud por empleado: %f\nPagos de pension por empleado: %f\nAuxiliaturas al empleado: %f\nSueldo final: %f ", sueldoBase, getSaludEmpleado(), getPensionEmpleado(), getAuxiliaturas(), getSueldoFinalEmpleado());
+
+        String infoEmpleador = String.format("Pagos de empleador: \nSalud: %f\nPension: %f\nSENA: %f\nCaja de compensacion: %f\nICBF: %f\nARL: %f\nPago a administradoras y fondos por parte del empleador total: %f", getSaludEmpleador(), getPensionEmpleador(), getSENAEmpleador(), getCajaCompensacionEmpleador(), getICBFEmpleador(), getARLEmpleador(), getPagosEmpleador());
 
         String infoTotal = String.format("%s \n%s \n%s \n", infoEmpleado, infoSueldo, infoEmpleador);
 
         return infoTotal;
     }
+
+    
 }
