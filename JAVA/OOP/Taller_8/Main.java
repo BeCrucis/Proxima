@@ -3,15 +3,21 @@ import java.util.*;
 
 public class Main {
 
+    private static final Scanner SCANNER = new Scanner(System.in);
+
     public static void main(String[] args) throws IOException {
 
-        Scanner sc = new Scanner(System.in).useDelimiter("\\n");
+        Scanner sc = SCANNER.useDelimiter("\\n");
+        ArrayList<String> tiposEmpleado = new ArrayList<>(List.of(
+            "Docente medio tiempo", "Docente tiempo completo", "Docente catedra", 
+            "Administrativo planta auxiliar", "Administrativo planta tecnico", "Administrativo planta profesional",
+            "OPS"));
 
         ArrayList<Empleado> empleados = new ArrayList<>();
         ArrayList<Empleado> empleadosActivos = new ArrayList<>();
         ArrayList<Empleado> empleadosInactivos = new ArrayList<>();
 
-        Empleado demo = new Empleado("Juan jose", "100232", 900000, 2);
+        Empleado demo = new Empleado("Juan jose","100232", "EmpleadoDemo", 900000, 2);
         empleados.add(demo);
         empleadosActivos.add(demo);
 
@@ -23,13 +29,23 @@ public class Main {
             System.out.println("3. Activar un empleado");
             System.out.println("4. Eliminar un empleado");
             System.out.println("5. Ver informacion de empleado");
-            System.out.println("6. Calcular nomina total");
+            System.out.println("6. Realizar nomina");
+            System.out.println("7. Realizar pagos parafiscales"); 
+            System.out.println("8. Realizar pagos de salud");
+            System.out.println("9. Realizar pagos de pension");
+            System.out.println("10. Cambiar empleado de dependencia"); //TODO
+            System.out.println("11. Nomina por dependencia");
             System.out.println("99. Salir del programa");
             System.out.println();
             System.out.print("Inserte su opcion: ");
             String opt = sc.nextLine();
 
+            clearScreen();
+
             if (opt.equals("1")) {
+
+                System.out.println("Ha seleccionado crear un nuevo empleado:");
+                System.out.println();
 
                 System.out.print("Inserte el nombre del empleado: ");
                 String nombre = sc.nextLine();
@@ -40,8 +56,17 @@ public class Main {
                 System.out.print("Inserte el sueldo del empleado: ");
                 double sueldoBase = Double.parseDouble(sc.nextLine());
 
-                System.out.print("Inserte el nivel ARL del empleado: ");
-                int nivelARL = Integer.parseInt(sc.nextLine());
+                System.out.println("Inserte que tipo de empleado es:");
+                String tipoEmpleado = selectFromArrayList(tiposEmpleado);
+
+                int nivelARL = 0;
+
+                if (!tipoEmpleado.equals("OPS")) {
+                    nivelARL = 1;
+                } else {
+                    System.out.print("Inserte el nivel ARL del empleado: ");
+                    nivelARL = Integer.parseInt(sc.nextLine());
+                }
 
                 if (sueldoBase < Empleado.getSueldominimo()) {
                     System.out.println("ERROR: El empleado no debe morir de hambre, inserte un sueldo mayor a "
@@ -56,7 +81,7 @@ public class Main {
                     sc.nextLine();
                 }
 
-                Empleado tempEmpleado = new Empleado(nombre, documentoId, sueldoBase, nivelARL);
+                Empleado tempEmpleado = new Empleado(nombre, documentoId, tipoEmpleado, sueldoBase, nivelARL);
                 empleados.add(tempEmpleado);
                 empleadosActivos.add(tempEmpleado);
 
@@ -153,8 +178,8 @@ public class Main {
 
             if (opt.equals("6")) {
 
-                clearScreen();
-                
+                System.out.println("Imprimiendo detalles individuales: ");
+                System.out.println();
                 double nominaTotal = 0;
                 double costoEmpleados = 0;
                 double pagoSueldoEmpleados = 0;
@@ -175,11 +200,14 @@ public class Main {
                     pagoEmpleadorCajaCompensacion += empleado.getCajaCompensacionEmpleador();
                     pagoEmpleadorICBF += empleado.getICBFEmpleador();
                     pagoEmpleadorARL += empleado.getARLEmpleador();
-                    pagoEmpleadorTotal += empleado.getPagosEmpleador();    
+                    pagoEmpleadorTotal += empleado.getPagosEmpleador();
+                    
+                    System.out.println(empleado.infoPagosTotales());
                 }
 
                 nominaTotal = costoEmpleados + pagoEmpleadorTotal;
                 
+                System.out.println();
                 System.out.printf("La nomina total es de : %f Pesos\n", nominaTotal);
                 System.out.printf("El costo por empleados total es de : %f Pesos\n", costoEmpleados);
                 System.out.printf("El pago a empleados total es de : %f Pesos\n", pagoSueldoEmpleados);
@@ -196,6 +224,118 @@ public class Main {
                 System.out.println();
                 System.out.println("Presione Enter para continuar . . .");
                 sc.nextLine();
+            }
+
+            if (opt.equals("7")) {
+
+                System.out.println("Ha seleccionado hacer pagos parafiscales");
+                System.out.println();
+
+                System.out.println("Imprimiendo detalles individuales: ");
+                System.out.println();
+
+                double pagoTotal = 0;
+                double pagoSENATotal = 0;
+                double pagoCajaCompensacionTotal = 0;
+                double pagoICBFTotal = 0;
+                
+                
+                for (Empleado empleado : empleadosActivos) {
+                    
+                    pagoSENATotal += empleado.getSENAEmpleador();
+                    pagoCajaCompensacionTotal += empleado.getCajaCompensacionEmpleador();
+                    pagoICBFTotal += empleado.getICBFEmpleador();
+
+                    System.out.println(empleado.toString());
+                    System.out.println("Pago de SENA: " + empleado.getSENAEmpleador() + " Pesos");
+                    System.out.println("Pago de caja de compensacion: " + empleado.getCajaCompensacionEmpleador() + " Pesos");
+                    System.out.println("Pago de ICFB: " + empleado.getICBFEmpleador() + " Pesos");
+                    System.out.println();
+                }
+
+                pagoTotal = pagoSENATotal + pagoCajaCompensacionTotal + pagoICBFTotal;
+
+                System.out.println("Pagos de SENA totales: " + pagoSENATotal + " Pesos");
+                System.out.println("Pagos de caja de compensacion totales: " + pagoCajaCompensacionTotal + " Pesos");
+                System.out.println("Pagos de ICFB totales: " + pagoICBFTotal + " Pesos");
+                System.out.println();
+                System.out.println("Pagos parafiscales totales: " + pagoTotal + " Pesos");
+
+                System.out.println();
+                System.out.println("Presione Enter para continuar . . .");
+                sc.nextLine();
+
+            }
+
+            if (opt.equals("8")) {
+
+                System.out.println("Ha seleccionado hacer pagos de salud");
+                System.out.println();
+
+                System.out.println("Imprimiendo detalles individuales: ");
+                System.out.println();
+
+                double saludTotal = 0;
+                double saludEmpleados = 0;
+                double saludEmpleador = 0;
+                
+                for (Empleado empleado : empleadosActivos) {
+                    
+                    saludEmpleados += empleado.getSaludEmpleado();
+                    saludEmpleador += empleado.getSaludEmpleador();
+
+                    System.out.println(empleado.toString());
+                    System.out.println("Pago de salud por parte de empleado: " + empleado.getSaludEmpleado() + " Pesos");
+                    System.out.println("Pago de salud por parte de empleador: " + empleado.getSaludEmpleador() + " Pesos");
+                    System.out.println();
+                }
+
+                saludTotal = saludEmpleados + saludEmpleador;
+
+                System.out.println("Pagos de salud totales por parte de empleados: " + saludEmpleados + " Pesos");
+                System.out.println("Pagos de salud totales por parte de empleador: " + saludEmpleador + " Pesos");
+                System.out.println("Pagos de salud totales: " + saludTotal + " Pesos");
+
+                System.out.println();
+                System.out.println("Presione Enter para continuar . . .");
+                sc.nextLine();
+
+            }
+
+            if (opt.equals("9")) {
+
+                System.out.println("Ha seleccionado hacer pagos de pension");
+                System.out.println();
+
+                System.out.println("Imprimiendo detalles individuales: ");
+                System.out.println();
+
+                double pensionTotal = 0;
+                double pensionEmpleados = 0;
+                double pensionEmpleador = 0;
+                
+                for (Empleado empleado : empleadosActivos) {
+                    
+                    pensionEmpleados += empleado.getPensionEmpleado();
+                    pensionEmpleador += empleado.getPensionEmpleador();
+
+                    System.out.println(empleado.toString());
+                    System.out.println("Pago de pension por parte de empleado: " + empleado.getPensionEmpleado() + " Pesos");
+                    System.out.println("Pago de pension por parte de empleador: " + empleado.getPensionEmpleador() + " Pesos");
+                    System.out.println();
+                }
+
+                pensionTotal = pensionEmpleados + pensionEmpleador;
+
+                System.out.println();
+                System.out.println("Pagos de pension totales por parte de empleados: " + pensionEmpleados + " Pesos");
+                System.out.println("Pagos de pension totales por parte de empleador: " + pensionEmpleador + " Pesos");
+                System.out.println("Pagos de pension totales: " + pensionTotal + " Pesos");
+
+                System.out.println();
+                System.out.println("Presione Enter para continuar . . .");
+                sc.nextLine();
+
             }
 
             if (opt.equals("99")) {
@@ -227,7 +367,7 @@ public class Main {
             return null;
         }
 
-        Scanner tmpsc = new Scanner(System.in);
+        Scanner tmpsc = SCANNER;
 
         for (Obj var : list) {
             System.out.println((list.indexOf(var) + 1) + ". " + var.toString());

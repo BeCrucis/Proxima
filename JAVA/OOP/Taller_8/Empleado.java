@@ -21,14 +21,15 @@ public class Empleado extends Persona{
 
     protected double sueldoBase;
     protected int nivelARL;
-    private double sueldoFinal;
 
-    public Empleado(String nombre, String documentoId, double sueldoBase, int nivelARL){
+    protected String tipoEmpleado;
+
+    public Empleado(String nombre, String documentoId, String tipoEmpleado, double sueldoBase, int nivelARL){
         super(nombre, documentoId);
 
+        this.tipoEmpleado = tipoEmpleado;
         this.sueldoBase = sueldoBase;
         this.nivelARL = nivelARL;
-        this.sueldoFinal = getSueldoFinalEmpleado();
 
     }
 
@@ -44,6 +45,10 @@ public class Empleado extends Persona{
 
     public double getSueldoBase(){
         return sueldoBase;
+    }
+
+    public String getTipoEmpleado() {
+        return tipoEmpleado;
     }
 
     public void retirarEmpleado(){
@@ -137,7 +142,7 @@ public class Empleado extends Persona{
     }
 
     public String infoPagosTotales() {
-        String infoEmpleado = String.format("Empleado : %s, ID: %d", getNombre(), getID());
+        String infoEmpleado = String.format("Empleado : %s, Tipo: %s, ID: %d", getNombre(), getTipoEmpleado(), getID());
 
         String infoSueldo = String.format("Sueldo base: %f\nPagos de salud por empleado: %f\nPagos de pension por empleado: %f\nAuxiliaturas al empleado: %f\nSueldo final: %f ", sueldoBase, getSaludEmpleado(), getPensionEmpleado(), getAuxiliaturas(), getSueldoFinalEmpleado());
 
@@ -148,5 +153,9 @@ public class Empleado extends Persona{
         return infoTotal;
     }
 
-    
+    @Override
+    public String toString() {
+        String formattedInfo = String.format("Empleado : %s, Tipo: %s, ID: %d", getNombre(), getTipoEmpleado(), getID());
+        return formattedInfo;
+    }
 }
