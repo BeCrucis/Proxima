@@ -1,4 +1,4 @@
-public class Empleado extends Persona{
+public class Empleado extends Persona {
 
     static private final double sueldoMinimo = 828116;
     static private final double auxilioTransporte = 97032;
@@ -21,29 +21,34 @@ public class Empleado extends Persona{
 
     protected double sueldoBase;
     protected int nivelARL;
+    protected Nodo dependencia;
 
     protected String tipoEmpleado;
 
-    public Empleado(String nombre, String documentoId, String tipoEmpleado, double sueldoBase, int nivelARL){
+    public Empleado(String nombre, String documentoId, String tipoEmpleado, double sueldoBase,
+            int nivelARL, Nodo dependencia) {
         super(nombre, documentoId);
 
         this.tipoEmpleado = tipoEmpleado;
         this.sueldoBase = sueldoBase;
         this.nivelARL = nivelARL;
+        this.dependencia = dependencia;
+        dependencia.addEmpleado(this);
 
     }
 
-    public static double getSueldominimo(){
+    public static double getSueldominimo() {
         return sueldoMinimo;
     }
 
-    private double getAuxiliaturas(){
-        if(tieneAuxilio){
+    private double getAuxiliaturas() {
+        if (tieneAuxilio) {
             return auxilioTransporte;
-        } else return 0;
+        } else
+            return 0;
     }
 
-    public double getSueldoBase(){
+    public double getSueldoBase() {
         return sueldoBase;
     }
 
@@ -51,60 +56,65 @@ public class Empleado extends Persona{
         return tipoEmpleado;
     }
 
-    public void retirarEmpleado(){
+    public void retirarEmpleado() {
         isActivo = false;
     }
 
-    public void activarEmpleado(){
+    public void activarEmpleado() {
         isActivo = true;
     }
 
-    public boolean isActivo(){
+    public boolean isActivo() {
         return isActivo;
     }
-    
-    public double getSaludEmpleado(){
+
+    public double getSaludEmpleado() {
 
 
-        return sueldoBase*porcentajeSaludEmpleado;
+        return sueldoBase * porcentajeSaludEmpleado;
     }
 
-    public double getSaludEmpleador(){
+    public double getSaludEmpleador() {
 
-        return sueldoBase*porcentajeSaludEmpleador;
+        return sueldoBase * porcentajeSaludEmpleador;
     }
 
-    public double getPensionEmpleado(){
-        return sueldoBase*porcentajePensionEmpleado;
+    public double getPensionEmpleado() {
+        return sueldoBase * porcentajePensionEmpleado;
     }
 
-    public double getPensionEmpleador(){
-        return sueldoBase*porcentajePensionEmpleador;
+    public double getPensionEmpleador() {
+        return sueldoBase * porcentajePensionEmpleador;
     }
 
-    public double getSENAEmpleador(){
-        return sueldoBase*porcentajeSENAEmpleador;
+    public double getSENAEmpleador() {
+        return sueldoBase * porcentajeSENAEmpleador;
     }
 
-    public double getCajaCompensacionEmpleador(){
-        return sueldoBase*porcentajeCajaCompensacionEmpleador;
+    public double getCajaCompensacionEmpleador() {
+        return sueldoBase * porcentajeCajaCompensacionEmpleador;
     }
 
-    public double getICBFEmpleador(){
-        return sueldoBase*porcentajeICBFEmpleador;
+    public double getICBFEmpleador() {
+        return sueldoBase * porcentajeICBFEmpleador;
     }
 
-    public double getARLEmpleador(){
+    public double getARLEmpleador() {
 
-        if(nivelARL == 1) return sueldoBase*porcentajeARLtipo1Empleador;
+        if (nivelARL == 1)
+            return sueldoBase * porcentajeARLtipo1Empleador;
 
-        else if (nivelARL == 2) return sueldoBase*porcentajeARLtipo2Empleador;
+        else if (nivelARL == 2)
+            return sueldoBase * porcentajeARLtipo2Empleador;
 
-        else if (nivelARL == 3) return sueldoBase*porcentajeARLtipo3Empleador;
+        else if (nivelARL == 3)
+            return sueldoBase * porcentajeARLtipo3Empleador;
 
-        else if (nivelARL == 4) return sueldoBase*porcentajeARLtipo4Empleador;
+        else if (nivelARL == 4)
+            return sueldoBase * porcentajeARLtipo4Empleador;
 
-        else if (nivelARL == 5) return sueldoBase*porcentajeARLtipo5Empleador;
+        else if (nivelARL == 5)
+            return sueldoBase * porcentajeARLtipo5Empleador;
 
         else {
             System.out.println("Nivel ARL no valido");
@@ -113,23 +123,23 @@ public class Empleado extends Persona{
 
     }
 
-    public double getSueldoFinalEmpleado(){
+    public double getSueldoFinalEmpleado() {
 
         double costoSalud = getSaludEmpleado();
         double costoPension = getPensionEmpleado();
         double ingresoExtra = 0;
 
-        if(tieneAuxilio){
+        if (tieneAuxilio) {
 
             ingresoExtra = auxilioTransporte;
         }
-        
+
         double sueldoFinal = sueldoBase - costoSalud - costoPension + ingresoExtra;
 
         return sueldoFinal;
     }
 
-    public double getPagosEmpleador(){
+    public double getPagosEmpleador() {
 
         double costoSalud = getSaludEmpleador();
         double costoPension = getPensionEmpleador();
@@ -141,21 +151,42 @@ public class Empleado extends Persona{
         return costoSalud + costoPension + costoSENA + costoCajaCompensacion + costoICBF + costoARL;
     }
 
+    public Nodo getDependencia() {
+        return this.dependencia;
+    }
+
+    public void setDependencia(Nodo nuevaDependencia) {
+
+        dependencia.removeEmpleado(this);
+        nuevaDependencia.addEmpleado(this);
+        dependencia = nuevaDependencia;
+    }
+
     public String infoPagosTotales() {
-        String infoEmpleado = String.format("Empleado : %s, Tipo: %s, ID: %d", getNombre(), getTipoEmpleado(), getID());
+        String infoEmpleado = String.format("Empleado : %s, Tipo: %s, ID: %d", getNombre(),
+                getTipoEmpleado(), getID());
 
-        String infoSueldo = String.format("Sueldo base: %f\nPagos de salud por empleado: %f\nPagos de pension por empleado: %f\nAuxiliaturas al empleado: %f\nSueldo final: %f ", sueldoBase, getSaludEmpleado(), getPensionEmpleado(), getAuxiliaturas(), getSueldoFinalEmpleado());
+        String infoSueldo = String.format(
+                "Sueldo base: %f\nPagos de salud por empleado: %f\nPagos de pension por empleado: %f\nAuxiliaturas al empleado: %f\nSueldo final: %f ",
+                sueldoBase, getSaludEmpleado(), getPensionEmpleado(), getAuxiliaturas(),
+                getSueldoFinalEmpleado());
 
-        String infoEmpleador = String.format("Pagos de empleador: \nSalud: %f\nPension: %f\nSENA: %f\nCaja de compensacion: %f\nICBF: %f\nARL: %f\nPago a administradoras y fondos por parte del empleador total: %f", getSaludEmpleador(), getPensionEmpleador(), getSENAEmpleador(), getCajaCompensacionEmpleador(), getICBFEmpleador(), getARLEmpleador(), getPagosEmpleador());
+        String infoEmpleador = String.format(
+                "Pagos de empleador: \nSalud: %f\nPension: %f\nSENA: %f\nCaja de compensacion: %f\nICBF: %f\nARL: %f\nPago a administradoras y fondos por parte del empleador total: %f",
+                getSaludEmpleador(), getPensionEmpleador(), getSENAEmpleador(),
+                getCajaCompensacionEmpleador(), getICBFEmpleador(), getARLEmpleador(),
+                getPagosEmpleador());
 
-        String infoTotal = String.format("%s \n%s \n%s \n", infoEmpleado, infoSueldo, infoEmpleador);
+        String infoTotal =
+                String.format("%s \n%s \n%s \n", infoEmpleado, infoSueldo, infoEmpleador);
 
         return infoTotal;
     }
 
     @Override
     public String toString() {
-        String formattedInfo = String.format("Empleado : %s, Tipo: %s, ID: %d", getNombre(), getTipoEmpleado(), getID());
+        String formattedInfo = String.format("Empleado : %s, Tipo: %s, ID: %d, Dependencia: %s",
+                getNombre(), getTipoEmpleado(), getID(), getDependencia());
         return formattedInfo;
     }
 }
