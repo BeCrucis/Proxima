@@ -415,7 +415,22 @@ public class Main {
         Nodo vrAcademica = new Nodo(rectoria, "Vicerrectoria Academica");
         Nodo profesores = new Nodo(rectoria, "Vicerrectoria Administrativa");
         Nodo facultades = new Nodo(rectoria, "Decanato de facultad");
-        Nodo fisicoMecanicas = new Nodo(facultades, "Facultad de ingenierias Fisicomecanicas");
+        Nodo fisicoMecanicas = new Nodo(facultades, "Facultad de Ingenierias Fisicomecanicas");
+        Nodo escSistemas = new Nodo(fisicoMecanicas, "Escuela de Ingenieria de sistemas e informatica");
+        Nodo maestriaSistemas = new Nodo(escSistemas, "Maestría en Ingeniería de Sistemas e Informática");
+        Nodo escCivil = new Nodo(fisicoMecanicas, "Escuela de Ingenieria Civil");
+        Nodo escMecanica = new Nodo(fisicoMecanicas, "Escuela de Ingenieria Mecanica");
+        Nodo fisicoQuimicas = new Nodo(facultades, "Facultad de Ingenierias Fisicoquimicas");
+        Nodo escPetroleos = new Nodo(fisicoQuimicas, "Escuela de Ingenieria de Petroleos");
+        Nodo escIngQuimica = new Nodo(fisicoQuimicas, "Escuela de Ingenieria Quimica");
+        Nodo ciencias = new Nodo(facultades, "Facultad de Ciencias");
+        Nodo escFisica = new Nodo(ciencias, "Escuela de Fisica");
+        Nodo escMatematicas = new Nodo(ciencias, "Escuela de Matematicas");
+        Nodo cienciasHumanas = new Nodo(facultades, "Facultad de Ciencias Humanas");
+        Nodo escFilosofia = new Nodo(cienciasHumanas, "Escuela de Filosofia");
+        Nodo escTrabajoSocial = new Nodo(cienciasHumanas, "Escuela de Trabajo Social");
+        Nodo salud = new Nodo(facultades, "Facultad de Salud");
+        Nodo escMedicina = new Nodo(salud, "Escuela de Medicina");
 
         nodos.add(rectoria);
         nodos.addAll(rectoria.getRecursiveHijos());
