@@ -426,19 +426,27 @@ public class Main {
         Nodo escSistemas = new Nodo(fisicoMecanicas, "Escuela de Ingenieria de sistemas e informatica");
         Nodo maestriaSistemas = new Nodo(escSistemas, "Maestría en Ingeniería de Sistemas e Informática");
         Nodo escCivil = new Nodo(fisicoMecanicas, "Escuela de Ingenieria Civil");
+        Nodo maestriaCivil = new Nodo(escCivil, "Maestria en Ingenieria Civil");
         Nodo escMecanica = new Nodo(fisicoMecanicas, "Escuela de Ingenieria Mecanica");
+        Nodo maestriaMecanica = new Nodo(escMecanica, "Maestria en Ingenieria Mecanica");
         Nodo fisicoQuimicas = new Nodo(facultades, "Facultad de Ingenierias Fisicoquimicas");
         Nodo escPetroleos = new Nodo(fisicoQuimicas, "Escuela de Ingenieria de Petroleos");
+        Nodo maestriaPetroleos = new Nodo(escPetroleos, "Maestria en Ingenieria de Petroleos y Gas");
         Nodo escIngQuimica = new Nodo(fisicoQuimicas, "Escuela de Ingenieria Quimica");
+        Nodo maestriaIngQuimica = new Nodo(escIngQuimica, "Maestria en Ingenieria Quimica");
         Nodo ciencias = new Nodo(facultades, "Facultad de Ciencias");
         Nodo escFisica = new Nodo(ciencias, "Escuela de Fisica");
+        Nodo doctoradoFisica = new Nodo(escFisica, "Doctorado en Fisica");
         Nodo escMatematicas = new Nodo(ciencias, "Escuela de Matematicas");
+        Nodo maestriaMatematicas = new Nodo(escMatematicas, "Maestria en Matematicas");
         Nodo cienciasHumanas = new Nodo(facultades, "Facultad de Ciencias Humanas");
         Nodo escFilosofia = new Nodo(cienciasHumanas, "Escuela de Filosofia");
+        Nodo doctoradoFilosofia = new Nodo(escFisica, "Doctorado en Filosofia");
         Nodo escTrabajoSocial = new Nodo(cienciasHumanas, "Escuela de Trabajo Social");
+        Nodo maestriaTrabajoSocial = new Nodo(escTrabajoSocial, "Maestría en Intervención Social");
         Nodo salud = new Nodo(facultades, "Facultad de Salud");
         Nodo escMedicina = new Nodo(salud, "Escuela de Medicina");
-
+        Nodo especMedicina = new Nodo(escMedicina, "Especializacion en Medicina Interna");
 
         nodos.add(rectoria);
         nodos.addAll(rectoria.getRecursiveHijos());
