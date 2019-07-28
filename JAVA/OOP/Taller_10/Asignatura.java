@@ -5,14 +5,25 @@ public class Asignatura {
     private String nombre;
     private String codigo;
     private int creditos;
-    private ArrayList<String> requisitos;
+    private ArrayList<String> requisitos; //Requisitos por codigo de asignatura
     private ArrayList<Curso> cursos;
+
+    public Asignatura(String nombre, String codigo, int creditos) {
+        this.nombre = nombre;
+        this.codigo = codigo;
+        this.creditos = creditos;
+        
+        requisitos = new ArrayList<>();
+        cursos = new ArrayList<>();
+    }
 
     public Asignatura(String nombre, String codigo, int creditos, ArrayList<String> requisitos) {
         this.nombre = nombre;
         this.codigo = codigo;
         this.creditos = creditos;
         this.requisitos = requisitos;
+
+        cursos = new ArrayList<>();
     }
 
     public void addCurso(Curso curso){

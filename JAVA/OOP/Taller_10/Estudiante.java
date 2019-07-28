@@ -14,6 +14,10 @@ public class Estudiante extends Persona {
         
         this.tipoEstudiante = tipoEstudiante;
         isActivo = true;
+
+        programas = new ArrayList<>();
+        cursosActivos = new ArrayList<>();
+        cursosRealizados = new ArrayList<>();
     }
 
     public void activarEstudiante(){

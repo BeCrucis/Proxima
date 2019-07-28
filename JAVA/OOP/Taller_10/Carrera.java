@@ -10,6 +10,9 @@ public class Carrera {
     public Carrera(String nombre, Nodo escuela) {
         this.nombre = nombre;
         this.escuela = escuela;
+
+        pensum = new ArrayList<>();
+        estudiantes = new ArrayList<>();
     }
 
     public void addToPensun(Asignatura asignatura) {

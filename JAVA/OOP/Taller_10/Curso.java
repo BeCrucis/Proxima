@@ -11,6 +11,14 @@ public class Curso {
     private Empleado profesor;
     private ArrayList<Double> notasFinales;
 
+    public Curso(Asignatura asignatura, int capacidad) {
+        this.asignatura = asignatura;
+        this.capacidad = capacidad;
+
+        estudiantes = new ArrayList<>();
+        notasFinales = new ArrayList<>();
+    }
+
     public Curso(Asignatura asignatura, Empleado profesor, int capacidad) {
         this.asignatura = asignatura;
         this.profesor = profesor;

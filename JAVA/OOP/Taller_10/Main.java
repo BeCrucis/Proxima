@@ -5,9 +5,26 @@ public class Main {
 
     private static final Scanner SCANNER = new Scanner(System.in);
 
+    static ArrayList<Empleado> empleados = new ArrayList<>();
+    static ArrayList<Empleado> empleadosActivos = new ArrayList<>();
+    static ArrayList<Empleado> empleadosInactivos = new ArrayList<>();
+
+    static ArrayList<Nodo> dependencias = new ArrayList<>();
+
+    static ArrayList<Carrera> programas = new ArrayList<>();
+
+    static ArrayList<Estudiante> estudiantes = new ArrayList<>();
+    static ArrayList<Estudiante> estudiantesActivos = new ArrayList<>();
+    static ArrayList<Estudiante> estudiantesInactivos = new ArrayList<>();
+
+    static ArrayList<Carrera> programasPregrado = new ArrayList<>();
+    static ArrayList<Carrera> programasMaestria = new ArrayList<>();
+    static ArrayList<Carrera> programasDoctorado = new ArrayList<>();
+
     public static void main(String[] args) throws IOException {
 
         Scanner sc = SCANNER.useDelimiter("\\n");
+
         ArrayList<String> tiposEmpleado = new ArrayList<>(List.of("Docente medio tiempo",
                 "Docente tiempo completo", "Docente catedra", "Administrativo planta auxiliar",
                 "Administrativo planta tecnico", "Administrativo planta profesional", "OPS"));
@@ -15,21 +32,9 @@ public class Main {
         ArrayList<String> tiposEstudiante = new ArrayList<>(
                 List.of("Estudiante pregrado", "Estudiante maestria", "Estudiante doctorado"));
 
-        ArrayList<Empleado> empleados = new ArrayList<>();
-        ArrayList<Empleado> empleadosActivos = new ArrayList<>();
-        ArrayList<Empleado> empleadosInactivos = new ArrayList<>();
 
-        ArrayList<Nodo> dependencias = crearDependencias();
-
-        ArrayList<Estudiante> estudiantes = new ArrayList<>();
-        ArrayList<Estudiante> estudiantesActivos = new ArrayList<>();
-        ArrayList<Estudiante> estudiantesInactivos = new ArrayList<>();
-
-        ArrayList<Carrera> programasPregrado = new ArrayList<>();;
-        ArrayList<Carrera> programasMaestria = new ArrayList<>();;
-        ArrayList<Carrera> programasDoctorado = new ArrayList<>();;
-
-        crearEmpleadosDemo(empleados, empleadosActivos, dependencias); // Crea empleados base
+        crearDependencias(); // Crea dependencias basicas
+        crearPersonasDemo(); // Crea empleados base
 
         while (true) {
 
@@ -226,7 +231,6 @@ public class Main {
                 double pagoSENATotal = 0;
                 double pagoCajaCompensacionTotal = 0;
                 double pagoICBFTotal = 0;
-
 
                 for (Empleado empleado : empleadosActivos) {
 
@@ -484,9 +488,11 @@ public class Main {
 
                 if (estudianteSeleccionado.getTipoEstudiante().toUpperCase().contains("PREGRADO")) {
                     programaSeleccionado = selectFromArrayList(programasPregrado);
-                } else if (estudianteSeleccionado.getTipoEstudiante().toUpperCase().contains("MAESTRIA")) {
+                } else if (estudianteSeleccionado.getTipoEstudiante().toUpperCase()
+                        .contains("MAESTRIA")) {
                     programaSeleccionado = selectFromArrayList(programasMaestria);
-                } else if (estudianteSeleccionado.getTipoEstudiante().toUpperCase().contains("DOCTORADO")) {
+                } else if (estudianteSeleccionado.getTipoEstudiante().toUpperCase()
+                        .contains("DOCTORADO")) {
                     programaSeleccionado = selectFromArrayList(programasDoctorado);
                 } else {
                     System.out.println("Error: Tipo de estudiante invalido");
@@ -494,7 +500,8 @@ public class Main {
 
                 programaSeleccionado.addEstudiante(estudianteSeleccionado);
 
-                System.out.println("Estudiante " + estudianteSeleccionado.toString() + "Agregado a:");
+                System.out
+                        .println("Estudiante " + estudianteSeleccionado.toString() + "Agregado a:");
                 System.out.println(programaSeleccionado.toString());
 
                 System.out.println();
@@ -511,8 +518,6 @@ public class Main {
 
         }
 
-
-
     }
 
     public static void coolIntro() {
@@ -527,7 +532,7 @@ public class Main {
 
     }
 
-    public static ArrayList<Nodo> crearDependencias() {
+    public static void crearDependencias() {
 
         ArrayList<Nodo> nodos = new ArrayList<>();
 
@@ -537,10 +542,8 @@ public class Main {
         Nodo profesores = new Nodo(rectoria, "Vicerrectoria Administrativa");
         Nodo facultades = new Nodo(rectoria, "Decanato de facultad");
         Nodo fisicoMecanicas = new Nodo(facultades, "Facultad de ingenierias Fisicomecanicas");
-        Nodo escSistemas =
-                new Nodo(fisicoMecanicas, "Escuela de Ingenieria de sistemas e informatica");
-        Nodo maestriaSistemas =
-                new Nodo(escSistemas, "Maestría en Ingeniería de Sistemas e Informática");
+        Nodo escSistemas = new Nodo(fisicoMecanicas, "Escuela de Ingenieria de sistemas");
+        Nodo maestriaSistemas = new Nodo(escSistemas, "Maestria en Ingenieria de Sistemas");
         Nodo escCivil = new Nodo(fisicoMecanicas, "Escuela de Ingenieria Civil");
         Nodo escMecanica = new Nodo(fisicoMecanicas, "Escuela de Ingenieria Mecanica");
         Nodo fisicoQuimicas = new Nodo(facultades, "Facultad de Ingenierias Fisicoquimicas");
@@ -555,20 +558,30 @@ public class Main {
         Nodo salud = new Nodo(facultades, "Facultad de Salud");
         Nodo escMedicina = new Nodo(salud, "Escuela de Medicina");
 
-
-        nodos.add(rectoria);
-        nodos.addAll(rectoria.getRecursiveHijos());
-
-        return nodos;
+        dependencias.add(rectoria);
+        dependencias.addAll(rectoria.getRecursiveHijos());
     }
 
-    public static void crearEmpleadosDemo(ArrayList<Empleado> empleados,
-            ArrayList<Empleado> empleadosActivos, ArrayList<Nodo> dependencias) {
+    public static void crearCarrerasDemo() {
 
-        Empleado demo =
-                new Empleado("Juan jose", "100232", "EmpleadoDemo", 900000, 2, dependencias.get(0));
-        empleados.add(demo);
-        empleadosActivos.add(demo);
+
+    }
+
+    public static void crearPersonasDemo() {
+
+        Empleado demo1 = new Empleado("Juan J", "100232", "Demo", 900000, 2, dependencias.get(0));
+        empleados.add(demo1);
+        empleadosActivos.add(demo1);
+
+        Estudiante demo2 = new Estudiante("Bolsa McBolsaface", "10020", "Estudiante Pregrado");
+        Estudiante demo3 = new Estudiante("Lobito", "10020", "Estudiante Maestria");
+        Estudiante demo4 = new Estudiante("Dr Strange", "10020", "Estudiante Doctorado");
+        estudiantes.add(demo2);
+        estudiantes.add(demo3);
+        estudiantes.add(demo4);
+        estudiantesActivos.add(demo2);
+        estudiantesActivos.add(demo3);
+        estudiantesActivos.add(demo4);
     }
 
     public static void hacerNomina(ArrayList<Empleado> empleados) {
@@ -620,9 +633,8 @@ public class Main {
 
     }
 
-
-
-    public static <Obj> Obj selectFromArrayList(ArrayList<Obj> list) {
+    //Funcion generica que devuelte un objeto seleccionado de un ArrayList
+    public static <Obj> Obj selectFromArrayList(ArrayList<Obj> list) { 
 
         if (list.isEmpty()) {
             System.out.println("Lista vacia, saliendo . . .");
