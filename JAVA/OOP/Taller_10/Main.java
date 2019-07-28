@@ -12,13 +12,24 @@ public class Main {
                 "Docente tiempo completo", "Docente catedra", "Administrativo planta auxiliar",
                 "Administrativo planta tecnico", "Administrativo planta profesional", "OPS"));
 
+        ArrayList<String> tiposEstudiante = new ArrayList<>(
+                List.of("Estudiante pregrado", "Estudiante maestria", "Estudiante doctorado"));
+
         ArrayList<Empleado> empleados = new ArrayList<>();
         ArrayList<Empleado> empleadosActivos = new ArrayList<>();
         ArrayList<Empleado> empleadosInactivos = new ArrayList<>();
 
         ArrayList<Nodo> dependencias = crearDependencias();
 
-        crearEmpleadosDemo(empleados, empleadosActivos, dependencias); //Crea empleados base
+        ArrayList<Estudiante> estudiantes = new ArrayList<>();
+        ArrayList<Estudiante> estudiantesActivos = new ArrayList<>();
+        ArrayList<Estudiante> estudiantesInactivos = new ArrayList<>();
+
+        ArrayList<Carrera> programasPregrado = new ArrayList<>();;
+        ArrayList<Carrera> programasMaestria = new ArrayList<>();;
+        ArrayList<Carrera> programasDoctorado = new ArrayList<>();;
+
+        crearEmpleadosDemo(empleados, empleadosActivos, dependencias); // Crea empleados base
 
         while (true) {
 
@@ -27,20 +38,23 @@ public class Main {
             System.out.println("2. Retirar un empleado");
             System.out.println("3. Activar un empleado");
             System.out.println("4. Eliminar un empleado");
-            System.out.println("5. Ver informacion de empleado");
+            System.out.println("5. Liquidar empleado");
             System.out.println("6. Realizar nomina");
             System.out.println("7. Realizar pagos parafiscales");
             System.out.println("8. Realizar pagos de salud");
             System.out.println("9. Realizar pagos de pension");
             System.out.println("10. Cambiar empleado de dependencia");
             System.out.println("11. Nomina por dependencia");
-            System.out.println("12. Matricular estudiante en programa");//TODO
+            System.out.println("12. Agregar un estudiante");
             System.out.println("13. Retirar estudiante");
-            System.out.println("14. Eliminar estudiante");
-            System.out.println("15. Matricular estudiante en materia");
-            System.out.println("16. Asignar horario a materia");
-            System.out.println("17. Asignar profesor a materia");
-            System.out.println("18. Promedio arimetico de estudiante arimetico y ponderado");
+            System.out.println("14. Reactivar estudiante");
+            System.out.println("15. Eliminar estudiante");
+            System.out.println("16. Matricular estudiante en programa");
+            System.out.println("17. Matricular estudiante en curso de asignatura"); // TODO
+            System.out.println("18. Asignar horario a curso de asignatura");
+            System.out.println("19. Asignar profesor a materia");
+            System.out.println("20. Subir notas finales de estudiante");
+            System.out.println("21. Promedio arimetico de estudiante arimetico y ponderado");
             System.out.println("99. Salir del programa");
             System.out.println();
             System.out.print("Inserte su opcion: ");
@@ -173,7 +187,7 @@ public class Main {
 
                 if (!empleados.isEmpty()) {
 
-                    System.out.println("Ha seleccionado ver informacion de un empleado: ");
+                    System.out.println("Ha seleccionado liquidar un empleado: ");
                     Empleado empleadoSeleccionado = selectFromArrayList(empleados);
 
                     clearScreen();
@@ -347,43 +361,141 @@ public class Main {
 
                 System.out.println("Ha seleccionado hacer nomina por dependencia");
                 Nodo dependenciaSeleccionada = selectFromArrayList(dependencias);
-                ArrayList<Nodo> dependenciasSeleccionadas =
-                        new ArrayList<>(Arrays.asList(dependenciaSeleccionada));
 
                 ArrayList<Empleado> empleadosObtenidos = dependenciaSeleccionada.getEmpleados();
 
                 clearScreen();
 
-                System.out.print("Desea hacer nomina de las dependencias hijas tambien? S/N: ");
-                String tempOpt = sc.nextLine();
-
-                if (tempOpt.toUpperCase().equals("S")) {
-
-                    ArrayList<Nodo> dependenciasHijas = dependenciaSeleccionada.getRecursiveHijos();
-
-                    for (Nodo dependencia : dependenciasHijas) {
-
-                        ArrayList<Empleado> temp = dependencia.getEmpleados();
-
-                        for (Empleado empleado : temp) {
-                            if (empleado.isActivo()) {
-                                empleadosObtenidos.add(empleado);
-                            }
-                        }
-
-                        dependenciasSeleccionadas.add(dependencia);
-                    }
-
-                }
-
-                clearScreen();
-
-                System.out.println("Haciendo nomina de las siguientes dependencias: ");
-                for (Nodo dependencia : dependenciasSeleccionadas) {
-                    System.out.println(dependencia.toString());
-                }
+                System.out.println("Haciendo nomina de la siguiente dependencia: ");
+                System.out.println(dependenciaSeleccionada.toString());
 
                 hacerNomina(empleadosObtenidos);
+
+                System.out.println();
+                System.out.println("Presione Enter para continuar . . .");
+                sc.nextLine();
+
+            }
+
+            if (opt.equals("12")) {
+
+                System.out.println("Ha seleccionado crear un nuevo estudiante:");
+                System.out.println();
+
+                System.out.print("Inserte el nombre del estudiante: ");
+                String nombre = sc.nextLine();
+
+                System.out.print("Inserte el documento del estudiante: ");
+                String documentoId = sc.nextLine();
+
+                System.out.println("Inserte que tipo de estudiante es:");
+                String tipoEstudiante = selectFromArrayList(tiposEstudiante);
+
+                Estudiante tempEstudiante = new Estudiante(nombre, documentoId, tipoEstudiante);
+
+                estudiantes.add(tempEstudiante);
+                estudiantesActivos.add(tempEstudiante);
+
+            }
+
+            if (opt.equals("13")) {
+
+                if (!estudiantesActivos.isEmpty()) {
+
+                    System.out
+                            .println("Ha seleccionado convertir a estudiante en no estudiante!: ");
+                    Estudiante estudianteSeleccionado = selectFromArrayList(estudiantesActivos);
+
+                    estudianteSeleccionado.retirarEstudiante();
+                    estudiantesActivos.remove(estudianteSeleccionado);
+                    estudiantesInactivos.add(estudianteSeleccionado);
+
+                    System.out.println("Estudiante retirado, estudiante ahora es no estudiante!");
+                    System.out.println("Presione enter para continuar. . .");
+                    sc.nextLine();
+                } else {
+
+                    System.out.println("No hay estudiantes a seleccionar!");
+                    System.out.println("Presione enter para continuar . . .");
+                    sc.nextLine();
+                }
+            }
+
+            if (opt.equals("14")) {
+
+                if (!estudiantesInactivos.isEmpty()) {
+
+                    System.out
+                            .println("Ha seleccionado convertir a no estudiante en estudiante!: ");
+                    Estudiante estudianteSeleccionado = selectFromArrayList(estudiantesInactivos);
+
+                    estudianteSeleccionado.activarEstudiante();
+                    estudiantesInactivos.remove(estudianteSeleccionado);
+                    estudiantesActivos.add(estudianteSeleccionado);
+
+                    System.out
+                            .println("No Estudiante activado, no estudiante ahora es estudiante!");
+                    System.out.println("Presione enter para continuar. . .");
+                    sc.nextLine();
+                } else {
+
+                    System.out.println("No hay estudiantes a seleccionar!");
+                    System.out.println("Presione enter para continuar . . .");
+                    sc.nextLine();
+                }
+            }
+
+            if (opt.equals("15")) {
+
+                if (!estudiantes.isEmpty()) {
+
+                    System.out.println("Ha seleccionado convertir a estudiante en nopersona!: ");
+                    Estudiante estudianteSeleccionado = selectFromArrayList(estudiantes);
+
+                    estudiantes.remove(estudianteSeleccionado);
+                    if (estudianteSeleccionado.isActivo) {
+                        estudiantesActivos.remove(estudianteSeleccionado);
+                    } else {
+                        estudiantesInactivos.remove(estudianteSeleccionado);
+                    }
+
+                    System.out.println("Estudiante borrado, estudiante ahora es nopersona!");
+                    System.out.println("Plusempujar enter para continuar. . .");
+                    sc.nextLine();
+                } else {
+
+                    System.out.println("No hay estudiantes a seleccionar!");
+                    System.out.println("Presione enter para continuar . . .");
+                    sc.nextLine();
+                }
+            }
+
+            if (opt.equals("16")) {
+
+                System.out.println("Ha seleccionado matricular a un estudiante a un programa");
+
+                System.out.println("Seleccione un estudiante: ");
+                Estudiante estudianteSeleccionado = selectFromArrayList(estudiantes);
+
+                System.out.println("Seleccione el programa a matricular al estudiante:");
+                System.out.println(estudianteSeleccionado.toString());
+
+                Carrera programaSeleccionado = null;
+
+                if (estudianteSeleccionado.getTipoEstudiante().toUpperCase().contains("PREGRADO")) {
+                    programaSeleccionado = selectFromArrayList(programasPregrado);
+                } else if (estudianteSeleccionado.getTipoEstudiante().toUpperCase().contains("MAESTRIA")) {
+                    programaSeleccionado = selectFromArrayList(programasMaestria);
+                } else if (estudianteSeleccionado.getTipoEstudiante().toUpperCase().contains("DOCTORADO")) {
+                    programaSeleccionado = selectFromArrayList(programasDoctorado);
+                } else {
+                    System.out.println("Error: Tipo de estudiante invalido");
+                }
+
+                programaSeleccionado.addEstudiante(estudianteSeleccionado);
+
+                System.out.println("Estudiante " + estudianteSeleccionado.toString() + "Agregado a:");
+                System.out.println(programaSeleccionado.toString());
 
                 System.out.println();
                 System.out.println("Presione Enter para continuar . . .");
@@ -398,6 +510,8 @@ public class Main {
             clearScreen();
 
         }
+
+
 
     }
 
@@ -423,30 +537,24 @@ public class Main {
         Nodo profesores = new Nodo(rectoria, "Vicerrectoria Administrativa");
         Nodo facultades = new Nodo(rectoria, "Decanato de facultad");
         Nodo fisicoMecanicas = new Nodo(facultades, "Facultad de ingenierias Fisicomecanicas");
-        Nodo escSistemas = new Nodo(fisicoMecanicas, "Escuela de Ingenieria de sistemas e informatica");
-        Nodo maestriaSistemas = new Nodo(escSistemas, "Maestría en Ingeniería de Sistemas e Informática");
+        Nodo escSistemas =
+                new Nodo(fisicoMecanicas, "Escuela de Ingenieria de sistemas e informatica");
+        Nodo maestriaSistemas =
+                new Nodo(escSistemas, "Maestría en Ingeniería de Sistemas e Informática");
         Nodo escCivil = new Nodo(fisicoMecanicas, "Escuela de Ingenieria Civil");
-        Nodo maestriaCivil = new Nodo(escCivil, "Maestria en Ingenieria Civil");
         Nodo escMecanica = new Nodo(fisicoMecanicas, "Escuela de Ingenieria Mecanica");
-        Nodo maestriaMecanica = new Nodo(escMecanica, "Maestria en Ingenieria Mecanica");
         Nodo fisicoQuimicas = new Nodo(facultades, "Facultad de Ingenierias Fisicoquimicas");
         Nodo escPetroleos = new Nodo(fisicoQuimicas, "Escuela de Ingenieria de Petroleos");
-        Nodo maestriaPetroleos = new Nodo(escPetroleos, "Maestria en Ingenieria de Petroleos y Gas");
         Nodo escIngQuimica = new Nodo(fisicoQuimicas, "Escuela de Ingenieria Quimica");
-        Nodo maestriaIngQuimica = new Nodo(escIngQuimica, "Maestria en Ingenieria Quimica");
         Nodo ciencias = new Nodo(facultades, "Facultad de Ciencias");
         Nodo escFisica = new Nodo(ciencias, "Escuela de Fisica");
-        Nodo doctoradoFisica = new Nodo(escFisica, "Doctorado en Fisica");
         Nodo escMatematicas = new Nodo(ciencias, "Escuela de Matematicas");
-        Nodo maestriaMatematicas = new Nodo(escMatematicas, "Maestria en Matematicas");
         Nodo cienciasHumanas = new Nodo(facultades, "Facultad de Ciencias Humanas");
         Nodo escFilosofia = new Nodo(cienciasHumanas, "Escuela de Filosofia");
-        Nodo doctoradoFilosofia = new Nodo(escFisica, "Doctorado en Filosofia");
         Nodo escTrabajoSocial = new Nodo(cienciasHumanas, "Escuela de Trabajo Social");
-        Nodo maestriaTrabajoSocial = new Nodo(escTrabajoSocial, "Maestría en Intervención Social");
         Nodo salud = new Nodo(facultades, "Facultad de Salud");
         Nodo escMedicina = new Nodo(salud, "Escuela de Medicina");
-        Nodo especMedicina = new Nodo(escMedicina, "Especializacion en Medicina Interna");
+
 
         nodos.add(rectoria);
         nodos.addAll(rectoria.getRecursiveHijos());
@@ -511,6 +619,8 @@ public class Main {
                 pagoEmpleadorTotal);
 
     }
+
+
 
     public static <Obj> Obj selectFromArrayList(ArrayList<Obj> list) {
 

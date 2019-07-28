@@ -1,20 +1,23 @@
 import java.util.ArrayList;
 
 public class Curso {
-    
-    String codigoCurso;
-    int horaInicio;
-    int horaFin;
-    ArrayList<Estudiante> estudiantes;
-    int capacidad;
-    Asignatura asignatura;
-    Empleado profesor;
-    double notaFinal;
+
+    private String codigoCurso;
+    public int horaInicio;
+    public int horaFin;
+    private ArrayList<Estudiante> estudiantes;
+    public int capacidad;
+    private Asignatura asignatura;
+    private Empleado profesor;
+    private ArrayList<Double> notasFinales;
 
     public Curso(Asignatura asignatura, Empleado profesor, int capacidad) {
         this.asignatura = asignatura;
         this.profesor = profesor;
         this.capacidad = capacidad;
+
+        estudiantes = new ArrayList<>();
+        notasFinales = new ArrayList<>();
     }
 
     public int getHoraInicio() {
@@ -45,19 +48,29 @@ public class Curso {
         this.profesor = profesor;
     }
 
-    public double getNotaFinal() {
-        return notaFinal;
+    public ArrayList<Double> getNotasFinales() {
+        return notasFinales;
     }
 
-    public void setNotaFinal(double notaFinal) {
-        this.notaFinal = notaFinal;
+    public void setNotaFinal(Estudiante estudiante, double notaFinal) {
+
+        try {
+            int indiceNota = estudiantes.indexOf(estudiante);
+            notasFinales.set(indiceNota, notaFinal);
+        } catch (Exception e) {
+            System.out.println("Estudiante invalido");
+        }
+
+
     }
 
-    public void addEstudiante(Estudiante estudiante){
-        
+    public void addEstudiante(Estudiante estudiante) {
+
         if (estudiantes.size() == capacidad) {
-            System.out.println("Curso lleno!");     
-        } else { estudiantes.add(estudiante); }
+            System.out.println("Curso lleno!");
+        } else {
+            estudiantes.add(estudiante);
+        }
     }
 
 }

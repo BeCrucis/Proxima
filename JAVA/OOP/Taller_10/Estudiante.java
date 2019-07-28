@@ -2,13 +2,30 @@ import java.util.ArrayList;
 
 public class Estudiante extends Persona {
 
+    String tipoEstudiante;
+    boolean isActivo;
+
     ArrayList<Carrera> programas;
     ArrayList<Curso> cursosActivos;
     ArrayList<Curso> cursosRealizados;
 
-    public Estudiante(String nombre, String documentoId) {
+    public Estudiante(String nombre, String documentoId, String tipoEstudiante) {
         super(nombre, documentoId);
-        // TODO Auto-generated constructor stub
+        
+        this.tipoEstudiante = tipoEstudiante;
+        isActivo = true;
+    }
+
+    public void activarEstudiante(){
+        isActivo = true;
+    }
+
+    public void retirarEstudiante(){
+        isActivo = false;
+    }
+
+    public String getTipoEstudiante() {
+      return tipoEstudiante;
     }
 
     public void agregarCurso(Curso curso) {
@@ -23,7 +40,7 @@ public class Estudiante extends Persona {
             cursosRealizados.add(cursoSeleccionado);
             cursosActivos.remove(cursoSeleccionado);
 
-            cursoSeleccionado.setNotaFinal(notaFinal);
+            cursoSeleccionado.setNotaFinal(this, notaFinal);
         } catch (Exception e) {
 
             System.out.println("Curso no encontrado");
@@ -45,5 +62,11 @@ public class Estudiante extends Persona {
     public ArrayList<Curso> getCursosRealizados() {
         return cursosRealizados;
     }  
+
+    @Override
+    public String toString() {
+        String formattedInfo = String.format("Estudante : %s, Tipo: %s, ID: %d, Programas: %s", getNombre(), getTipoEstudiante(), getID(), getProgramas().toString());
+return formattedInfo;
+    }
 
 }
