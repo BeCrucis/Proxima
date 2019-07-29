@@ -11,11 +11,11 @@ public class Main {
 
     static ArrayList<Nodo> dependencias = new ArrayList<>();
 
-    static ArrayList<Carrera> programas = new ArrayList<>();
-
     static ArrayList<Estudiante> estudiantes = new ArrayList<>();
     static ArrayList<Estudiante> estudiantesActivos = new ArrayList<>();
     static ArrayList<Estudiante> estudiantesInactivos = new ArrayList<>();
+
+    static ArrayList<Asignatura> asignaturas = new ArrayList<>();
 
     static ArrayList<Carrera> programasPregrado = new ArrayList<>();
     static ArrayList<Carrera> programasMaestria = new ArrayList<>();
@@ -33,7 +33,8 @@ public class Main {
 
 
         crearDependencias(); // Crea dependencias basicas
-        crearPersonasDemo(); // Crea empleados base
+        crearPersonas(); // Crea empleados base
+        crearCarreras(); //Crea programas con asignaturas y cursos
 
         while (true) {
 
@@ -54,9 +55,9 @@ public class Main {
             System.out.println("14. Reactivar estudiante");
             System.out.println("15. Eliminar estudiante");
             System.out.println("16. Matricular estudiante en programa");
-            System.out.println("17. Matricular estudiante en curso de asignatura"); // TODO
-            System.out.println("18. Asignar horario a curso de asignatura");
-            System.out.println("19. Asignar profesor a materia");
+            System.out.println("17. Matricular estudiante en curso de asignatura"); 
+            System.out.println("18. Asignar horario a curso de asignatura"); 
+            System.out.println("19. Asignar profesor a curso");
             System.out.println("20. Subir notas finales de estudiante");
             System.out.println("21. Promedio arimetico de estudiante arimetico y ponderado");
             System.out.println("99. Salir del programa");
@@ -80,44 +81,50 @@ public class Main {
                 System.out.print("Inserte el sueldo del empleado: ");
                 double sueldoBase = Double.parseDouble(sc.nextLine());
 
-                System.out.println("Inserte que tipo de empleado es:");
-                String tipoEmpleado = selectFromArrayList(tiposEmpleado);
-
-                System.out.print("Inserte el nivel ARL del empleado: ");
-                int nivelARL = Integer.parseInt(sc.nextLine());
-
-                System.out.println("Inserte la dependencia del empleado: ");
-                Nodo dependenciaEmpleado = selectFromArrayList(dependencias);
-
                 if (sueldoBase < Empleado.getSueldominimo()) {
                     System.out.println(
                             "ERROR: El empleado no debe morir de hambre, inserte un sueldo mayor a "
                                     + Empleado.getSueldominimo() + " Pesos");
                     System.out.println("Presione enter para continuar . . .");
                     sc.nextLine();
+                    continue;
                 }
+
+                System.out.println("Inserte que tipo de empleado es:");
+                String tipoEmpleado = selectFromArrayList(tiposEmpleado);
+
+                System.out.print("Inserte el nivel ARL del empleado: ");
+                int nivelARL = Integer.parseInt(sc.nextLine());
 
                 if (nivelARL < 1 || nivelARL > 5) {
                     System.out.println("ERROR: Nivel ARL invalido");
                     System.out.println("Presione enter para continuar . . .");
                     sc.nextLine();
+                    continue;
                 }
 
-                Empleado tempEmpleado = null;
+                System.out.println("Inserte la dependencia del empleado: ");
+                Nodo dependenciaEmpleado = selectFromArrayList(dependencias);
 
                 if (tipoEmpleado.equals("OPS")) {
-                    tempEmpleado = new OPS(nombre, documentoId, tipoEmpleado, sueldoBase, nivelARL,
-                            dependenciaEmpleado);
-                } else if (tipoEmpleado.equals("OPS")){
-                    tempEmpleado = new Empleado(nombre, documentoId, tipoEmpleado, sueldoBase,
-                            nivelARL, dependenciaEmpleado);
-                } else {
-                    tempEmpleado = new Docente(nombre, documentoId, tipoEmpleado, sueldoBase,
-                            nivelARL, dependenciaEmpleado);
-                }
 
-                empleados.add(tempEmpleado);
-                empleadosActivos.add(tempEmpleado);
+                    OPS tempEmpleado = new OPS(nombre, documentoId, tipoEmpleado, sueldoBase, nivelARL, dependenciaEmpleado);
+                    empleados.add(tempEmpleado);
+                    empleadosActivos.add(tempEmpleado);
+                        
+                } else if (tipoEmpleado.toUpperCase().contains("DOCENTE")){
+
+                    Docente tempEmpleado = new Docente(nombre, documentoId, tipoEmpleado, sueldoBase, nivelARL, dependenciaEmpleado);
+                    empleados.add(tempEmpleado);
+                    empleadosActivos.add(tempEmpleado);
+
+                } else {
+
+                    Empleado tempEmpleado = new Docente(nombre, documentoId, tipoEmpleado, sueldoBase, nivelARL, dependenciaEmpleado);
+                    empleados.add(tempEmpleado);
+                    empleadosActivos.add(tempEmpleado);
+
+                }
 
             }
 
@@ -394,10 +401,13 @@ public class Main {
                 System.out.print("Inserte el documento del estudiante: ");
                 String documentoId = sc.nextLine();
 
+                System.out.print("Inserte el codigo del estudiante: ");
+                String codigoEstudiante = sc.nextLine();
+
                 System.out.println("Inserte que tipo de estudiante es:");
                 String tipoEstudiante = selectFromArrayList(tiposEstudiante);
 
-                Estudiante tempEstudiante = new Estudiante(nombre, documentoId, tipoEstudiante);
+                Estudiante tempEstudiante = new Estudiante(nombre, documentoId, codigoEstudiante, tipoEstudiante);
 
                 estudiantes.add(tempEstudiante);
                 estudiantesActivos.add(tempEstudiante);
@@ -516,6 +526,239 @@ public class Main {
 
             }
 
+            if (opt.equals("17")) {
+
+                if (!estudiantesActivos.isEmpty()) {
+
+                    System.out.println("Ha seleccionado matricular estudiante a curso de asignatura!: ");
+
+                    Estudiante estudianteSeleccionado = selectFromArrayList(estudiantesActivos);
+
+                    if (estudianteSeleccionado.getProgramas().isEmpty()) {
+                        System.out.println("El estudiante no cuenta con ningun programa!");
+                        System.out.println("Presione enter para continuar . . .");
+                        sc.nextLine();
+                        continue;
+                    }
+
+                    clearScreen();
+
+                    ArrayList<Asignatura> asignaturasDisponibles = new ArrayList<>();
+
+                    for(Carrera programa : estudianteSeleccionado.getProgramas()){
+
+                        for(Asignatura asignatura : programa.getPensum()){
+
+                            if (!asignaturasDisponibles.contains(asignatura)) {
+                                asignaturasDisponibles.add(asignatura);
+                            }
+                        }
+                    }
+
+                    System.out.println("Seleccione la asignatura a seleccionar: ");
+                    Asignatura asignaturaSeleccionada = selectFromArrayList(asignaturasDisponibles);
+
+                    clearScreen();
+
+                    System.out.println("Seleccione el curso deseado: ");
+                    Curso cursoSeleccionado = selectFromArrayList(asignaturaSeleccionada.getCursos());
+
+                    cursoSeleccionado.addEstudiante(estudianteSeleccionado);
+
+                    System.out.println("Estudiante " + estudianteSeleccionado.getNombre());
+                    System.out.println("Matriculado en el siguiente curso:");
+                    System.out.println(cursoSeleccionado.toString());
+                    System.out.println("Presione enter para continuar . . .");
+                    sc.nextLine();
+
+                } else {
+
+                    System.out.println("No hay estudiantes a seleccionar!");
+                    System.out.println("Presione enter para continuar . . .");
+                    sc.nextLine();
+                }
+            }
+
+            if (opt.equals("18")) {
+
+                if (!asignaturas.isEmpty()) {
+
+                    System.out.println("Ha seleccionado asignar horario a curso! ");
+                    System.out.println();
+                    System.out.println("Seleccione a que asignatura pertenece el curso:");
+
+                    Asignatura asignaturaSeleccionada = selectFromArrayList(asignaturas);
+
+                    clearScreen();
+
+                    System.out.println("Seleccione el curso deseado: ");
+                    Curso cursoSeleccionado = selectFromArrayList(asignaturaSeleccionada.getCursos());
+
+                    ArrayList<Integer> horasInicio = new ArrayList<>();
+                    
+                    for (int i = 6; i <= 22; i++) {
+                        horasInicio.add(i);
+                    }
+
+                    System.out.println("Seleccione la hora de inicio deseada (Formato 24 horas):");
+                    Integer horaInicioSeleccionada = selectFromArrayList(horasInicio);
+
+                    ArrayList<Integer> horasFinal = new ArrayList<>();
+                    
+                    for (int i = horaInicioSeleccionada+1; i <= 22; i++) {
+                        horasFinal.add(i);
+                    }
+
+                    System.out.println("Seleccione la hora final deseada (Formato 24 horas):");
+                    Integer horaFinalSeleccionada = selectFromArrayList(horasFinal);
+
+                    cursoSeleccionado.setHoraInicio(horaInicioSeleccionada);
+                    cursoSeleccionado.setHoraFin(horaFinalSeleccionada);
+
+                    System.out.println("Horas de curso actualizadas!, imprimiendo curso resultante . . .");
+                    System.out.println(cursoSeleccionado.toString());
+                    System.out.println("Presione enter para continuar . . .");
+                    sc.nextLine();
+
+                } else {
+
+                    System.out.println("No hay asignaturas a seleccionar!");
+                    System.out.println("Presione enter para continuar . . .");
+                    sc.nextLine();
+                }
+            }
+
+            if (opt.equals("19")) {
+
+                if (!asignaturas.isEmpty()) {
+
+                    System.out.println("Ha seleccionado asignar profesor a curso! ");
+                    System.out.println();
+                    System.out.println("Seleccione a que asignatura pertenece el curso:");
+
+                    Asignatura asignaturaSeleccionada = selectFromArrayList(asignaturas);
+
+                    clearScreen();
+
+                    System.out.println("Seleccione el curso deseado: ");
+                    Curso cursoSeleccionado = selectFromArrayList(asignaturaSeleccionada.getCursos());
+
+                    ArrayList<Docente> docentesDisponibles = new ArrayList<>();
+
+                    for (Empleado empleado : empleados) {
+                        if (empleado instanceof Docente) {
+                            docentesDisponibles.add((Docente) empleado);
+                        }
+                    }
+
+                    System.out.println("Curso seleccionado: " + cursoSeleccionado.toString());
+                    System.out.println("Seleccione el profesor para el curso seleccionado: ");
+                    
+                    Docente profesorSeleccionado = selectFromArrayList(docentesDisponibles);
+
+                    cursoSeleccionado.setProfesor(profesorSeleccionado);
+
+                    System.out.println("Profesor actualizado!, imprimiendo curso resultante . . .");
+                    System.out.println(cursoSeleccionado.toString());
+                    System.out.println("Presione enter para continuar . . .");
+                    sc.nextLine();
+
+                } else {
+
+                    System.out.println("No hay asignaturas a seleccionar!");
+                    System.out.println("Presione enter para continuar . . .");
+                    sc.nextLine();
+                }
+            }
+
+            if (opt.equals("20")) {
+
+                if (!estudiantes.isEmpty()) {
+
+                    System.out.println("Ha seleccionado subir notas finales del estudiante! ");
+                    System.out.println();
+                    System.out.println("Seleccione el estudiante:");
+
+                    Estudiante estudianteSeleccionado = selectFromArrayList(estudiantes);
+
+                    clearScreen();
+
+                    System.out.println("Seleccione el curso deseado: ");
+                    Curso cursoSeleccionado = selectFromArrayList(estudianteSeleccionado.getCursosActivos());
+
+                    System.out.println("Curso seleccionado: " + cursoSeleccionado.toString());
+
+                    System.out.println("Escriba la nota final del estudiante (De 0 a 5): ");
+                    Double notaFinal = Double.parseDouble(sc.nextLine());
+
+                    if (notaFinal >= 0 && notaFinal <=5) {
+                        estudianteSeleccionado.completarCurso(cursoSeleccionado, notaFinal);
+                    } else {
+                        System.out.println("Nota final no valida");
+                        System.out.println("Presione enter para continuar . . .");
+                        sc.nextLine();
+                        continue;
+                    }
+
+                    System.out.println("Nota subida al sistema de manera irrevocable!, imprimiendo detalles . . .");
+                    System.out.println("Curso:");
+                    System.out.println(cursoSeleccionado.toString());
+                    System.out.println("Estudiante:");
+                    System.out.println(estudianteSeleccionado.toString());
+                    System.out.println("Nota final:");
+                    System.out.println(notaFinal.toString());
+                    System.out.println("Presione enter para continuar . . .");
+                    sc.nextLine();
+
+                } else {
+
+                    System.out.println("No hay estudiantes a seleccionar!");
+                    System.out.println("Presione enter para continuar . . .");
+                    sc.nextLine();
+                }
+            }
+
+            if (opt.equals("21")) {
+
+                if (!estudiantes.isEmpty()) {
+
+                    System.out.println("Ha seleccionado obtener promedios del estudiante! ");
+                    System.out.println();
+                    System.out.println("Seleccione el estudiante:");
+
+                    Estudiante estudianteSeleccionado = selectFromArrayList(estudiantes);
+
+                    clearScreen();
+
+                    if (estudianteSeleccionado.getCursosRealizados().isEmpty()) {
+                        System.out.println("No hay notas finales que promediar!");
+                        System.out.println("Presione enter para continuar . . .");
+                        sc.nextLine();
+                        continue;
+                    }
+
+                    clearScreen();
+                    
+                    System.out.println("Imprimiendo detalles:");
+                    System.out.println("Estudiante:");
+                    System.out.println(estudianteSeleccionado.toString());
+                    System.out.println("Total de cursos realizados:");
+                    System.out.println(estudianteSeleccionado.getCursosRealizados().size());
+
+                    System.out.println("Promedio arimetico: " + estudianteSeleccionado.getPromedioArimetico());
+                    System.out.println("Promedio ponderado: " + estudianteSeleccionado.getPromedioPonderado());
+                    
+                    System.out.println("Presione enter para continuar . . .");
+                    sc.nextLine();
+
+                } else {
+
+                    System.out.println("No hay estudiantes a seleccionar!");
+                    System.out.println("Presione enter para continuar . . .");
+                    sc.nextLine();
+                }
+            }
+
             if (opt.equals("99")) {
                 System.exit(0);
             }
@@ -538,6 +781,7 @@ public class Main {
 
     }
 
+    @SuppressWarnings("unused")
     public static void crearDependencias() {
 
         ArrayList<Nodo> nodos = new ArrayList<>();
@@ -568,14 +812,15 @@ public class Main {
         dependencias.addAll(rectoria.getRecursiveHijos());
     }
 
-    public static void crearCarrerasDemo() {
+    @SuppressWarnings("unused")
+    public static void crearCarreras() {
 
         Carrera programa1 = new Carrera("Ing Sistemas", dependencias.get(10));
         Carrera programa2 = new Carrera("Maestria Sistemas", dependencias.get(10));
         Carrera programa3 = new Carrera("Doctorado Sistemas", dependencias.get(10)); 
         programasPregrado.add(programa1);
-        programasPregrado.add(programa2);
-        programasPregrado.add(programa3);
+        programasMaestria.add(programa2);
+        programasDoctorado.add(programa3);
 
         Asignatura asignatura1 = new Asignatura("Calculo I", "0001", 4);
         Asignatura asignatura2 = new Asignatura("Calculo II", "0002", 4);
@@ -584,6 +829,14 @@ public class Main {
         Asignatura asignatura5 = new Asignatura("Fiestologia", "0005", 2);
         Asignatura asignatura6 = new Asignatura("Trabajo de grado I", "0006", 10);
         Asignatura asignatura7 = new Asignatura("Bailoterapia", "0006", 3);
+
+        asignaturas.add(asignatura1);
+        asignaturas.add(asignatura2);
+        asignaturas.add(asignatura3);
+        asignaturas.add(asignatura4);
+        asignaturas.add(asignatura5);
+        asignaturas.add(asignatura6);
+        asignaturas.add(asignatura7);
 
         programa1.addToPensun(asignatura1);
         programa1.addToPensun(asignatura2);
@@ -609,11 +862,11 @@ public class Main {
         
     }
 
-    public static void crearPersonasDemo() {
+    public static void crearPersonas() {
 
         Empleado demo1 = new Empleado("Juan J", "100232", "Demo", 900000, 2, dependencias.get(0));
-        Empleado profe1 = new Empleado("Henry Ford", "100232", "Docente coche", 900000, 2, dependencias.get(10));
-        Empleado profe2 = new Empleado("Jack el destripador", "100232", "Docente cuchilla", 900000, 2, dependencias.get(10));
+        Docente profe1 = new Docente("Henry Ford", "100232", "Docente coche", 900000, 2, dependencias.get(10));
+        Docente profe2 = new Docente("Jack el destripador", "100232", "Docente cuchilla", 900000, 2, dependencias.get(10));
         empleados.add(demo1);
         empleados.add(profe1);
         empleados.add(profe2);
@@ -621,9 +874,9 @@ public class Main {
         empleadosActivos.add(profe1);
         empleadosActivos.add(profe2);
 
-        Estudiante demo2 = new Estudiante("Bolsa McBolsaface", "10020", "Estudiante Pregrado");
-        Estudiante demo3 = new Estudiante("Lobito", "10020", "Estudiante Maestria");
-        Estudiante demo4 = new Estudiante("Dr Strange", "10020", "Estudiante Doctorado");
+        Estudiante demo2 = new Estudiante("Bolsa McBolsaface", "10020", "2102020", "Estudiante Pregrado");
+        Estudiante demo3 = new Estudiante("Lobito", "10021", "2102021", "Estudiante Maestria");
+        Estudiante demo4 = new Estudiante("Dr Strange", "10022", "2102022", "Estudiante Doctorado");
         estudiantes.add(demo2);
         estudiantes.add(demo3);
         estudiantes.add(demo4);

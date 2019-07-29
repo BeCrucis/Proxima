@@ -3,15 +3,17 @@ import java.util.ArrayList;
 public class Estudiante extends Persona {
 
     String tipoEstudiante;
+    String codigoEstudiante;
     boolean isActivo;
 
     ArrayList<Carrera> programas;
     ArrayList<Curso> cursosActivos;
     ArrayList<Curso> cursosRealizados;
 
-    public Estudiante(String nombre, String documentoId, String tipoEstudiante) {
+    public Estudiante(String nombre, String documentoId, String codigoEstudiante, String tipoEstudiante) {
         super(nombre, documentoId);
-        
+
+        this.codigoEstudiante = codigoEstudiante;
         this.tipoEstudiante = tipoEstudiante;
         isActivo = true;
 
@@ -20,16 +22,20 @@ public class Estudiante extends Persona {
         cursosRealizados = new ArrayList<>();
     }
 
-    public void activarEstudiante(){
+    public String getCodigoEstudiante() {
+      return codigoEstudiante;
+    }
+
+    public void activarEstudiante() {
         isActivo = true;
     }
 
-    public void retirarEstudiante(){
+    public void retirarEstudiante() {
         isActivo = false;
     }
 
     public String getTipoEstudiante() {
-      return tipoEstudiante;
+        return tipoEstudiante;
     }
 
     public void addCurso(Curso curso) {
@@ -38,17 +44,26 @@ public class Estudiante extends Persona {
 
     public void completarCurso(Curso curso, double notaFinal) {
 
-        try {
-            int indiceCurso = cursosActivos.indexOf(curso);
+        String codigoCurso = curso.getCodigoCurso();
+        int indiceCurso = -2;
+
+        //try {
+
+            for (Curso cursoLista : cursosActivos) {
+                if (cursoLista.getCodigoCurso().equals(curso.getCodigoCurso())) {
+                    indiceCurso = cursosActivos.indexOf(cursoLista);
+                    break;
+                }
+            }
             Curso cursoSeleccionado = cursosActivos.get(indiceCurso);
             cursosRealizados.add(cursoSeleccionado);
             cursosActivos.remove(cursoSeleccionado);
 
             cursoSeleccionado.setNotaFinal(this, notaFinal);
-        } catch (Exception e) {
+        //} catch (Exception e) {
 
-            System.out.println("Curso no encontrado");
-        }
+        //    System.out.println("Curso no encontrado");
+        //}
     }
 
     public ArrayList<Carrera> getProgramas() {
@@ -65,12 +80,50 @@ public class Estudiante extends Persona {
 
     public ArrayList<Curso> getCursosRealizados() {
         return cursosRealizados;
-    }  
+    }
+
+    public double getPromedioPonderado(){
+        
+        double promedioPonderado = 0.0;
+        int creditosTotales = 0;
+
+        for (Curso cursoRealizado : cursosRealizados) {
+
+            int creditosAsignatura = cursoRealizado.getAsignatura().getCreditos();
+            creditosTotales += creditosAsignatura;
+            promedioPonderado += cursoRealizado.getNotaFinal(this) * creditosAsignatura;
+            
+        }
+
+        promedioPonderado = promedioPonderado / creditosTotales;
+        return promedioPonderado;
+    }
+
+    public double getPromedioArimetico(){
+
+        double promedioArimetico = 0.0;
+        int cantidadCursos = cursosRealizados.size();
+
+        for (Curso cursoRealizado : cursosRealizados) {
+            promedioArimetico += cursoRealizado.getNotaFinal(this);
+        }
+
+        promedioArimetico = promedioArimetico / cantidadCursos;
+        return promedioArimetico;
+    }
 
     @Override
     public String toString() {
-        String formattedInfo = String.format("Estudante : %s, Tipo: %s, ID: %d, Programas: %s", getNombre(), getTipoEstudiante(), getID(), getProgramas().toString());
-return formattedInfo;
+
+        String programas = "";
+
+        for (Carrera programa : getProgramas()) {
+            programas = programa.getNombre() + " " + programas;
+        }
+
+        String formattedInfo = String.format("Estudiante : %s, Tipo: %s, ID: %d, Programas: %s",
+                getNombre(), getTipoEstudiante(), getID(), programas);
+        return formattedInfo;
     }
 
 }

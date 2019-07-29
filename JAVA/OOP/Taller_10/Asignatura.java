@@ -58,6 +58,12 @@ public class Asignatura {
         return this.cursos;
     }
 
+    @Override
+    public String toString() {
     
+        String formattedInfo = String.format("Nombre: %s , Cantidad de cursos: %d, Creditos: %d", nombre, cursos.size(), creditos);
+        
+        return formattedInfo;
+    }
 
 }

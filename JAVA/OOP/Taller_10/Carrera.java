@@ -1,13 +1,6 @@
 import java.util.ArrayList;
 
 public class Carrera {
-<<<<<<< HEAD
-=======
-    
-    String nombre;
-    Nodo facultad;
-    ArrayList<Asignatura> pensum;
->>>>>>> refs/remotes/origin/master
 
     private String nombre;
     private Nodo escuela;
@@ -16,10 +9,18 @@ public class Carrera {
 
     public Carrera(String nombre, Nodo escuela) {
         this.nombre = nombre;
-        this.facultad = facultad;
+        this.escuela = escuela;
 
         pensum = new ArrayList<>();
         estudiantes = new ArrayList<>();
+    }
+
+    public ArrayList<Asignatura> getPensum() {
+      return pensum;
+    }
+    
+    public String getNombre() {
+      return nombre;
     }
 
     public void addToPensun(Asignatura asignatura) {
@@ -33,7 +34,6 @@ public class Carrera {
 
         }
     }
-<<<<<<< HEAD
 
     public void addEstudiante(Estudiante estudiante) {
 
@@ -44,11 +44,8 @@ public class Carrera {
     public String toString() {
         String formattedInfo =
                 String.format("Carrera: %s , Escuela: %s , Cantidad de asignaturas: %d ", nombre,
-                        escuela, pensum.size());
+                        escuela.getNombre(), pensum.size());
         return formattedInfo;
     }
 
-=======
-    
->>>>>>> refs/remotes/origin/master
 }

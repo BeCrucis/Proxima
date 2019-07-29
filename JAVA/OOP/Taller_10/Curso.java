@@ -12,10 +12,11 @@ public class Curso {
     private ArrayList<Double> notasFinales;
 
     public Curso(String codigoCurso, Asignatura asignatura, int capacidad) {
+        this.codigoCurso = codigoCurso;
         this.asignatura = asignatura;
         this.profesor = null;
         this.capacidad = capacidad;
-        
+
         horaInicio = 0;
         horaFin = 0;
 
@@ -25,6 +26,7 @@ public class Curso {
     }
 
     public Curso(String codigoCurso, Asignatura asignatura, Empleado profesor, int capacidad) {
+        this.codigoCurso = codigoCurso;
         this.asignatura = asignatura;
         this.profesor = profesor;
         this.capacidad = capacidad;
@@ -35,6 +37,10 @@ public class Curso {
         estudiantes = new ArrayList<>();
         notasFinales = new ArrayList<>();
         asignatura.addCurso(this);
+    }
+
+    public String getCodigoCurso() {
+      return codigoCurso;
     }
 
     public int getHoraInicio() {
@@ -71,14 +77,45 @@ public class Curso {
 
     public void setNotaFinal(Estudiante estudiante, double notaFinal) {
 
-        try {
-            int indiceNota = estudiantes.indexOf(estudiante);
+        String codigoEstudiante = estudiante.getCodigoEstudiante();
+        int indiceNota = -1;
+
+        //try {
+
+            for (Estudiante estudianteLista : estudiantes) {
+                if (estudianteLista.getCodigoEstudiante().equals(codigoEstudiante)) {
+                    indiceNota = estudiantes.indexOf(estudianteLista);
+                    break;
+                }
+            }
+
             notasFinales.set(indiceNota, notaFinal);
-        } catch (Exception e) {
-            System.out.println("Estudiante invalido");
-        }
 
+        //} catch (Exception e) {
+        //    System.out.println("Estudiante invalido");
+        //}
+    }
 
+    public double getNotaFinal(Estudiante estudiante) {
+
+        String codigoEstudiante = estudiante.getCodigoEstudiante();
+        int indiceNota = -1;
+
+        //try {
+            
+            for (Estudiante estudianteLista : estudiantes) {
+                if (estudianteLista.getCodigoEstudiante().equals(codigoEstudiante)) {
+                    indiceNota = estudiantes.indexOf(estudianteLista);
+                    break;
+                }
+            }
+            return notasFinales.get(indiceNota);
+        //}
+
+        //catch (Exception e) {
+        //    System.out.println("Estudiante invalido");
+        //    return 0;
+        //}
     }
 
     public void addEstudiante(Estudiante estudiante) {
@@ -88,6 +125,7 @@ public class Curso {
         } else {
             estudiantes.add(estudiante);
             estudiante.addCurso(this);
+            notasFinales.add(0.0);
         }
     }
 
@@ -97,11 +135,14 @@ public class Curso {
         String formattedInfo;
 
         if (profesor == null) {
-            formattedInfo = String.format("Asignatura: %s , Codigo: %s, Profesor: Sin asignar, Horario: %d - %d", asignatura.getNombre(), codigoCurso, horaInicio, horaFin);
+            formattedInfo = String.format(
+                    "Asignatura: %s , Codigo: %s, Profesor: Sin asignar, Horario: %d - %d",
+                    asignatura.getNombre(), codigoCurso, horaInicio, horaFin);
         } else {
-            formattedInfo = String.format("Asignatura: %s , Codigo: %s, Profesor: %s, Horario: %d - %d", asignatura.getNombre(), codigoCurso, profesor.getNombre(), horaInicio, horaFin);
+            formattedInfo = String.format(
+                    "Asignatura: %s , Codigo: %s, Profesor: %s, Horario: %d - %d",
+                    asignatura.getNombre(), codigoCurso, profesor.getNombre(), horaInicio, horaFin);
         }
-
         return formattedInfo;
     }
 
