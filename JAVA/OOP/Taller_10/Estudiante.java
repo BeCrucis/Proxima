@@ -32,7 +32,7 @@ public class Estudiante extends Persona {
       return tipoEstudiante;
     }
 
-    public void agregarCurso(Curso curso) {
+    public void addCurso(Curso curso) {
         cursosActivos.add(curso);
     }
 

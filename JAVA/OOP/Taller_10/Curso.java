@@ -11,21 +11,30 @@ public class Curso {
     private Empleado profesor;
     private ArrayList<Double> notasFinales;
 
-    public Curso(Asignatura asignatura, int capacidad) {
+    public Curso(String codigoCurso, Asignatura asignatura, int capacidad) {
         this.asignatura = asignatura;
+        this.profesor = null;
         this.capacidad = capacidad;
+        
+        horaInicio = 0;
+        horaFin = 0;
 
         estudiantes = new ArrayList<>();
         notasFinales = new ArrayList<>();
+        asignatura.addCurso(this);
     }
 
-    public Curso(Asignatura asignatura, Empleado profesor, int capacidad) {
+    public Curso(String codigoCurso, Asignatura asignatura, Empleado profesor, int capacidad) {
         this.asignatura = asignatura;
         this.profesor = profesor;
         this.capacidad = capacidad;
 
+        horaInicio = 0;
+        horaFin = 0;
+
         estudiantes = new ArrayList<>();
         notasFinales = new ArrayList<>();
+        asignatura.addCurso(this);
     }
 
     public int getHoraInicio() {
@@ -78,7 +87,22 @@ public class Curso {
             System.out.println("Curso lleno!");
         } else {
             estudiantes.add(estudiante);
+            estudiante.addCurso(this);
         }
+    }
+
+    @Override
+    public String toString() {
+
+        String formattedInfo;
+
+        if (profesor == null) {
+            formattedInfo = String.format("Asignatura: %s , Codigo: %s, Profesor: Sin asignar, Horario: %d - %d", asignatura.getNombre(), codigoCurso, horaInicio, horaFin);
+        } else {
+            formattedInfo = String.format("Asignatura: %s , Codigo: %s, Profesor: %s, Horario: %d - %d", asignatura.getNombre(), codigoCurso, profesor.getNombre(), horaInicio, horaFin);
+        }
+
+        return formattedInfo;
     }
 
 }
