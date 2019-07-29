@@ -1,6 +1,13 @@
 import java.util.ArrayList;
 
 public class Carrera {
+<<<<<<< HEAD
+=======
+    
+    String nombre;
+    Nodo facultad;
+    ArrayList<Asignatura> pensum;
+>>>>>>> refs/remotes/origin/master
 
     private String nombre;
     private Nodo escuela;
@@ -9,7 +16,7 @@ public class Carrera {
 
     public Carrera(String nombre, Nodo escuela) {
         this.nombre = nombre;
-        this.escuela = escuela;
+        this.facultad = facultad;
 
         pensum = new ArrayList<>();
         estudiantes = new ArrayList<>();
@@ -26,6 +33,7 @@ public class Carrera {
 
         }
     }
+<<<<<<< HEAD
 
     public void addEstudiante(Estudiante estudiante) {
 
@@ -40,4 +48,7 @@ public class Carrera {
         return formattedInfo;
     }
 
+=======
+    
+>>>>>>> refs/remotes/origin/master
 }
