@@ -10,6 +10,7 @@ public class Curso {
     private Asignatura asignatura;
     private Empleado profesor;
     private ArrayList<Double> notasFinales;
+    private String salon;
 
     public Curso(String codigoCurso, Asignatura asignatura, int capacidad) {
         this.codigoCurso = codigoCurso;
@@ -71,18 +72,27 @@ public class Curso {
         this.profesor = profesor;
     }
 
+    public String getSalon(){
+        return salon;
+    }
+
+    public void setSalon(String salon){
+        this.salon = salon;
+    }
+
     public ArrayList<Double> getNotasFinales() {
         return notasFinales;
     }
-
+    //Cambia la nota final de un estudiante
     public void setNotaFinal(Estudiante estudiante, double notaFinal) {
 
         String codigoEstudiante = estudiante.getCodigoEstudiante();
-        int indiceNota = -1;
+        int indiceNota = -1;//Indice invalido
 
-        //try {
+        try {
 
             for (Estudiante estudianteLista : estudiantes) {
+                //Valida estudiante
                 if (estudianteLista.getCodigoEstudiante().equals(codigoEstudiante)) {
                     indiceNota = estudiantes.indexOf(estudianteLista);
                     break;
@@ -91,17 +101,17 @@ public class Curso {
 
             notasFinales.set(indiceNota, notaFinal);
 
-        //} catch (Exception e) {
-        //    System.out.println("Estudiante invalido");
-        //}
+        } catch (Exception e) {
+            System.out.println("Estudiante invalido");
+        }
     }
-
+    //Obtiene la nota final de un estudiante
     public double getNotaFinal(Estudiante estudiante) {
 
         String codigoEstudiante = estudiante.getCodigoEstudiante();
         int indiceNota = -1;
 
-        //try {
+        try {
             
             for (Estudiante estudianteLista : estudiantes) {
                 if (estudianteLista.getCodigoEstudiante().equals(codigoEstudiante)) {
@@ -110,12 +120,12 @@ public class Curso {
                 }
             }
             return notasFinales.get(indiceNota);
-        //}
+        }
 
-        //catch (Exception e) {
-        //    System.out.println("Estudiante invalido");
-        //    return 0;
-        //}
+        catch (Exception e) {
+            System.out.println("Estudiante invalido");
+            return 0;
+        }
     }
 
     public void addEstudiante(Estudiante estudiante) {

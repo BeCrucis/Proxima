@@ -67,6 +67,7 @@ public class Main {
 
             clearScreen();
 
+            //Agrega un empleado
             if (opt.equals("1")) {
 
                 System.out.println("Ha seleccionado crear un nuevo empleado:");
@@ -120,7 +121,7 @@ public class Main {
 
                 } else {
 
-                    Empleado tempEmpleado = new Docente(nombre, documentoId, tipoEmpleado, sueldoBase, nivelARL, dependenciaEmpleado);
+                    Empleado tempEmpleado = new Empleado(nombre, documentoId, tipoEmpleado, sueldoBase, nivelARL, dependenciaEmpleado);
                     empleados.add(tempEmpleado);
                     empleadosActivos.add(tempEmpleado);
 
@@ -128,6 +129,7 @@ public class Main {
 
             }
 
+            //Retira un empleado, lo desactiva
             if (opt.equals("2")) {
 
                 if (!empleadosActivos.isEmpty()) {
@@ -149,12 +151,13 @@ public class Main {
                     sc.nextLine();
                 }
             }
-
+            
+            //Activa un empleado
             if (opt.equals("3")) {
 
                 if (!empleadosInactivos.isEmpty()) {
 
-                    System.out.println("Ha seleccionado convertir a no empleado en empleado!: ");
+                    System.out.println("Ha seleccionado convertir a un no empleado en empleado!: ");
                     Empleado empleadoSeleccionado = selectFromArrayList(empleadosInactivos);
 
                     empleadoSeleccionado.activarEmpleado();
@@ -172,6 +175,7 @@ public class Main {
                 }
             }
 
+            //Elimina un empleado
             if (opt.equals("4")) {
 
                 if (!empleados.isEmpty()) {
@@ -197,6 +201,7 @@ public class Main {
                 }
             }
 
+            //Liquida un empleado
             if (opt.equals("5")) {
 
                 if (!empleados.isEmpty()) {
@@ -219,6 +224,7 @@ public class Main {
 
             }
 
+            //Realiza nomina
             if (opt.equals("6")) {
 
                 hacerNomina(empleadosActivos);
@@ -228,6 +234,7 @@ public class Main {
                 sc.nextLine();
             }
 
+            //Realiza pagos parafiscales
             if (opt.equals("7")) {
 
                 System.out.println("Ha seleccionado hacer pagos parafiscales");
@@ -270,6 +277,7 @@ public class Main {
 
             }
 
+            //Realiza pagos de salud
             if (opt.equals("8")) {
 
                 System.out.println("Ha seleccionado hacer pagos de salud");
@@ -309,6 +317,7 @@ public class Main {
 
             }
 
+            //Realiza pago de pension
             if (opt.equals("9")) {
 
                 System.out.println("Ha seleccionado hacer pagos de pension");
@@ -349,6 +358,7 @@ public class Main {
 
             }
 
+            //Cambia empleado de dependencia
             if (opt.equals("10")) {
 
                 System.out.println("Ha seleccionado cambiar a un empleado de dependencia");
@@ -370,6 +380,8 @@ public class Main {
                 sc.nextLine();
 
             }
+
+            //Realiza nomina por dependencia
             if (opt.equals("11")) {
 
                 System.out.println("Ha seleccionado hacer nomina por dependencia");
@@ -390,6 +402,7 @@ public class Main {
 
             }
 
+            //Crea un nuevo estudiante
             if (opt.equals("12")) {
 
                 System.out.println("Ha seleccionado crear un nuevo estudiante:");
@@ -414,6 +427,7 @@ public class Main {
 
             }
 
+            //Desactiva a un estudiante
             if (opt.equals("13")) {
 
                 if (!estudiantesActivos.isEmpty()) {
@@ -437,6 +451,7 @@ public class Main {
                 }
             }
 
+            //Activa a un estudiante
             if (opt.equals("14")) {
 
                 if (!estudiantesInactivos.isEmpty()) {
@@ -461,6 +476,7 @@ public class Main {
                 }
             }
 
+            //Elimina un estudiante, lo retira
             if (opt.equals("15")) {
 
                 if (!estudiantes.isEmpty()) {
@@ -486,6 +502,7 @@ public class Main {
                 }
             }
 
+            //Matricula a un estudiante en un programa
             if (opt.equals("16")) {
 
                 System.out.println("Ha seleccionado matricular a un estudiante a un programa");
@@ -526,6 +543,7 @@ public class Main {
 
             }
 
+            //Matricula a un estudiante a un curso de una asignatura
             if (opt.equals("17")) {
 
                 if (!estudiantesActivos.isEmpty()) {
@@ -579,6 +597,7 @@ public class Main {
                 }
             }
 
+            //Asigna horario a un curso
             if (opt.equals("18")) {
 
                 if (!asignaturas.isEmpty()) {
@@ -628,6 +647,7 @@ public class Main {
                 }
             }
 
+            //Asigna profesor a un curso
             if (opt.equals("19")) {
 
                 if (!asignaturas.isEmpty()) {
@@ -671,6 +691,7 @@ public class Main {
                 }
             }
 
+            //Sube las notas finales de un estudiante
             if (opt.equals("20")) {
 
                 if (!estudiantes.isEmpty()) {
@@ -718,6 +739,7 @@ public class Main {
                 }
             }
 
+            //Obtiene los promedios de un estudiante
             if (opt.equals("21")) {
 
                 if (!estudiantes.isEmpty()) {
@@ -759,6 +781,7 @@ public class Main {
                 }
             }
 
+            //Sale del programa
             if (opt.equals("99")) {
                 System.exit(0);
             }
@@ -790,22 +813,20 @@ public class Main {
         Nodo vrInvestigacion = new Nodo(rectoria, "Vicerrectoria de Investigacion");
         Nodo vrAcademica = new Nodo(rectoria, "Vicerrectoria Academica");
         Nodo profesores = new Nodo(rectoria, "Vicerrectoria Administrativa");
-        Nodo facultades = new Nodo(rectoria, "Decanato de facultad");
-        Nodo fisicoMecanicas = new Nodo(facultades, "Facultad de ingenierias Fisicomecanicas");
+        Nodo fisicoMecanicas = new Nodo(rectoria, "Facultad de ingenierias Fisicomecanicas");
         Nodo escSistemas = new Nodo(fisicoMecanicas, "Escuela de Ingenieria de sistemas");
-        //Nodo maestriaSistemas = new Nodo(escSistemas, "Maestria en Ingenieria de Sistemas");
         Nodo escCivil = new Nodo(fisicoMecanicas, "Escuela de Ingenieria Civil");
         Nodo escMecanica = new Nodo(fisicoMecanicas, "Escuela de Ingenieria Mecanica");
-        Nodo fisicoQuimicas = new Nodo(facultades, "Facultad de Ingenierias Fisicoquimicas");
+        Nodo fisicoQuimicas = new Nodo(rectoria, "Facultad de Ingenierias Fisicoquimicas");
         Nodo escPetroleos = new Nodo(fisicoQuimicas, "Escuela de Ingenieria de Petroleos");
         Nodo escIngQuimica = new Nodo(fisicoQuimicas, "Escuela de Ingenieria Quimica");
-        Nodo ciencias = new Nodo(facultades, "Facultad de Ciencias");
+        Nodo ciencias = new Nodo(rectoria, "Facultad de Ciencias");
         Nodo escFisica = new Nodo(ciencias, "Escuela de Fisica");
         Nodo escMatematicas = new Nodo(ciencias, "Escuela de Matematicas");
-        Nodo cienciasHumanas = new Nodo(facultades, "Facultad de Ciencias Humanas");
+        Nodo cienciasHumanas = new Nodo(rectoria, "Facultad de Ciencias Humanas");
         Nodo escFilosofia = new Nodo(cienciasHumanas, "Escuela de Filosofia");
         Nodo escTrabajoSocial = new Nodo(cienciasHumanas, "Escuela de Trabajo Social");
-        Nodo salud = new Nodo(facultades, "Facultad de Salud");
+        Nodo salud = new Nodo(rectoria, "Facultad de Salud");
         Nodo escMedicina = new Nodo(salud, "Escuela de Medicina");
 
         dependencias.add(rectoria);

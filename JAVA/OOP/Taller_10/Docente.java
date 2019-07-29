@@ -7,7 +7,7 @@ public class Docente extends Empleado{
     }
 
     public void hacerCosa(){
-        System.out.println("Cosa de docente");
+        System.out.println("Cosa de docente: Enseñar");
     }
     
 }
