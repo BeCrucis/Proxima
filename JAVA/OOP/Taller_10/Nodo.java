@@ -5,7 +5,6 @@ public class Nodo {
     private Nodo padre;
     private ArrayList<Nodo> hijos;
     private ArrayList<Empleado> empleados;
-    private ArrayList<Estudiante> estudiantes;
     private String nombre;
 
     public Nodo(String nombre) {

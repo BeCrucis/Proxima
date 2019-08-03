@@ -50,7 +50,7 @@ public class Estudiante extends Persona {
         //try {
 
             for (Curso cursoLista : cursosActivos) {
-                if (cursoLista.getCodigoCurso().equals(curso.getCodigoCurso())) {
+                if (cursoLista.getCodigoCurso().equals(codigoCurso)) {
                     indiceCurso = cursosActivos.indexOf(cursoLista);
                     break;
                 }
