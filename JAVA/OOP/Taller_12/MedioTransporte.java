@@ -6,7 +6,7 @@ public class MedioTransporte {
     ArrayList<Persona> personas;
     ArrayList<Silla> sillas;
 
-    public void añadirPasajero(Persona pasajero) {
+    public void addPasajero(Persona pasajero) {
         personas.add(pasajero);
     }
 
