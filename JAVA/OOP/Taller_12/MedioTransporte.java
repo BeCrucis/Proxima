@@ -10,4 +10,8 @@ public class MedioTransporte {
         personas.add(pasajero);
     }
 
+    public void addConductor(Conductor conductor) {
+        this.conductor = conductor;
+    }
+
 }
