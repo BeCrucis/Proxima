@@ -7,4 +7,11 @@ public class Pasajero extends Persona{
         this.tarjetaCliente = tarjetaCliente;
     }
 
+    public Pasajero(Persona persona, boolean tarjetaCliente){
+        this(persona.getId(), persona.getNombre(), persona.getApellido(), persona.getEdad(), persona.getDocumento(), tarjetaCliente);
+    }
+
+    public boolean isTarjetaCliente() {
+        return tarjetaCliente;
+    }
 }

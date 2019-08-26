@@ -3,7 +3,7 @@ public class RutaViaje {
     private Viaje viaje;
     private Ruta ruta;
     
-    public void RutaViaje(Viaje viaje, Ruta ruta) {
+    public RutaViaje(Viaje viaje, Ruta ruta) {
         this.viaje = viaje;
         this.ruta = ruta;
     }

@@ -1,5 +1,5 @@
 public interface RegistroViaje {
 
-    public abstract void crearViaje();
+    public abstract Viaje crearViaje(RutaViaje ruta) throws InvalidRouteException;
     
 }

@@ -7,4 +7,12 @@ public class Conductor extends Persona{
         this.pase = pase;
     }
 
+    public Conductor(Persona persona, boolean pase){
+        this(persona.getId(), persona.getNombre(), persona.getApellido(), persona.getEdad(), persona.getDocumento(), pase);
+    }
+
+    public boolean hasPase(){
+        return pase;
+    }
+
 }

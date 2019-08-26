@@ -5,5 +5,8 @@ public class Silla {
     public Silla(int numero) {
         this.numero = numero;
     }
-    
+ 
+    public int getNumero() {
+        return numero;
+    }
 }
