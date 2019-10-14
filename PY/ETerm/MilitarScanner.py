@@ -73,7 +73,7 @@ def importStudentInfoOED(driver, link):
 		
 		for entry in observerEntries:
 			entryData = entry.findChildren("td" , recursive=False)
-			if entryData[5].text.upper() == "Segundo Periodo".upper():
+			if entryData[5].text.upper() == "Tercer Periodo".upper():
 				rawFecha = entryData[2].text
 				formattedFecha = rawFecha[:10]
 				dateList.append(formattedFecha)
@@ -113,10 +113,20 @@ def main(headless = False):
 
 	courses = {}
 
-	#courses["OCTAVO"] = ["OCTAVO 2"]
-	#courses["NOVENO"] = ["NOVENO 1", "NOVENO 2"]
+	# # courses["PREJARDIN"] = ["PREJARDIN 1"]
+	# courses["JARDIN"] = ["JARDIN 1"]
+	# courses["TRANSICION"] = ["TRANSICION 1"]
+	# courses["PRIMERO"] = ["PRIMERO 1"]
+	# courses["SEGUNDO"] = ["SEGUNDO 1"]
+	# courses["TERCERO"] = ["TERCERO 1"]
+	# courses["CUARTO"] = ["CUARTO 1"]
+	# courses["QUINTO"] = ["QUINTO 1"]
+	courses["SEXTO"] = ["SEXTO 1", "SEXTO 2"]
+	courses["SEPTIMO"] = ["SEPTIMO 1", "SEPTIMO 2"]
+	courses["OCTAVO"] = ["OCTAVO 1","OCTAVO 2"]
+	courses["NOVENO"] = ["NOVENO 1", "NOVENO 2"]
 	courses["DECIMO"] = ["DECIMO 1"]
-	#courses["UNDECIMO"] = ["UNDECIMO 1", "UNDECIMO 2"]
+	courses["UNDECIMO"] = ["UNDECIMO 1", "UNDECIMO 2"]
 
 
 
@@ -126,20 +136,33 @@ def main(headless = False):
 
 			courseName = F"{courseGrade} {course}"
 
+			observerInfo = importObserverInfo(driver, "https://colmilgeneralsantander.phidias.co/poll/consolidate/people?poll=23", "OED", courseName)
+
 			with open(F"{courseName}.txt", "w") as f:
 
-				print(courseName)
+				infoFile = open(F"{courseName}INFO.txt", "w")
+				califFile = open(F"{courseName}GRADES.txt", "w")
+				nameFile = open(F"{courseName}NAMES.txt", "w")
 
-				observerInfo = importObserverInfo(driver, "https://colmilgeneralsantander.phidias.co/poll/consolidate/people?poll=23", "OED", courseName)
+				print(courseName)
 
 				for student in observerInfo:
 					print(F"{student}: {observerInfo[student]}")
 					print()
 
-					if len(observerInfo[student]) > 1:
-
-						f.write(F"{student} : {98-(len(observerInfo[student])*3)} : {' '.join(observerInfo[student]) }\n")
+					if len(observerInfo[student]) > 1:	
+						f.write(F"{student} : {(98-(len(observerInfo[student])*3))/10} : {' '.join(observerInfo[student]) }\n")
+						califFile.write(F"{(98-(len(observerInfo[student])*3))/10}\n")
 					else:
-						f.write(F"{student} : {95} : {' '.join(observerInfo[student]) }\n")
+						f.write(F"{student} : {95/10} : {' '.join(observerInfo[student]) }\n")
+						califFile.write(F"{95/10}\n")
+					
+					infoFile.write(F"{' '.join(observerInfo[student]) }\n")
+					nameFile.write(F"{student.upper()}\n")
+
+				infoFile.close()
+				califFile.close()
+				nameFile.close()
+			
 
 main()

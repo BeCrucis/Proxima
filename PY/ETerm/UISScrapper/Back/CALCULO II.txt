@@ -1,0 +1,58 @@
+Grupo: [B4] // #: 37 !: 37
+Profesores: ['DANIEL RAMIREZ CABRALES'] IB: 1.0||||||||||||||||||||||||||||||||||||||||
+Grupo: [C3] // #: 38 !: 38
+Profesores: ['DANIEL RAMIREZ CABRALES'] IB: 1.0||||||||||||||||||||||||||||||||||||||||
+Grupo: [F1] // #: 13 !: 13
+Profesores: ['JAVIER JOSE MURGAS IBARRA'] IB: 1.0||||||||||||||||||||||||||||||||||||||||
+Grupo: [C1] // #: 37 !: 38
+Profesores: ['DANIEL RAMIREZ CABRALES'] IB: 1.03
+Grupo: [C2] // #: 35 !: 36
+Profesores: ['RICARDO MONTURIOL MARTINEZ'] IB: 1.03
+Grupo: [C6] // #: 36 !: 37
+Profesores: ['ADRIANA ALEXANDRA ALBARRACIN MANTILLA'] IB: 1.03
+Grupo: [J4] // #: 35 !: 36
+Profesores: ['ELIZABETH PEREZ MARTINEZ'] IB: 1.03
+Grupo: [L3] // #: 35 !: 36
+Profesores: ['ELIZABETH PEREZ MARTINEZ'] IB: 1.03
+Grupo: [C5] // #: 35 !: 37
+Profesores: ['ADRIANA ALEXANDRA ALBARRACIN MANTILLA'] IB: 1.06
+Grupo: [H1] // #: 34 !: 36
+Profesores: ['HECTOR EDONIS PINEDO TAPIA'] IB: 1.06
+Grupo: [H3] // #: 35 !: 37
+Profesores: ['HUGO GARCIA GUARIN'] IB: 1.06
+Grupo: [J1] // #: 36 !: 38
+Profesores: ['EDGAR RENE RAMIREZ LAMUS'] IB: 1.06
+Grupo: [B1] // #: 32 !: 36
+Profesores: ['MARIA CLAUDIA GOMEZ BELTRAN'] IB: 1.12
+Grupo: [B3] // #: 17 !: 19
+Profesores: ['RICARDO MONTURIOL MARTINEZ'] IB: 1.12
+Grupo: [H2] // #: 33 !: 37
+Profesores: ['HUGO GARCIA GUARIN'] IB: 1.12
+Grupo: [L4] // #: 32 !: 36
+Profesores: ['ELIZABETH PEREZ MARTINEZ'] IB: 1.12
+Grupo: [C4] // #: 31 !: 36
+Profesores: ['ALEXANDER  HOLGUIN VILLA'] IB: 1.16
+Grupo: [A3] // #: 30 !: 35
+Profesores: ['MARIA CLAUDIA GOMEZ BELTRAN'] IB: 1.17
+Grupo: [L5] // #: 31 !: 37
+Profesores: ['SERGIO ANDRES MONTOYA TORRES'] IB: 1.19
+Grupo: [B5] // #: 29 !: 36
+Profesores: ['ARNOLDO RAFAEL TEHERAN HERRERA'] IB: 1.24
+Grupo: [L1] // #: 30 !: 38
+Profesores: ['EDGAR RENE RAMIREZ LAMUS'] IB: 1.27
+Grupo: [A1] // #: 22 !: 35
+Profesores: ['CARLOS ARTURO BAUTISTA DUQUE'] IB: 1.59
+Grupo: [A2] // #: 21 !: 35
+Profesores: ['CARLOS ARTURO BAUTISTA DUQUE'] IB: 1.67
+Grupo: [B2] // #: 20 !: 35
+Profesores: ['CARLOS ARTURO BAUTISTA DUQUE'] IB: 1.75
+Grupo: [VB4] // #: 0 !: 35
+Profesores: ['Sin profesor'] IB: 99
+Grupo: [L6] // #: 0 !: 0
+Profesores: [] IB: 99||||||||||||||||||||||||||||||||||||||||
+Grupo: [VB1] // #: 0 !: 35
+Profesores: ['LAURA MILENA ROMERO PARADA'] IB: 99
+Grupo: [VB2] // #: 0 !: 35
+Profesores: ['JESUS FERNANDO CARREÑO DIAZ'] IB: 99
+Grupo: [VB3] // #: 0 !: 35
+Profesores: ['LUIS ANGEL PEREZ FERNANDEZ'] IB: 99

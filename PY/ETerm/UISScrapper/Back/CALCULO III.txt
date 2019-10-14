@@ -1,0 +1,54 @@
+Grupo: [A4] // #: 37 !: 37
+Profesores: ['ALBERTO MACIAS ORDOÑEZ'] IB: 1.0||||||||||||||||||||||||||||||||||||||||
+Grupo: [A5] // #: 35 !: 35
+Profesores: ['ALBERTO MACIAS ORDOÑEZ'] IB: 1.0||||||||||||||||||||||||||||||||||||||||
+Grupo: [B2] // #: 35 !: 35
+Profesores: ['YERLY VANESA SOLER PORRAS'] IB: 1.0||||||||||||||||||||||||||||||||||||||||
+Grupo: [B4] // #: 36 !: 36
+Profesores: ['JUAN CARLOS BASTO PINEDA'] IB: 1.0||||||||||||||||||||||||||||||||||||||||
+Grupo: [C1] // #: 36 !: 36
+Profesores: ['ALBERTO MACIAS ORDOÑEZ'] IB: 1.0||||||||||||||||||||||||||||||||||||||||
+Grupo: [H2] // #: 36 !: 36
+Profesores: ['RICARDO MONTURIOL MARTINEZ'] IB: 1.0||||||||||||||||||||||||||||||||||||||||
+Grupo: [J2] // #: 37 !: 37
+Profesores: ['DANIEL OSWALDO TELLEZ NAVARRO'] IB: 1.0||||||||||||||||||||||||||||||||||||||||
+Grupo: [A2] // #: 36 !: 37
+Profesores: ['JUAN CARLOS BASTO PINEDA'] IB: 1.03
+Grupo: [D1] // #: 37 !: 38
+Profesores: ['MICHAEL ALEXANDER RINCON VILLAMIZAR'] IB: 1.03
+Grupo: [A1] // #: 37 !: 38
+Profesores: ['FELIX ANTONIO PAEZ DIAZ'] IB: 1.03
+Grupo: [J1] // #: 35 !: 36
+Profesores: ['DANIEL OSWALDO TELLEZ NAVARRO'] IB: 1.03
+Grupo: [L4] // #: 34 !: 35
+Profesores: ['DANIEL OSWALDO TELLEZ NAVARRO'] IB: 1.03
+Grupo: [A3] // #: 34 !: 36
+Profesores: ['DUWAMG ALEXIS PRADA MARIN'] IB: 1.06
+Grupo: [H1] // #: 35 !: 37
+Profesores: ['SOREN IVAN ARENAS OBREGON'] IB: 1.06
+Grupo: [L2] // #: 35 !: 37
+Profesores: ['DUWAMG ALEXIS PRADA MARIN'] IB: 1.06
+Grupo: [L3] // #: 34 !: 36
+Profesores: ['NELSON LOPEZ ROJAS'] IB: 1.06
+Grupo: [B3] // #: 15 !: 16
+Profesores: ['Sin profesor'] IB: 1.07
+Grupo: [H5] // #: 33 !: 36
+Profesores: ['SOREN IVAN ARENAS OBREGON'] IB: 1.09
+Grupo: [L1] // #: 33 !: 36
+Profesores: ['SOREN IVAN ARENAS OBREGON'] IB: 1.09
+Grupo: [H3] // #: 33 !: 37
+Profesores: ['JORGE ELIECER GOMEZ RIOS'] IB: 1.12
+Grupo: [H4] // #: 31 !: 36
+Profesores: ['NELSON LOPEZ ROJAS'] IB: 1.16
+Grupo: [D2] // #: 20 !: 35
+Profesores: ['JULIO CESAR CARRILLO ESCOBAR'] IB: 1.75
+Grupo: [B1] // #: 12 !: 35
+Profesores: ['JULIO CESAR CARRILLO ESCOBAR'] IB: 2.92
+Grupo: [VC4] // #: 0 !: 35
+Profesores: ['Sin profesor'] IB: 99
+Grupo: [VC1] // #: 0 !: 35
+Profesores: ['ANDRES SEBASTIAN CAÑAS PEREZ'] IB: 99
+Grupo: [VC2] // #: 0 !: 35
+Profesores: ['Sin profesor'] IB: 99
+Grupo: [VC3] // #: 0 !: 35
+Profesores: ['Sin profesor'] IB: 99
