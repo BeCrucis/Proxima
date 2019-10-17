@@ -1,0 +1,2 @@
+file 'F:/Downloads/Carpetas/Programs/Programming/PY/ETerm/Manim/videos/Manim/480p15/partial_movie_files/DoSomething2/00000.mp4'
+file 'F:/Downloads/Carpetas/Programs/Programming/PY/ETerm/Manim/videos/Manim/480p15/partial_movie_files/DoSomething2/00001.mp4'

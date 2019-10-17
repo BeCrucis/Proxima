@@ -1,29 +1,16 @@
 import random
 
-rand1 = random.randint(1,2)
-rand2 = random.randint(1,3)
 
-success = 0
-fail = 0
+holo = {}
 
-intentos = 10000
+for n in range(10):
+    holo[n] = n+1
+x = sorted(list(holo))
+print(x)
 
-for n in range(intentos):
-    rand3 = random.randint(1,2)
+def a():
 
-    if rand3 == rand1:
-        success += 1
-        continue
-    else:
-        rand4 = random.randint(1,4)
-        if rand4 == rand2:
-            success += 1
-            continue
-        else:
-            fail += 1
+    def coso(x):
+        return x**2
 
-print(F"De {intentos} intentos hubieron:")
-print(F"{success} sucesos")
-print(F"{fail} fallos")
-print(F"{success*100/intentos}% de suceso")
-
+    return coso
