@@ -2,6 +2,7 @@ from manimlib.imports import *
 import numpy as np
 
 # pragma pylint: disable=no-member
+#pylint: disable=undefined-variable
 
 class Grid(VMobject):
     CONFIG = {
@@ -90,3 +91,47 @@ class ScreenGrid(VGroup):
         self.add(grilla, ejes, leyendas)
         if self.show_points:
             self.add(puntos)
+
+def createDot(obj, x, y, color = WHITE):
+    dot = Dot(np.array([x, y, 0]), color = color)
+    obj.play(GrowFromCenter(dot), run_time = .2)
+    return dot
+
+def connectDots(obj, dot1, dot2, color = WHITE):
+    line = Line(dot1.get_center(), dot2.get_center(), color = color)
+    obj.play(GrowFromPoint(line, dot1.get_center()), run_time = .3)
+    return line
+
+def createGrid(obj, x_min = 0, x_max = 0, y_min = 0, y_max = 0):
+    grid = NumberPlane().add_coordinates(list(range(x_min,x_max)), list(range(y_min,y_max)))
+    obj.play(ShowIncreasingSubsets(grid))
+    return grid
+
+class TangentVector(Scene):
+    def construct(self):
+        figure = Ellipse(color=RED).scale(2)
+        dot = Dot()
+        alpha = ValueTracker(0)
+        vector = self.get_tangent_vector(alpha.get_value(),figure,scale=2)
+        dot.add_updater(lambda m: m.move_to(vector.get_start()))
+        self.play(
+            ShowCreation(figure),
+            GrowFromCenter(dot),
+            GrowArrow(vector)
+            )
+        vector.add_updater(
+            lambda m: m.become(
+                    self.get_tangent_vector(alpha.get_value()%1,figure,scale=2)
+                )
+            )
+        self.add(vector,dot)
+        self.play(alpha.increment_value, 2, run_time=8, rate_func=linear)
+        self.wait()
+
+    def get_tangent_vector(self, proportion, curve, dx=0.001, scale=1):
+        coord_i = curve.point_from_proportion(proportion)
+        coord_f = curve.point_from_proportion(proportion + dx)
+        reference_line = Line(coord_i,coord_f)
+        unit_vector = reference_line.get_unit_vector() * scale
+        vector = Arrow(coord_i, coord_i + unit_vector, buff=0)
+        return vector
