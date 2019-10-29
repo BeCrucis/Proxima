@@ -300,6 +300,7 @@ def main():
                 pool.map(letters2sound, voices)
                 
         elif play == "0":
+
             with open(pathOutput, "w") as f:
 
                 for block in blocks:
