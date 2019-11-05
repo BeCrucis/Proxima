@@ -192,11 +192,7 @@ def main():
         [URL IMPORTADAS DE PIANOLETTERNOTES.BLOGSPOT]
                     """)
 
-        play = input("0 = Exportar archivo de texto para C++ | 1 = Tocar cancion: ")
-        if play == "0":
-            outputName = input("Inserte el camino a donde exportar el archivo: ")
-            pathOutput = f"{os.path.dirname(os.path.realpath(__file__))}/{outputName}.txt"
-            print(f"El archivo sera importado a {pathOutput}")
+        play = input("0 = Exportar archivo de Beeps | 1 = Tocar cancion: ")
 
         path = input("Inserte el camino o URL de la cancion: ")
 
@@ -206,7 +202,6 @@ def main():
             blocks = blockextractor(path)
 
         if play == "1":
-            
 
             for block in blocks:
                 letters = block2letter(block)
@@ -217,17 +212,37 @@ def main():
                     else:
                         time.sleep(defaultTime/1000)
 
-        elif play == "0":
-            with open(pathOutput, "w") as f:
-
-                for block in blocks:
-                    letters = block2letter(block)
-                    for letter in letters:
-                        if letter != "-":
-                            f.write(f"Beep({frequencies[letter]},{defaultTime});\n")
-                        else:
-                            f.write(f"Sleep({defaultTime});\n")
         else:
-            break
+
+            output_lang = input("Lenguaje a exportar -> | Python = 1 | C++ = Else |: ")
+            outputName = path.split("/")[-1].split(".")[0]
+            if output_lang == "1":
+                outputName = outputName + "_py"
+            else:
+                outputName = outputName + "_cpp"
+
+            pathOutput = f"{os.path.dirname(os.path.realpath(__file__))}/{outputName}.txt"
+            print(f"El archivo sera exportado a {pathOutput}")
+
+            if output_lang == "1":
+                with open(pathOutput, "w") as f:
+                    for block in blocks:
+                        letters = block2letter(block)
+                        for letter in letters:
+                            if letter != "-":
+                                f.write(f"winsound.Beep({frequencies[letter]},{defaultTime});\n")
+                            else:
+                                f.write(f"time.sleep({defaultTime/1000});\n")
+
+            else:
+                with open(pathOutput, "w") as f:
+
+                    for block in blocks:
+                        letters = block2letter(block)
+                        for letter in letters:
+                            if letter != "-":
+                                f.write(f"Beep({frequencies[letter]},{defaultTime});\n")
+                            else:
+                                f.write(f"Sleep({defaultTime});\n")
 
 main()
