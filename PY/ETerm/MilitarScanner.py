@@ -11,20 +11,27 @@ def importObserverInfo(driver, observerLink, observerName, courseName):
 	
 	driver.get(observerLink)
 
+	course_string_input = "Comportamiento " + courseName
+
 	searchBox = driver.find_elements_by_id("people_search")[0]
-	searchBox.send_keys("Comportamiento " + courseName)
+	searchBox.send_keys(course_string_input)
 
 	time.sleep(2)
 
 	moreElements = driver.find_elements_by_class_name("result_type_course")
 
-	moreElements[0].click()
+	for element in moreElements:
+
+		if len(course_string_input) == len(element.text):
+			element.click()
+			break
 
 	time.sleep(2)
 
 	searchBox.send_keys(u"\ue007")
 
 	time.sleep(2)
+	os.system("pause")
 	
 	elements = driver.find_elements_by_tag_name("a")
 
@@ -73,7 +80,7 @@ def importStudentInfoOED(driver, link):
 		
 		for entry in observerEntries:
 			entryData = entry.findChildren("td" , recursive=False)
-			if entryData[5].text.upper() == "Tercer Periodo".upper():
+			if entryData[5].text.upper() == "Cuarto Periodo".upper():
 				rawFecha = entryData[2].text
 				formattedFecha = rawFecha[:10]
 				dateList.append(formattedFecha)
@@ -113,7 +120,7 @@ def main(headless = False):
 
 	courses = {}
 
-	# # courses["PREJARDIN"] = ["PREJARDIN 1"]
+	# courses["PREJARDIN"] = ["PREJARDIN 1"]
 	# courses["JARDIN"] = ["JARDIN 1"]
 	# courses["TRANSICION"] = ["TRANSICION 1"]
 	# courses["PRIMERO"] = ["PRIMERO 1"]
@@ -121,14 +128,12 @@ def main(headless = False):
 	# courses["TERCERO"] = ["TERCERO 1"]
 	# courses["CUARTO"] = ["CUARTO 1"]
 	# courses["QUINTO"] = ["QUINTO 1"]
-	courses["SEXTO"] = ["SEXTO 1", "SEXTO 2"]
-	courses["SEPTIMO"] = ["SEPTIMO 1", "SEPTIMO 2"]
-	courses["OCTAVO"] = ["OCTAVO 1","OCTAVO 2"]
-	courses["NOVENO"] = ["NOVENO 1", "NOVENO 2"]
+	# courses["SEXTO"] = ["SEXTO 1", "SEXTO 2"]
+	# courses["SEPTIMO"] = ["SEPTIMO 1", "SEPTIMO 2"]
+	# courses["OCTAVO"] = ["OCTAVO 1","OCTAVO 2"]
+	# courses["NOVENO"] = ["NOVENO 1", "NOVENO 2"]
 	courses["DECIMO"] = ["DECIMO 1"]
 	courses["UNDECIMO"] = ["UNDECIMO 1", "UNDECIMO 2"]
-
-
 
 	for courseGrade in courses:
 
@@ -138,6 +143,7 @@ def main(headless = False):
 
 			observerInfo = importObserverInfo(driver, "https://colmilgeneralsantander.phidias.co/poll/consolidate/people?poll=23", "OED", courseName)
 
+			os.system("pause")
 			with open(F"{courseName}.txt", "w") as f:
 
 				infoFile = open(F"{courseName}INFO.txt", "w")
