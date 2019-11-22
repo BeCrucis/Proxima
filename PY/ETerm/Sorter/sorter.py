@@ -1,7 +1,7 @@
 import os
 import openpyxl
 from Persona import *
-from openpyxl.styles import Color, PatternFill, Font, Border
+from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font
 from openpyxl.styles import colors
 
 EXCEL_PAGE = "input.xlsx"
@@ -36,6 +36,12 @@ def main():
     output_wb = openpyxl.Workbook()
     output_ws = output_wb.active
 
+    for row in ws.iter_rows(1,1,1,15):
+        for cell in row:
+            output_ws.cell(cell.row, cell.column).value = cell.value
+            output_ws.cell(cell.row, cell.column).font = Font(name='Consolas', bold=True)
+            output_ws.cell(cell.row, cell.column).alignment = Alignment(horizontal='center')
+
     row_number = 2
 
     for person in people:
@@ -61,8 +67,12 @@ def main():
             output_ws.cell(row_number, 14).value = event[5]
             output_ws.cell(row_number, 15).value = event[6]
 
+            for row in output_ws.iter_rows(row_number, row_number, 1, 15):
+                    for cell in row:
+                        cell.font = Font(name='Consolas')
+                        cell.alignment = Alignment(horizontal='center')
+
             if fill:
-                print("O NO")
                 redFill = PatternFill(start_color='FFFF0000',
                 end_color='FFFF0000',
                 fill_type='solid')

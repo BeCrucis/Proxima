@@ -12,22 +12,22 @@ class Persona():
         if sur1 is None:
             self.sur1 = ""
         else:
-            self.sur1 = sur1.upper()
+            self.sur1 = sur1.upper().strip()
         
         if sur2 is None:
             self.sur2 = ""
         else:
-            self.sur2 = sur2.upper()
+            self.sur2 = sur2.upper().strip()
 
         if name1 is None:
             self.name1 = ""
         else:
-            self.name1 = name1.upper()
+            self.name1 = name1.upper().strip()
 
         if name2 is None:
             self.name2 = ""
         else:
-            self.name2 = name2.upper()
+            self.name2 = name2.upper().strip()
 
         if genre is None:
             self.genre = ""
