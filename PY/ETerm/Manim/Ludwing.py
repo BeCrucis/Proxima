@@ -94,6 +94,36 @@ class L(GraphScene):
             Uncreate(vector1),
             )
         self.wait()
+        
+class FieldWithAxes(Scene):
+    CONFIG = {
+    "plane_kwargs" : {
+    "color" : RED_B
+    },
+    "point_charge_loc" : 0.5*RIGHT-1.5*UP,
+    }
+
+    plane_kwargs = {"color" : RED_B}
+
+    def construct(self):
+        plane = NumberPlane(**self.plane_kwargs)
+        plane.add(plane.get_axis_labels())
+        self.add(plane)
+        
+        field = VGroup(*[self.calc_field(x*RIGHT+y*UP)
+        for x in np.arange(-9,9,1)
+        for y in np.arange(-5,5,1)
+        ])
+        
+        self.play(ShowCreation(field))
+    
+    def calc_field(self,point):
+        x,y = point[:2]
+        temp = 0.5*RIGHT-1.5*UP
+        Rx,Ry = temp[:2]
+        r = math.sqrt((x-Rx)**2 + (y-Ry)**2)
+        efield = (point - temp)/r**3
+
 
 def get_tangent_vector(proportion, curve, dx=0.001, scale=1, color = WHITE):
     coord_i = curve.point_from_proportion(proportion)
@@ -104,7 +134,7 @@ def get_tangent_vector(proportion, curve, dx=0.001, scale=1, color = WHITE):
     return vector
 
 def main():
-    os.system("manim Ludwing.py L -pl")
+    os.system("manim Ludwing.py FieldWithAxes -pl")
 
 if __name__ == "__main__":
     main()    
