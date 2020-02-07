@@ -4,7 +4,9 @@ using namespace std;
 
 struct nodo
 {
-	int data;
+	int codigo;
+    string nombre;
+    int nivel;
 	nodo *sig;
 };
 
@@ -26,11 +28,14 @@ class linkedList{
         
         int i = 0;
 
-        while(this->firstNode != this->lastNode){
+        cout << this->to_string() << endl;
+
+        while(this->firstNode->sig != NULL){
+
+            cout << "Borrando " << this->get(0) << " en la posicion " << "["<<i<<"]"<<endl;
 
             nodo *previousNode = this->firstNode;
             this->firstNode = this->firstNode->sig;
-            cout << "Borrando " << previousNode->data << " en la posicion " << "["<<i<<"]"<<endl;
 
             this->lenght -= 1;
             i += 1;
@@ -40,31 +45,102 @@ class linkedList{
         }
 
         if(this->lenght > 0){
-            cout << "Borrando " << firstNode->data << " en la posicion " << "["<<i<<"]"<<endl;
+            cout << "Borrando " << this->get(0) << " en la posicion " << "["<<i<<"]"<<endl;
             this->lenght -= 1;
             delete this->firstNode;
             cout << "Borrando lista encadenada" <<endl;
         } 
     }
 
-    void add(int data){
+    void read_student(){
+
+        int codigo, nivel;
+        string nombre;
+
+        cout << "Inserte el codigo de estudiante: ";
+        cin >> codigo;
+
+        cout << "Inserte el nombre de estudiante: ";
+        cin >> nombre;
+
+        cout << "Inserte el nivel de estudiante: ";
+        cin >> nivel;
+
+        this->add(codigo, nombre, nivel);
+        
+        cout << this->to_string() << endl;
+    }
+
+    void remove(int index){
+
+        nodo* erasedNode = this->get_node(index);
+
+        
+
+        if(index == 0){
+            this->firstNode = this->firstNode->sig;
+            delete erasedNode;
+            this->lenght -= 1;
+            return;
+        }
+
+        nodo *previousNode;
+        previousNode = this->get_node(index-1);
+
+        previousNode->sig = erasedNode->sig;
+        delete erasedNode;
+
+        this->lenght -= 1;
+    }
+
+    void remove_by_code(int codigo){
+
+        int foundNodeIndex = this->search_by_code(codigo);
+
+        if(foundNodeIndex != -1){
+
+            cout << "Borrando " << this->get(foundNodeIndex) << " en la posicion " << "["<<foundNodeIndex<<"]"<<endl;
+            this->remove(foundNodeIndex);
+
+            cout << this->to_string() << endl;
+
+        } else {
+            cout << "Codigo " << codigo << " No encontrado!";
+        }
+    }
+
+    int search_by_code(int codigo){
+
+        for(int i=0; i < this->lenght; i++){
+
+            if(this->get_node(i)->codigo == codigo){
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    void add(int codigo, string nombre, int nivel){
 
 
         nodo *newNode = new nodo();
-        newNode->data = data;
+        newNode->codigo = codigo;
+        newNode->nombre = nombre;
+        newNode->nivel = nivel;
         newNode->sig = NULL;
 
         if(this->firstNode == NULL){
 
             cout << "Creando lista por primera vez!" << endl;
-            cout << "Insertando " << data << " en la posicion" << " [0]" << endl;
+            cout << "Insertando " <<"("<<codigo <<", "<<nombre<<", "<<nivel<<") " <<" en la posicion" << " [0]" << endl;
             this->firstNode = newNode;
             this->lastNode = newNode;
         }
 
         else {
             
-            cout << "Insertando " << data << " en la posicion" << " ["<<this->lenght<<"]"<<endl;
+            cout << "Insertando " <<"("<<codigo <<", "<<nombre<<", "<<nivel<<") " << " en la posicion" << " ["<<this->lenght<<"]"<<endl;
             this->lastNode->sig = newNode;
             this->lastNode = newNode;
         }
@@ -72,7 +148,7 @@ class linkedList{
         this->lenght += 1;
     }
 
-    void add(int data, int index){
+    void add(int codigo, string nombre, int nivel, int index){
 
         if(index > lenght){
 
@@ -81,58 +157,50 @@ class linkedList{
         }
 
         nodo *newNode = new nodo();
-        newNode->data = data;
+        newNode->codigo = codigo;
+        newNode->nombre = nombre;
+        newNode->nivel = nivel;
         newNode->sig = NULL;
 
-        if(this->firstNode == NULL){
+        if (index == 0 && this->firstNode != NULL){
 
-            cout << "Creando lista por primera vez!" << endl;
-            cout << "Insertando " << data << " en la posicion" << " [0]" << endl;
-            this->firstNode = newNode;
-            this->lastNode = newNode;
-        }
+            cout << "Insertando " <<"("<<codigo <<", "<<nombre<<", "<<nivel<<") " << " en la posicion" << " ["<<index<<"]"<<endl;
 
-        else {
-
-            if (index == 0){
-
-                cout << "Insertando " << data << " en la posicion" << " ["<<index<<"]"<<endl;
-
-                nodo *replaceNode = firstNode;
-                newNode->sig = replaceNode;
-                this->firstNode = newNode;
-                this->lenght += 1;
-                return;
-            }
-
-            if (index == this->lenght){
-                this->add(data);
-                return;
-            }
-
-            cout << "Insertando " << data << " en la posicion" << " ["<<index<<"]"<<endl;
-
-            nodo *previousNode;
-            previousNode = firstNode;
-
-            for (int i = 1; i < index; i++){
-                previousNode = previousNode->sig;
-            }
-
-            nodo *replaceNode = previousNode->sig;
-            previousNode->sig = newNode;
+            nodo *replaceNode = firstNode;
             newNode->sig = replaceNode;
+            this->firstNode = newNode;
+            this->lenght += 1;
+            return;
         }
+
+        if (index == this->lenght){
+            this->add(codigo, nombre, nivel);
+            return;
+        }
+
+        cout << "Insertando " <<"("<<codigo <<", "<<nombre<<", "<<nivel<<") " << " en la posicion" << " ["<<index<<"]"<<endl;
+
+        nodo *previousNode;
+        previousNode = firstNode;
+
+        for (int i = 1; i < index; i++){
+            previousNode = previousNode->sig;
+        }
+
+        nodo *replaceNode = previousNode->sig;
+        previousNode->sig = newNode;
+        newNode->sig = replaceNode;
+        
 
         this->lenght += 1;
     }
 
-    int get(int index){
+    nodo* get_node(int index){
 
         if(index >= lenght || index < 0){
 
             cout << "Indice "<<"["<<index<<"]"<<" invalido, inserte un indice menor al largo de la lista!" << endl;
-            return -1;
+            return NULL;
         }
 
         nodo *currentNode;
@@ -142,7 +210,27 @@ class linkedList{
             currentNode = currentNode->sig;
         }
 
-        return currentNode->data;
+        return currentNode;
+    }
+
+    string get(int index){
+
+        if(index >= lenght || index < 0){
+
+            cout << "Indice "<<"["<<index<<"]"<<" invalido, inserte un indice menor al largo de la lista!" << endl;
+            return "";
+        }
+
+        nodo *currentNode;
+        currentNode = firstNode;
+
+        for (int i = 0; i < index; i++){
+            currentNode = currentNode->sig;
+        }
+
+        return "(" + std::to_string(currentNode->codigo) + 
+        ", " + currentNode->nombre + 
+        ", " + std::to_string(currentNode->nivel) + ")";
     }
 
     string to_string(){
@@ -151,12 +239,12 @@ class linkedList{
         nodo *currentNode;
         currentNode = this->firstNode;
 
-        for (int i = 0; i < lenght-1; i++){
-            out = out + std::to_string(currentNode->data) + ", ";
+        for(int i = 0; i < lenght-1; i++){
+            out = out + this->get(i) + ", ";
             currentNode = currentNode->sig;
         }
 
-        out = out + std::to_string(currentNode->data) + "]";
+        out = out + this->get(lenght-1) + "]";
 
         return out;
 
@@ -168,21 +256,21 @@ int main(){
 
     linkedList list;
 
-    for (int i = 1; i <= 10; i++){
+    for (int i = 1; i <= 3; i++){
 
-        list.add(i*2, i-1);
+        // list.add(i*2,"jose", i*5);
+        list.read_student();
     }
     
     cout << list.to_string() << endl;
 
-    list.add(1000, 7);
+    // list.add(1000, 7);
+
+    // cout << list.to_string() << endl;
+
+    // system("pause");
 
     cout << list.to_string() << endl;
 
-    system("pause");
-
-    delete &list;
-
     return 0;
 }
-
