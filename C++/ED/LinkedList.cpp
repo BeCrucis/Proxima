@@ -30,7 +30,7 @@ class linkedList{
 
         cout << this->to_string() << endl;
 
-        while(this->firstNode->sig != NULL){
+        while(this->lenght > 1){
 
             cout << "Borrando " << this->get(0) << " en la posicion " << "["<<i<<"]"<<endl;
 
@@ -68,14 +68,11 @@ class linkedList{
 
         this->add(codigo, nombre, nivel);
         
-        cout << this->to_string() << endl;
     }
 
     void remove(int index){
 
         nodo* erasedNode = this->get_node(index);
-
-        
 
         if(index == 0){
             this->firstNode = this->firstNode->sig;
@@ -105,7 +102,7 @@ class linkedList{
             cout << this->to_string() << endl;
 
         } else {
-            cout << "Codigo " << codigo << " No encontrado!";
+            cout << "Codigo " << codigo << " No encontrado!" << endl;
         }
     }
 
@@ -117,12 +114,11 @@ class linkedList{
                 return i;
             }
         }
-
         return -1;
+
     }
 
     void add(int codigo, string nombre, int nivel){
-
 
         nodo *newNode = new nodo();
         newNode->codigo = codigo;
@@ -183,7 +179,7 @@ class linkedList{
         nodo *previousNode;
         previousNode = firstNode;
 
-        for (int i = 1; i < index; i++){
+        for (int i = 0; i < index-1; i++){
             previousNode = previousNode->sig;
         }
 
@@ -235,6 +231,10 @@ class linkedList{
 
     string to_string(){
 
+        if(this->lenght == 0){
+            return "[]";
+        }
+
         string out = "[";
         nodo *currentNode;
         currentNode = this->firstNode;
@@ -254,23 +254,49 @@ class linkedList{
 
 int main(){
 
+    int opcion, codigo;
     linkedList list;
 
-    for (int i = 1; i <= 3; i++){
+    cout << "Bienvenido a la base de datos UIS" << endl;
+    cout << endl;
 
-        // list.add(i*2,"jose", i*5);
-        list.read_student();
-    }
+    do {
+
+        cout << "Seleccione una opcion:" << endl;
+        cout << "1: Agregar datos a lista" << endl;
+        cout << "2: Mostrar lista" << endl;
+        cout << "3: Eliminar nodo de lista" << endl;
+        cout << "4: Eliminar lista y salir" << endl;
+        cout << endl;
+
+        cout << "Inserte su opcion: ";
+        cin >> opcion;
+
+        if(opcion == 1){
+
+            list.read_student();
+            cout << list.to_string() << endl;
+
+        } else if(opcion == 2){
+
+            cout << list.to_string() << endl;
+
+        } else if(opcion == 3){
+
+            cout << "Inserte el codigo a eliminar: ";
+            cin >> codigo;
+            
+            list.remove_by_code(codigo);
+
+        } else if(opcion == 4){
+
+            delete &list;
+
+        }
+
+        system("pause");
+        system("cls");
+
+    } while (opcion != 4);
     
-    cout << list.to_string() << endl;
-
-    // list.add(1000, 7);
-
-    // cout << list.to_string() << endl;
-
-    // system("pause");
-
-    cout << list.to_string() << endl;
-
-    return 0;
 }
