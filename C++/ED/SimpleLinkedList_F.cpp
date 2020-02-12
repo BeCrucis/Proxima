@@ -35,6 +35,11 @@ class Lse {
 
 	void desplegarLista(){
 
+        if(inicial == NULL){
+			cout << "[]" << endl;
+			return;
+		}
+
 		string out = "[";
         nodo *nodoActual;
         nodoActual = this->inicial;
@@ -195,6 +200,8 @@ int main(){
         } else if (opcion == 2){
 
             l.eliminarNodo();
+            
+            cout << "Lista actual: ";
             l.desplegarLista();
 
         }
