@@ -26,11 +26,11 @@ class LinkedList:
         string_list = "["
         current_node = self.inicial
 
-        while current_node.sig is not None:
+        while current_node.sig is not self.inicial:
             string_list = f"{string_list}{current_node.dato}, "
             current_node = current_node.sig
         
-        if current_node.dato is not None:
+        if current_node.dato is not self.inicial:
             string_list = f"{string_list}{current_node.dato}]"
 
         else:
@@ -47,10 +47,19 @@ class LinkedList:
         
         anterior = self.inicial
 
-        while anterior.sig is not None and anterior.sig.dato < clave:
+        while anterior.sig is not self.inicial and anterior.sig.dato < clave:
             anterior = anterior.sig
         
         return anterior
+    
+    def search_last_node(self):
+
+        last = self.inicial
+
+        while last.sig != self.inicial:
+            last = last.sig
+        
+        return last
     
     def agregar(self):
 
@@ -66,24 +75,29 @@ class LinkedList:
 
         if self.inicial is None:
             self.inicial = nuevo
-            nuevo.sig = None
+            nuevo.sig = self.inicial
         
         else:
             anterior = self.search_list_code(nuevo.dato)
 
             if anterior is None and nuevo.dato != self.inicial.dato:
+                # Coloca nodo en posicion 0
+                ultimo_nodo = self.search_last_node()
                 nuevo.sig = self.inicial
                 self.inicial = nuevo
+                ultimo_nodo.sig = self.inicial
             
-            elif anterior is None or anterior.sig is not None and anterior.sig.dato == nuevo.dato:
+            elif anterior is None or anterior.sig.dato == nuevo.dato:
                 print("El nodo a agregar ya existe!")
             
-            elif anterior.sig is not None:
+            elif anterior.sig is not self.inicial:
+                # Coloca nodo en posicion 1 hasta n-2
                 nuevo.sig = anterior.sig
                 anterior.sig = nuevo
             
             else:
-                nuevo.sig = None
+                # Coloca nodo en posicion n-1
+                nuevo.sig = self.inicial
                 anterior.sig = nuevo
     
     def eliminar_nodo(self):
@@ -98,7 +112,7 @@ class LinkedList:
         
         anterior = self.search_list_code(deleted_data)
 
-        if anterior is None or anterior.sig is None or anterior.sig.dato != deleted_data:
+        if anterior is None or anterior.sig is self.inicial or anterior.sig.dato != deleted_data:
 
             if self.inicial.dato != deleted_data:
                 print("El nodo no existe!")
