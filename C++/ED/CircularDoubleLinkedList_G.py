@@ -39,11 +39,37 @@ class LinkedList:
         
         return string_list
     
+    def get_list_backwards(self):
+
+        if self.inicial is None:
+            return "[]"
+
+        string_list = "["
+        current_node = self.inicial.ant
+
+        while current_node is not self.inicial:
+            string_list = f"{string_list}{current_node.dato}, "
+            current_node = current_node.ant
+        
+        string_list = f"{string_list}{current_node.dato}]"
+        
+        return string_list
+    
+    def print_list(self):
+
+        opt = input("1: Sentido horario | Else: Sentido antihorario: ")
+
+        if opt == "1":
+            print(self)
+        
+        else:
+            print(self.get_list_backwards())
+    
     def search_list_code(self, clave):
 
         anterior = None
 
-        if self.inicial.dato >= clave:
+        if self.inicial is None or self.inicial.dato >= clave:
             return anterior
         
         anterior = self.inicial
@@ -68,6 +94,7 @@ class LinkedList:
         if self.inicial is None:
             self.inicial = nuevo
             nuevo.sig = self.inicial
+            nuevo.ant = self.inicial
         
         else:
             anterior = self.search_list_code(nuevo.dato)
@@ -107,7 +134,7 @@ class LinkedList:
 
         if anterior is None or anterior.sig is self.inicial or anterior.sig.dato != deleted_data:
 
-            if self.inicial.dato != deleted_data:
+            if self.inicial is None or self.inicial.dato != deleted_data:
                 print("El nodo no existe!")
             
             else:
@@ -146,11 +173,11 @@ def main():
 
         if opcion == "1":
             lista.agregar()
-            print(lista)
+            lista.print_list()
     
         if opcion == "2":
             lista.eliminar_nodo()
-            print(lista)
+            lista.print_list()
         
         os.system("pause")
         os.system("cls")
