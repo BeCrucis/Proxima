@@ -5,39 +5,58 @@ using namespace std;
 struct nodo {
 	int dato;
 	nodo *sig;
+    nodo *ant;
 };
 
-class Lsec {
+class Lde {
 
 	private:
 		nodo *inicial;
 
 	public:
 
-		Lsec(){
+		Lde(){
 			inicial = NULL;
 		}
 
 	void desplegarLista(){
 
-		if(inicial == NULL){
+        string opt;
+        string out = "[";
+        nodo *nodoActual;
+
+        cout << "1: Sentido horario | Else: Sentido antihorario: ";
+        // cin >> opt;
+        opt = "2";
+
+        if(inicial == NULL){
 			cout << "[]" << endl;
 			return;
 		}
 
-		string out = "[";
-        nodo *nodoActual;
-        nodoActual = inicial;
+        if(opt == "1"){
 
-        while (nodoActual->sig != inicial){
+            nodoActual = this->inicial;
 
-            out = out + std::to_string(nodoActual->dato) + ", ";
-            nodoActual = nodoActual->sig;
+            while (nodoActual->sig != inicial){
 
+                out = out + std::to_string(nodoActual->dato) + ", ";
+                nodoActual = nodoActual->sig;
+
+            }
+
+        } else {
+
+            nodoActual = this->inicial->ant;
+
+            while (nodoActual != inicial){
+
+                out = out + std::to_string(nodoActual->dato) + ", ";
+				nodoActual = nodoActual->ant;
+            }
         }
 
         out = out + std::to_string(nodoActual->dato) + "]";
-
         cout << out << endl;
 	}
 
@@ -73,16 +92,6 @@ class Lsec {
 		}
 	}
 
-    nodo *buscarUltimo(){
-
-        nodo *ultimo;
-        ultimo = inicial;
-        while(ultimo->sig != inicial){
-            ultimo = ultimo->sig;
-        }
-        return ultimo;
-    }
-
     void agregar(){
 
         nodo *nuevo, *anterior;
@@ -97,7 +106,8 @@ class Lsec {
 
                 //Agrega el primer nodo a la lista
                 inicial = nuevo;
-                nuevo->sig = inicial;
+                nuevo->sig = nuevo;
+                nuevo->ant = nuevo;
 
 			} else {
 				
@@ -107,30 +117,38 @@ class Lsec {
 
 				//Agrega un nodo que queda de primero
                 //en una lista que no estaba vacia
-				nodo* ultimo = buscarUltimo();
+                inicial->ant->sig = nuevo;
+                nuevo->ant = inicial->ant;
                 nuevo->sig = inicial;
+                inicial->ant = nuevo;
                 inicial = nuevo;
-                ultimo->sig = nuevo;
 
-				} else if (anterior == NULL || anterior->sig->dato == nuevo->dato){
+				} else if (anterior == NULL || (anterior->sig != NULL && anterior->sig->dato == nuevo->dato)){
 
 					cout << "El nodo a agregar ya existe!" << endl;
 
-				} else if (anterior->sig != inicial){
+				} else if (anterior->sig != NULL){
 
 					//Agrega un nodo que queda entre el
 					//primero y el ultimo
 					nuevo->sig = anterior->sig;
+                    nuevo->ant = anterior;
+
 					anterior->sig = nuevo;
+                    nuevo->sig->ant = nuevo;
 
 				} else {
 
 					//Agrega un nodo que queda de ultimo
 					nuevo->sig = inicial;
+                    nuevo->ant = anterior;
+                    
 					anterior->sig = nuevo;
 
 				}
 			}
+
+            this->desplegarLista();
 
             cout << "Desea agregar otro nodo? (S/N): ";
             cin >> resp;
@@ -164,8 +182,9 @@ class Lsec {
 						cout << "El nodo no existe" << endl;
 
 					} else {
-						
-						nodo* ultimo = buscarUltimo();
+						// Borra el nodo que esta en la primera posicion
+
+                        nodo* ultimo = inicial->ant;
 						nodo* temp = inicial;
 						int deletedData = temp->dato;
 
@@ -177,6 +196,8 @@ class Lsec {
 						} else {
 
 							inicial = inicial->sig;
+                            inicial->ant = ultimo;
+
 							ultimo->sig = inicial;
 							delete temp;
 
@@ -187,26 +208,30 @@ class Lsec {
 				
 				} else {
 
+					// Borra una dato en medio de la lista
 					nodo* temp = anterior->sig;
 					int deletedData = temp->dato;
-					
+
 					anterior->sig = anterior->sig->sig;
+                    anterior->sig->ant = anterior;
 					delete temp;
 
 					cout << "Borrado dato: "<<deletedData<< endl;
 				}
 
 			}
+
+			this->desplegarLista();
+			cout << endl;
+			
 		} while ( resp == 's');
 
     }
 };
 
 int main(){
-
-	Lsec l;
+	Lde l;
 	l.agregar();
-    l.eliminarNodo();
 	l.desplegarLista();
     
 }

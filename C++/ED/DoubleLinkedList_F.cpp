@@ -57,6 +57,58 @@ class Lde {
         cout << out << endl;
 	}
 
+    nodo *buscarUltimo(){
+
+        nodo *ultimo;
+        ultimo = inicial;
+        while(ultimo->sig != NULL){
+            ultimo = ultimo->sig;
+        }
+        return ultimo;
+    }
+
+    void desplegarLista2(){
+
+        string opt;
+        string out = "[";
+        nodo *nodoActual;
+
+        cout << "1: Sentido horario | Else: Sentido antihorario: ";
+        cin >> opt;
+
+        if(inicial == NULL){
+			cout << "[]" << endl;
+			return;
+		}
+
+        if(opt == "1"){
+
+            nodoActual = this->inicial;
+
+            while (nodoActual->sig != NULL){
+
+                out = out + std::to_string(nodoActual->dato) + ", ";
+                nodoActual = nodoActual->sig;
+
+            }
+
+        } else {
+
+            nodoActual = buscarUltimo();
+
+            while (nodoActual->ant != NULL){
+
+                out = out + std::to_string(nodoActual->dato) + ", ";
+                nodoActual = nodoActual->ant;
+
+            }
+        }
+
+        out = out + std::to_string(nodoActual->dato) + "]";
+        cout << out << endl;
+
+    }
+
 	nodo* buscarLista(int clave){
 
 		//Devuelve la direccion del nodo que antecede al nuevo

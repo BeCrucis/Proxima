@@ -5,39 +5,58 @@ using namespace std;
 struct nodo {
 	int dato;
 	nodo *sig;
+    nodo *ant;
 };
 
-class Lsec {
+class Lde {
 
 	private:
 		nodo *inicial;
 
 	public:
 
-		Lsec(){
+		Lde(){
 			inicial = NULL;
 		}
 
 	void desplegarLista(){
 
-		if(inicial == NULL){
+        string opt;
+        string out = "[";
+        nodo *nodoActual;
+
+        cout << "1: Sentido horario | Else: Sentido antihorario: ";
+        cin >> opt;
+
+        if(inicial == NULL){
 			cout << "[]" << endl;
 			return;
 		}
 
-		string out = "[";
-        nodo *nodoActual;
-        nodoActual = inicial;
+        if(opt == "1"){
 
-        while (nodoActual->sig != inicial){
+            nodoActual = this->inicial;
 
-            out = out + std::to_string(nodoActual->dato) + ", ";
-            nodoActual = nodoActual->sig;
+            while (nodoActual->sig != inicial){
 
+                out = out + std::to_string(nodoActual->dato) + ", ";
+                nodoActual = nodoActual->sig;
+
+            }
+
+        } else {
+
+            nodoActual = this->inicial->ant;
+
+            while (nodoActual->ant != inicial){
+
+                out = out + std::to_string(nodoActual->dato) + ", ";
+                nodoActual = nodoActual->ant;
+
+            }
         }
 
         out = out + std::to_string(nodoActual->dato) + "]";
-
         cout << out << endl;
 	}
 
@@ -63,7 +82,7 @@ class Lsec {
 
 			anterior = inicial;
 
-			while ((anterior->sig != inicial) && (anterior->sig->dato < clave)){
+			while ((anterior->sig != NULL) && (anterior->sig->dato < clave)){
 
 				anterior=anterior->sig;
 
@@ -72,16 +91,6 @@ class Lsec {
 			return anterior;
 		}
 	}
-
-    nodo *buscarUltimo(){
-
-        nodo *ultimo;
-        ultimo = inicial;
-        while(ultimo->sig != inicial){
-            ultimo = ultimo->sig;
-        }
-        return ultimo;
-    }
 
     void agregar(){
 
@@ -97,7 +106,8 @@ class Lsec {
 
                 //Agrega el primer nodo a la lista
                 inicial = nuevo;
-                nuevo->sig = inicial;
+                nuevo->sig = nuevo;
+                nuevo->ant = nuevo;
 
 			} else {
 				
@@ -107,29 +117,35 @@ class Lsec {
 
 				//Agrega un nodo que queda de primero
                 //en una lista que no estaba vacia
-				nodo* ultimo = buscarUltimo();
                 nuevo->sig = inicial;
+                nuevo->ant = inicial->ant;
+                inicial->ant = nuevo;
                 inicial = nuevo;
-                ultimo->sig = nuevo;
 
-				} else if (anterior == NULL || anterior->sig->dato == nuevo->dato){
+				} else if (anterior == NULL || (anterior->sig != NULL && anterior->sig->dato == nuevo->dato)){
 
 					cout << "El nodo a agregar ya existe!" << endl;
 
-				} else if (anterior->sig != inicial){
+				} else if (anterior->sig != NULL){
 
 					//Agrega un nodo que queda entre el
 					//primero y el ultimo
 					nuevo->sig = anterior->sig;
+                    nuevo->ant = anterior;
+
 					anterior->sig = nuevo;
+                    nuevo->sig->ant = nuevo;
 
 				} else {
 
 					//Agrega un nodo que queda de ultimo
 					nuevo->sig = inicial;
+                    nuevo->ant = anterior;
+                    
 					anterior->sig = nuevo;
 
 				}
+
 			}
 
             cout << "Desea agregar otro nodo? (S/N): ";
@@ -137,76 +153,11 @@ class Lsec {
             resp = tolower(resp);
         } while (resp == 's');
     }
-
-    void eliminarNodo(){
-
-		char resp;
-		int clave;
-		nodo* anterior;
-
-		do {
-
-			cout << "Desea eliminar un nodo? (S/N): ";
-            cin >> resp;
-            resp = tolower(resp);
-
-			if(resp == 's'){
-
-				cout << "Inserte la clave del nodo a eliminar: ";
-				cin >> clave;
-				
-				anterior = buscarLista(clave);
-
-				if(anterior == NULL || anterior->sig == inicial || anterior->sig->dato != clave){
-
-					if(inicial->dato != clave){
-
-						cout << "El nodo no existe" << endl;
-
-					} else {
-						
-						nodo* ultimo = buscarUltimo();
-						nodo* temp = inicial;
-						int deletedData = temp->dato;
-
-						if(ultimo == inicial){
-
-							inicial = NULL;
-							delete temp;
-
-						} else {
-
-							inicial = inicial->sig;
-							ultimo->sig = inicial;
-							delete temp;
-
-						}
-
-						cout << "Borrado dato: "<<deletedData<< endl;
-					}
-				
-				} else {
-
-					nodo* temp = anterior->sig;
-					int deletedData = temp->dato;
-					
-					anterior->sig = anterior->sig->sig;
-					delete temp;
-
-					cout << "Borrado dato: "<<deletedData<< endl;
-				}
-
-			}
-		} while ( resp == 's');
-
-    }
 };
 
 int main(){
-
-	Lsec l;
+	Lde l;
 	l.agregar();
-    l.eliminarNodo();
 	l.desplegarLista();
     
 }
