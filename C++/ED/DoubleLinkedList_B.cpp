@@ -5,33 +5,19 @@ using namespace std;
 struct nodo {
 	int dato;
 	nodo *sig;
+    nodo *ant;
 };
 
-class Lse {
+class Lde {
 
 	private:
 		nodo *inicial;
 
 	public:
 
-	Lse(){
-		inicial = NULL;
-	}
-
-    ~Lse(){
-
-        int deletedData;
-
-        while(inicial != NULL){
-
-            nodo* temp = inicial;
-            deletedData = temp->dato;
-            inicial = inicial->sig;
-            delete temp;
-            cout << "Borro: " <<deletedData<< endl;
-            
-        }
-    }
+		Lde(){
+			inicial = NULL;
+		}
 
 	void desplegarLista(){
 
@@ -103,6 +89,7 @@ class Lse {
                 //Agrega el primer nodo a la lista
                 inicial = nuevo;
                 nuevo->sig = NULL;
+                nuevo->ant = NULL;
 
 			} else {
 				
@@ -113,6 +100,8 @@ class Lse {
 				//Agrega un nodo que queda de primero
                 //en una lista que no estaba vacia
                 nuevo->sig = inicial;
+                nuevo->ant = inicial->ant;
+                inicial->ant = nuevo;
                 inicial = nuevo;
 
 				} else if (anterior == NULL || (anterior->sig != NULL && anterior->sig->dato == nuevo->dato)){
@@ -124,12 +113,17 @@ class Lse {
 					//Agrega un nodo que queda entre el
 					//primero y el ultimo
 					nuevo->sig = anterior->sig;
+                    nuevo->ant = anterior;
+
 					anterior->sig = nuevo;
+                    nuevo->sig->ant = nuevo;
 
 				} else {
 
 					//Agrega un nodo que queda de ultimo
 					nuevo->sig = NULL;
+                    nuevo->ant = anterior;
+                    
 					anterior->sig = nuevo;
 
 				}
@@ -141,62 +135,11 @@ class Lse {
             resp = tolower(resp);
         } while (resp == 's');
     }
-
-    void eliminarNodo(){
-
-		char resp;
-		int clave;
-		nodo* anterior;
-
-		do {
-
-			cout << "Desea eliminar un nodo? (S/N): ";
-            cin >> resp;
-            resp = tolower(resp);
-
-			if(resp == 's'){
-
-				cout << "Inserte la clave del nodo a eliminar: ";
-				cin >> clave;
-				
-				anterior = buscarLista(clave);
-
-				if(anterior == NULL || anterior->sig == NULL || anterior->sig->dato != clave){
-
-					if(inicial->dato != clave){
-
-						cout << "El nodo no existe" << endl;
-
-					} else {
-
-						nodo* temp = inicial;
-						int deletedData = temp->dato;
-						inicial = inicial->sig;
-						delete temp;
-
-						cout << "Borrado dato: "<<deletedData<< endl;
-					}
-				
-				} else {
-
-					nodo* temp = anterior->sig;
-					int deletedData = temp->dato;
-					anterior->sig = anterior->sig->sig;
-					delete temp;
-
-					cout << "Borrado dato: "<<deletedData<< endl;
-				}
-
-			}
-		} while ( resp == 's');
-
-    }
 };
 
 int main(){
-	Lse l;
+	Lde l;
 	l.agregar();
-	l.eliminarNodo();
 	l.desplegarLista();
     
 }

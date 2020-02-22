@@ -5,6 +5,7 @@ using namespace std;
 struct nodo {
 	int dato;
 	nodo *sig;
+    nodo *ant;
 };
 
 class Lse {
@@ -14,24 +15,24 @@ class Lse {
 
 	public:
 
-	Lse(){
-		inicial = NULL;
-	}
+		Lse(){
+			inicial = NULL;
+		}
 
-    ~Lse(){
+        ~Lse(){
 
-        int deletedData;
+            int deletedData;
 
-        while(inicial != NULL){
+            while(inicial != NULL){
 
-            nodo* temp = inicial;
-            deletedData = temp->dato;
-            inicial = inicial->sig;
-            delete temp;
-            cout << "Borro: " <<deletedData<< endl;
-            
+                nodo* temp = inicial;
+                deletedData = temp->dato;
+                inicial = inicial->sig;
+                delete temp;
+                cout << "Borro: " <<deletedData<< endl;
+                
+            }
         }
-    }
 
 	void desplegarLista(){
 
@@ -64,8 +65,8 @@ class Lse {
 		//Si la clave es menor o igual al dato del primer nodo
 		//el valor devuelto es NULL.
 
-		//Si la clave es mayor que el dato del último nodo
-		//devuelve la dirección del último nodo.
+		//Si la clave es mayor que el dato del Ãºltimo nodo
+		//devuelve la direcciÃ³n del Ãºltimo nodo.
 
 		nodo *anterior;
 		anterior = NULL;
@@ -103,6 +104,7 @@ class Lse {
                 //Agrega el primer nodo a la lista
                 inicial = nuevo;
                 nuevo->sig = NULL;
+                nuevo->ant = NULL;
 
 			} else {
 				
@@ -113,28 +115,39 @@ class Lse {
 				//Agrega un nodo que queda de primero
                 //en una lista que no estaba vacia
                 nuevo->sig = inicial;
+
+                nuevo->ant = inicial->ant;
+                inicial->ant = nuevo;
+
                 inicial = nuevo;
 
 				} else if (anterior == NULL || (anterior->sig != NULL && anterior->sig->dato == nuevo->dato)){
 
-					cout << "El nodo a agregar ya existe!" << endl;
+                	cout << "El nodo a agregar ya existe!" << endl;
 
 				} else if (anterior->sig != NULL){
 
 					//Agrega un nodo que queda entre el
 					//primero y el ultimo
 					nuevo->sig = anterior->sig;
+                    nuevo->ant = anterior;
+
 					anterior->sig = nuevo;
+                    nuevo->sig->ant = nuevo;
 
 				} else {
 
 					//Agrega un nodo que queda de ultimo
 					nuevo->sig = NULL;
+                    nuevo->ant = anterior;
+                    
 					anterior->sig = nuevo;
 
 				}
 
 			}
+			this->desplegarLista();
+			cout << endl;
 
             cout << "Desea agregar otro nodo? (S/N): ";
             cin >> resp;
@@ -168,10 +181,17 @@ class Lse {
 						cout << "El nodo no existe" << endl;
 
 					} else {
+						// Borra el nodo que esta en la primera posicion
 
 						nodo* temp = inicial;
 						int deletedData = temp->dato;
+
 						inicial = inicial->sig;
+
+						if(inicial != NULL){
+							inicial->ant = NULL;
+						}
+
 						delete temp;
 
 						cout << "Borrado dato: "<<deletedData<< endl;
@@ -179,15 +199,26 @@ class Lse {
 				
 				} else {
 
+					// Borra una dato en medio de la lista
 					nodo* temp = anterior->sig;
 					int deletedData = temp->dato;
+
 					anterior->sig = anterior->sig->sig;
+
+					if(anterior->sig != NULL){
+						anterior->sig->ant = anterior;
+					}
+					
 					delete temp;
 
 					cout << "Borrado dato: "<<deletedData<< endl;
 				}
 
 			}
+
+			this->desplegarLista();
+			cout << endl;
+			
 		} while ( resp == 's');
 
     }

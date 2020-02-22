@@ -20,20 +20,25 @@ class Lse {
 
 	void desplegarLista(){
 
-		if (inicial == NULL) {
-
-			cout << "La lista esta vacia" << endl;
-
-		} else {
-
-			nodo *apunt;
-			apunt = inicial;
-			while (apunt != NULL){
-				cout << apunt->dato << endl;
-				apunt = apunt->sig;
-
-			}
+        if(inicial == NULL){
+			cout << "[]" << endl;
+			return;
 		}
+
+		string out = "[";
+        nodo *nodoActual;
+        nodoActual = this->inicial;
+
+        while (nodoActual->sig != NULL){
+
+            out = out + std::to_string(nodoActual->dato) + ", ";
+            nodoActual = nodoActual->sig;
+
+        }
+
+        out = out + std::to_string(nodoActual->dato) + "]";
+
+        cout << out << endl;
 	}
 
 	nodo* buscarLista(int clave){
