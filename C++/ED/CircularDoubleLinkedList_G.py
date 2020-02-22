@@ -7,6 +7,7 @@ class Nodo:
 
         self.dato = None
         self.sig = None
+        self.ant = None
 
 class LinkedList:
 
@@ -52,15 +53,6 @@ class LinkedList:
         
         return anterior
     
-    def search_last_node(self):
-
-        last = self.inicial
-
-        while last.sig != self.inicial:
-            last = last.sig
-        
-        return last
-    
     def agregar(self):
 
         nuevo = Nodo()
@@ -81,24 +73,25 @@ class LinkedList:
             anterior = self.search_list_code(nuevo.dato)
 
             if anterior is None and nuevo.dato != self.inicial.dato:
-                # Coloca nodo en posicion 0
-                ultimo_nodo = self.search_last_node()
+                # Agrega un nodo como primero
                 nuevo.sig = self.inicial
+                nuevo.ant = self.inicial.ant
+                self.inicial.ant.sig = nuevo
+                self.inicial.ant = nuevo
+
                 self.inicial = nuevo
-                ultimo_nodo.sig = self.inicial
-            
-            elif anterior is None or anterior.sig.dato == nuevo.dato:
+
+            elif anterior is None or anterior.sig is not self.inicial and anterior.sig.dato == nuevo.dato:
                 print("El nodo a agregar ya existe!")
             
-            elif anterior.sig is not self.inicial:
-                # Coloca nodo en posicion 1 hasta n-2
-                nuevo.sig = anterior.sig
-                anterior.sig = nuevo
-            
             else:
-                # Coloca nodo en posicion n-1
-                nuevo.sig = self.inicial
+                # Agrega un nodo en medio de la lista
+                nuevo.sig = anterior.sig
+                nuevo.ant = anterior
+
                 anterior.sig = nuevo
+                nuevo.sig.ant = nuevo
+            
     
     def eliminar_nodo(self):
 
@@ -119,18 +112,21 @@ class LinkedList:
             
             else:
 
-                ultimo = self.search_last_node()
+                ultimo = self.inicial.ant
 
                 if self.inicial == ultimo:
                     self.inicial = None
                 else:
                     self.inicial = self.inicial.sig
+                    self.inicial.ant = ultimo
                     ultimo.sig = self.inicial
 
                 print(f"Borrado dato: {deleted_data}")
     
         else:
             anterior.sig = anterior.sig.sig
+            anterior.sig.ant = anterior
+
             print(f"Borrado dato: {deleted_data}")
         
 
@@ -141,7 +137,7 @@ def main():
 
     while(opcion != "3"):
 
-        print("Lista Simplemente Encadenada!\n")
+        print("Lista Circular Doblemente Encadenada!\n")
         print("1. Agregar objeto a lista")
         print("2. Eliminar objeto de lista")
         print("3. Salir\n")

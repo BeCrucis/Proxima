@@ -8,14 +8,14 @@ struct nodo {
     nodo *ant;
 };
 
-class Lde {
+class Ldec {
 
 	private:
 		nodo *inicial;
 
 	public:
 
-		Lde(){
+		Ldec(){
 			inicial = NULL;
 		}
 
@@ -156,7 +156,7 @@ class Lde {
 };
 
 int main(){
-	Lde l;
+	Ldec l;
 	l.agregar();
 	l.desplegarLista();
     

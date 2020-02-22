@@ -15,9 +15,32 @@ class Ldec {
 
 	public:
 
-		Ldec(){
-			inicial = NULL;
-		}
+    Ldec(){
+        inicial = NULL;
+    }
+
+    ~Ldec(){
+
+        int deletedData;
+        nodo* nodoActual = inicial;
+
+        while(nodoActual->sig != inicial){
+
+            nodo* temp = nodoActual;
+            deletedData = temp->dato;
+
+            nodoActual = nodoActual->sig;
+
+            delete temp;
+            cout << "Borro: " <<deletedData<< endl;
+            
+        }
+
+        deletedData = nodoActual->dato;
+
+        delete nodoActual;
+        cout << "Borro: " <<deletedData<< endl;
+    }
 
 	void desplegarLista(){
 
