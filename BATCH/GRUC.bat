@@ -18,11 +18,11 @@ setlocal EnableDelayedExpansion
 :HELPMESSAGE
     echo      This batch script gets as input the location of a folder
     echo      with:
-    echo          * A "Compilers" folder with JDK, MinGW, and Python
+    echo          * A Folder with a "Compilers" folder inside with JDK, MinGW, and Python
     echo          * A file to compile
     echo          * Optionally the output file name
-    echo.     and outputs a compiled file (.exe for c++, .class for java^)
-    echo.     or interprets it (for python^)
+    echo      and outputs a compiled file (.exe for c++, .class for java^)
+    echo      or interprets it (for python^)
     echo.
     echo usage: gruc [base folder] [source file] [-o ^<output^>] [--e] [--e*]
     echo.
@@ -38,11 +38,12 @@ setlocal EnableDelayedExpansion
 :SETBASECONFIG
     set "cppDefaultCompilerPath=Compilers/MinGW/bin"
     set "cppCompilerFlags=-g3" 
-    set "cppLinkerFlags="
+    set "cppLinkerFlags=-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic"
+    REM set "cppLinkerFlags=-static-libstdc++ -static-libgcc"
 
     set "javaDefaultCompilerPath=Compilers/JDK13/bin"
     set "javaCompilerFlags=-g"
-    set "javaLinkerFlags=-cp "%~dp1""
+    set "javaLinkerFlags=-cp "%~dp2.""
 
     set "pyDefaultCompilerPath=Compilers/Python"
     set "pyCompilerFlags="
@@ -52,6 +53,7 @@ setlocal EnableDelayedExpansion
 
     rem print instructions if arguments are invalid
 
+    set "scriptFolder=%~dpnx0"
     set "baseFolder=%~1"
     set "inputFilePath=%~dpnx2"
     set "inputFileName=%~n2"
@@ -67,10 +69,12 @@ setlocal EnableDelayedExpansion
         set "baseFolder=%~dp1"
     )
 
+    pushd %baseFolder%
+
     if "%~x2" EQU ".cpp" (
         set defaultCompilerPath="%cppDefaultCompilerPath%"
         set compilerFlags=%cppCompilerFlags%
-        set linkerFlags="%cppLinkerFlags%"
+        set "linkerFlags=%cppLinkerFlags%"
         set programType=cpp
         shift
         goto :CHECKCOMPILEFLAGS
@@ -109,6 +113,8 @@ setlocal EnableDelayedExpansion
         )
 
         echo [INFO] Starting compilation
+        echo [INFO] Compiler path: %defaultCompilerPath%
+        echo [INFO] Script Working Directory: %cd%
         echo [INFO] Input File directory: !inputFileDirectory!
         echo [INFO] Input File name: !inputFileName!!inputFileExtension!
         echo [INFO] Output File directory: !compiledFileDirectory! 
@@ -168,10 +174,15 @@ setlocal EnableDelayedExpansion
 
     echo [PROCESS] Cleaning previous .exe files
     pushd "%compiledFileDirectory%"
-    del %compiledFileName%.exe
+
+        if exist %compiledFileName%.exe (
+        del %compiledFileName%.exe
+        echo [INFO] Deleted %compiledFileName%.exe
+    )
+
     popd
 
-    if %linkerFlags% EQU "" (
+    if "%linkerFlags%" EQU """" (
         set "linkerFlags="
     )
 
@@ -186,13 +197,19 @@ setlocal EnableDelayedExpansion
 
         popd
         pushd !compiledFileDirectory!
-
         echo [PROCESS] Issuing command: %compiledFileName%.exe
-        cls
-        call %compiledFileName%.exe || ( pause && exit )
+        
+        if exist %compiledFileName%.exe (
+            cls
+        )
+        
+        call %compiledFileName%.exe && ( set error="0" ) || ( set error="1" )
         echo.
-        echo.
-        echo [SUCCESS] Program execution finished successfuly
+        if !error! EQU "1" (
+            call :ERRORMESSAGE "Program execution failed"
+        ) else (
+            echo [SUCCESS] Program execution finished successfuly
+        )
     )
 
     if %cleanupFiles% EQU "1" (
@@ -226,12 +243,19 @@ setlocal EnableDelayedExpansion
 
         echo [INFO] Current java version: | set /p temp="[INFO] Current java version: "
         call java --version
-        echo [PROCESS] Issuing command: java -cp "%compiledFileDirectory%\" %compiledFileName%
-        cls
-        call java -cp "%compiledFileDirectory%\" %compiledFileName% || ( pause && exit )
+        echo [PROCESS] Issuing command: java -cp "%compiledFileDirectory%" %compiledFileName%
+
+            if exist %compiledFileDirectory%\%compiledFileName%.class ( 
+                cls
+            )
+
+        call java -cp "%compiledFileDirectory%\" %compiledFileName% && ( set error="0" ) || ( set error="1" )
         echo.
-        echo.
-        echo [SUCCESS] Program execution finished successfuly
+        if !error! EQU "1" (
+            call :ERRORMESSAGE "Program execution failed"
+        ) else (
+            echo [SUCCESS] Program execution finished successfuly
+        )
     )
 
     if %cleanupFiles% EQU "1" (
@@ -264,22 +288,17 @@ setlocal EnableDelayedExpansion
     call python --version
     echo [PROCESS] Issuing command: python !compiledFileDirectory!%compiledFileName%.py %compilerFlags% %LinkerFlags%
     cls
-    call python !compiledFileDirectory!%compiledFileName%.py %compilerFlags% %LinkerFlags% && set error="0" || set error="1"
-    echo.
+    call python !compiledFileDirectory!%compiledFileName%.py %compilerFlags% %LinkerFlags% && ( set error="0" ) || ( set error="1" )
     echo.
 
-    if %error% EQU "1" (
-        echo [ERROR] Program interpretation failed
+    if !error! EQU "1" (
+        call :ERRORMESSAGE "Program interpretation failed"
     ) else (
         echo [SUCCESS] Program interpretation finished successfuly
     )
     
     echo [INFO] GRUC will now exit
     exit
-
-:NORMALIZEPATH
-    set NPATH=%~dpfn1
-    exit /B
 
 :ERRORMESSAGE
     set errorMessage=%~1
