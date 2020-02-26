@@ -55,6 +55,7 @@ class Pila {
             cima->sig = NULL;
         } else {
 
+            // Encuentra el nodo anterior a la posicion de donde debe ir el nodo nuevo
             Nodo *anterior = buscarPrioridad(nuevo->prioridad);
             
             if(anterior == NULL){
@@ -73,11 +74,12 @@ class Pila {
     Nodo *buscarPrioridad(int prioridad){
 
         // Obtiene el nodo anterior al nodo de insercion 
+        // Si no existe nodo con menor prioridad, devuelve NULL
 
         Nodo *anterior;
 		anterior = NULL;
 
-		if (cima->prioridad <= prioridad){
+		if (cima->prioridad >= prioridad){
 
             return anterior;
 
@@ -85,7 +87,7 @@ class Pila {
 
 			anterior = cima;
 
-			while ((anterior->sig != NULL) && (anterior->sig->prioridad > prioridad)){
+			while ((anterior->sig != NULL) && (anterior->sig->prioridad < prioridad)){
 
 				anterior = anterior->sig;
 
@@ -96,6 +98,8 @@ class Pila {
     }
 
     void sacar(){
+
+        // Saca el nodo de la cima de la pila y lo imprime
 
         Nodo *objetivo = cima;
 
@@ -110,6 +114,8 @@ class Pila {
     }
 
     void limpiar(){
+
+        // Elimina los nodos de la pila y la deja vacia
 
         Nodo *objetivo = cima;
         Nodo *temp;
@@ -154,7 +160,10 @@ class Pila {
 
     void desplegar(){
 
+        // Imprime la pila desde la cima hasta su primer elemento
+
         if(cima == NULL){
+            // Si la pila esta vacia
 			cout << "[]" << endl;
 			return;
 		}
@@ -164,14 +173,16 @@ class Pila {
         nodoActual = cima;
 
         while (nodoActual->sig != NULL){
-
+            // Mientras el nodo actual no sea el primero de la pila, agregar valores
             out = out + std::to_string(nodoActual->dato) + ", ";
             nodoActual = nodoActual->sig;
 
         }
 
+        // Cuando el nodo actual es el primero de la pila, cierra el string
         out = out + std::to_string(nodoActual->dato) + "]";
 
+        // Imprimir la pila resultante
         cout << out << endl;
     }
 
@@ -219,9 +230,7 @@ int main(){
             pila.longitud();
 
         } else if (opcion == 6){
-        
-
-        
+                
         }
 
         cout << "Pila actual: ";
