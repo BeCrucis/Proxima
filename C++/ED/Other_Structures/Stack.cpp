@@ -45,14 +45,8 @@ class Pila {
         cout << "Inserte el dato agregar: ";
         cin >> nuevo->dato;
 
-        if(cima == NULL){
-            cima = nuevo;
-            cima->sig = NULL;
-        } else {
-            nuevo->sig = cima;
-            cima = nuevo;
-        }
-
+        nuevo->sig = cima;
+        cima = nuevo;
     }
 
     void sacar(){
