@@ -2,6 +2,9 @@
 #include <iomanip>
 #include <windows.h>
 
+// Hecho por Edward Parada para la asignatuda de Estructuras de Datos
+// Codigo de estudiante: 2182070
+
 using namespace std;
 
 struct Nodo {
@@ -74,7 +77,8 @@ class Pila {
     Nodo *buscarPrioridad(int prioridad){
 
         // Obtiene el nodo anterior al nodo de insercion 
-        // Si no existe nodo con menor prioridad, devuelve NULL
+        // Para ello busca un nodo con mayor prioridad a la insertada
+        // Si no existe nodo con mayor prioridad, devuelve NULL
 
         Nodo *anterior;
 		anterior = NULL;
