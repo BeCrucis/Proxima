@@ -42,15 +42,12 @@ class ABB{
 
     void borrarNodos(NodoArbol *raiz){
         if(raiz != NULL){
-            // Borra datos en inorden
-            NodoArbol *temp = raiz;
 
-            borrarNodos(temp->izq);
-            delete raiz;
-            borrarNodos(temp->der);
+            borrarNodos(raiz->der);  
+            borrarNodos(raiz->izq);
 
             cout << "Destructor de "<<raiz->info<< endl;
-            delete temp;            
+            delete raiz;          
         }
     }
 
@@ -112,7 +109,7 @@ class ABB{
         if (nivel == 1){
             cout << raiz->info << " ";
             return true;
-        }   
+        } 
 
         bool izq = desplegarNivel(raiz->izq, nivel - 1);
         bool der = desplegarNivel(raiz->der, nivel - 1);
@@ -124,8 +121,113 @@ class ABB{
     void desplegarAmplitud(NodoArbol *raiz){
         int nivel = 1;
 
-        while (desplegarNivel(raiz, nivel))
+        while (desplegarNivel(raiz, nivel)){
+            cout << "\n";
             nivel++;
+        }
+        
+        cout << endl;
+    }
+
+    void eliminarValor_2(int valor){
+
+        NodoArbol *objetivo, *padreObjetivo, *temp;
+        bool b;
+
+        //Inicio de busqueda del nodo a eliminar
+
+        if(raiz != NULL){
+            objetivo = raiz;
+            padreObjetivo = NULL;
+
+            while(objetivo->info != valor){
+                padreObjetivo = objetivo;
+
+                if(valor < objetivo->info){
+                    objetivo = objetivo->izq;
+                } else {
+                    objetivo = objetivo->der;
+                }
+
+                if(objetivo==NULL){
+                    cout << "El nodo a eliminar no existe" << endl;
+                    break;
+                }
+            }
+        } else {
+            cout << "El arbol no contiene nodos" << endl;
+            objetivo = NULL;
+        }
+
+        // Fin de la busqueda del nodo a eliminar
+        // En objetivo queda la direccion del nodo a eliminar
+        // En padreObjetivo queda la direccion del nodo padre del nodo a eliminar
+
+        if(objetivo == NULL){
+            return;
+        }
+
+        if(objetivo->der == NULL && objetivo->izq == NULL){
+            // Nodo sin hijos
+
+            if(padreObjetivo->info > objetivo->info){
+                padreObjetivo->izq == NULL;
+            } else {
+                padreObjetivo->der == NULL;
+            }
+
+            delete objetivo;
+
+        } else if(objetivo->der == NULL || objetivo->izq == NULL){
+            //Nodo con un hijo
+
+            // Busca el hijo del objetivo
+            NodoArbol *hijoObjetivo;
+
+            if(objetivo->der != NULL){
+                hijoObjetivo = objetivo->der;
+            } else {
+                hijoObjetivo = objetivo->izq;
+            }
+
+            // Reloca los hijos de objetivo
+
+            if(padreObjetivo->info > objetivo->info){
+                padreObjetivo->izq == hijoObjetivo;
+            } else {
+                padreObjetivo->der == hijoObjetivo;
+            }
+
+            delete objetivo;
+
+        } else {
+            // Nodo con dos hijos
+
+            // Busca un sucesor
+            NodoArbol *sucesor = objetivo->der;
+            NodoArbol *padreSucesor = objetivo;
+
+            while(sucesor->izq != NULL){
+                padreSucesor = sucesor;
+                sucesor = sucesor->izq;
+            }
+
+            //Reemplaza los datos del objetivo por los datos del sucesor
+            objetivo->info = sucesor->info;
+
+            // Arregla el arbol para quitar el sucesor de su posicion anterior
+            // y relocar los hijos del sucesor
+
+            NodoArbol *huerfanoSucesor = sucesor->der;
+
+            if (padreSucesor != objetivo){
+                padreSucesor->izq = huerfanoSucesor;
+            } else {
+                objetivo->der = huerfanoSucesor;
+            }
+
+            delete sucesor;
+        }
     }
 
     void eliminarValor(int valor){
@@ -226,7 +328,7 @@ class ABB{
                 }
             }
 
-            delete objetivo;
+            delete temp;
         } 
     }
 };
@@ -254,7 +356,7 @@ int main(){
     do {
         cout << "Entre el valor del nodo a eliminar: ";
         cin >> valor;
-        n.eliminarValor(valor);
+        n.eliminarValor_2(valor);
         cout << endl;
         
         cout << "Los nodos del arbol (Inorden) son: " << endl;
@@ -267,4 +369,6 @@ int main(){
         
         resp = tolower(resp);
     } while(resp != 'n');
+
+    n.desplegarAmplitud(raiz);
 }
