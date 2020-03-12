@@ -178,29 +178,7 @@ class ABB{
 
             delete objetivo;
 
-        } else if(objetivo->der == NULL || objetivo->izq == NULL){
-            //Nodo con un hijo
-
-            // Busca el hijo del objetivo
-            NodoArbol *hijoObjetivo;
-
-            if(objetivo->der != NULL){
-                hijoObjetivo = objetivo->der;
-            } else {
-                hijoObjetivo = objetivo->izq;
-            }
-
-            // Reloca los hijos de objetivo
-
-            if(padreObjetivo->info > objetivo->info){
-                padreObjetivo->izq == hijoObjetivo;
-            } else {
-                padreObjetivo->der == hijoObjetivo;
-            }
-
-            delete objetivo;
-
-        } else {
+        } else if (objetivo->der != NULL && objetivo->izq != NULL){
             // Nodo con dos hijos
 
             // Busca un sucesor
@@ -227,6 +205,30 @@ class ABB{
             }
 
             delete sucesor;
+
+        } else {
+            //Nodo con un hijo
+
+            // Busca el hijo del objetivo
+            NodoArbol *hijoObjetivo;
+
+            if(objetivo->der != NULL){
+                hijoObjetivo = objetivo->der;
+            } else {
+                hijoObjetivo = objetivo->izq;
+            }
+
+            // Reloca los hijos de objetivo
+
+            if(padreObjetivo == NULL){
+                raiz = hijoObjetivo;
+            } else if(padreObjetivo->info > objetivo->info){
+                padreObjetivo->izq = hijoObjetivo;
+            } else {
+                padreObjetivo->der = hijoObjetivo;
+            }
+
+            delete objetivo;
         }
     }
 
@@ -340,14 +342,17 @@ int main(){
     int valor;
     ABB n;
 
+    int contador = 5;
+
     do {
         n.insertar();
-        cout << "Desea crear otro nodo? S/N: ";
-        cin >> resp;
-        cout << endl;
+        contador -= 1;
+        // cout << "Desea crear otro nodo? S/N: ";
+        // cin >> resp;
+        // cout << endl;
         
-        resp = tolower(resp);
-    } while(resp != 'n');
+        // resp = tolower(resp);
+    } while(contador != 0);
 
     cout << "Los nodos del arbol son: " << endl;
     raiz = n.obtenerRaiz();
@@ -361,7 +366,8 @@ int main(){
         
         cout << "Los nodos del arbol (Inorden) son: " << endl;
         raiz = n.obtenerRaiz();
-        n.despliega(raiz);
+        // n.despliega(raiz);
+        n.desplegarAmplitud(raiz);
         
         cout << "Desea eliminar otro nodo? S/N: ";
         cin >> resp;

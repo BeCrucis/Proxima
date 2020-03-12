@@ -2,9 +2,9 @@ import openpyxl
 import unidecode
 import os
 
-wb = openpyxl.load_workbook("Grupos_2020.xlsx")
+wb = openpyxl.load_workbook("Semilleros_2020.xlsx")
 
-announcement_ws = wb["Facultad de Ciencias"]
+announcement_ws = wb["CONVOCATORIAS"]
 due_teachers_ws = wb["Profesores_Mora"]
 
 # Obtiene la lista de los profesores en mora
@@ -41,8 +41,8 @@ for row in due_teachers_ws.iter_rows(min_row=due_teachers_start_row,
 
 # Ahora verifica los nombres de los directores de grupo
 
-leader_teachers_column = 7
-leader_teachers_start_row = 5
+leader_teachers_column = 13
+leader_teachers_start_row = 7
 
 # Recorre las filas con las celdas con los nombres de los profesores
 for row in announcement_ws.iter_rows(min_row=leader_teachers_start_row, 
@@ -80,6 +80,6 @@ for row in announcement_ws.iter_rows(min_row=leader_teachers_start_row,
             break
     
     if is_due:
-        announcement_ws.cell(leader_teacher_cell.row, leader_teacher_cell.column+2).value= "MORA"
+        announcement_ws.cell(leader_teacher_cell.row, 1).value= "MORA"
         
 wb.save("Output.xlsx")
