@@ -342,7 +342,7 @@ int main(){
     int valor;
     ABB n;
 
-    int contador = 5;
+    int contador = 10;
 
     do {
         n.insertar();
