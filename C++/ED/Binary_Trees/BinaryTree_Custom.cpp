@@ -256,9 +256,8 @@ class ABB{
 
 int main(){
 
-    system("@echo off");
     system("chcp 65001");
-    system("@echo on");
+    system("cls");
 
     NodoArbol *raiz;
     string valor;

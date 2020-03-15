@@ -179,8 +179,8 @@ class ABB{
                     //Cuando tiene solo un hijo
                     if(objetivo->izq == NULL){
                         if(padreObjetivo != NULL){
-                            if(objetivo->info < padreObjetivo->info){
                                 padreObjetivo->izq = objetivo->der;
+                            if(objetivo->info < padreObjetivo->info){
                             } else {
                                 padreObjetivo->der = objetivo->der;
                             }
