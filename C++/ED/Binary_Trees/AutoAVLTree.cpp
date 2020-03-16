@@ -6,7 +6,6 @@ using namespace std;
 class NodoArbol
 {
 public:
-	int info, fb;
 	string direccion;
 	NodoArbol *der, *izq;
 	NodoArbol()
@@ -14,6 +13,14 @@ public:
 		der = NULL;
 		izq = NULL;
 	}
+
+    NodoArbol(int dato){
+        info = dato;
+        direccion = "x" + to_string(info);
+		izq = NULL;
+		der = NULL;
+    }
+
 	NodoArbol(int dato, int fb)
 	{
 		fb = fb;
@@ -21,6 +28,26 @@ public:
 		izq = NULL;
 		der = NULL;
 	}
+
+    int getInfo(){
+        return this->info;
+    }
+
+    void setInfo(int info){
+        this->info = info;
+    }
+
+    int getBalance(){
+        return this->fb;
+    }
+
+    void setBalance(int fb){
+        this->fb = fb;
+    }
+
+    private:
+    int info;
+    int fb;
 
 };
 class AVL
@@ -46,7 +73,7 @@ public:
 		{
 			borrar_nodos(raiz->izq);
 			borrar_nodos(raiz->der);
-			cout << "Borro " << raiz->info << endl;
+			cout << "Borro " << raiz->getInfo() << endl;
 			delete raiz;
 		}
 	}
@@ -60,7 +87,7 @@ public:
 
         cout << (esIzquierdo ? "├──" : "└──" );
         
-        cout << raiz->info << endl;
+        cout << raiz->getInfo() <<"["<<raiz->direccion<<"]"<< endl;
 
         desplegarNodo( prefijo + (esIzquierdo ? "│   " : "    "), raiz->izq, true);
         desplegarNodo( prefijo + (esIzquierdo ? "│   " : "    "), raiz->der, false);
@@ -70,36 +97,34 @@ public:
         desplegarNodo("", raiz, false);
     }
 
-	void insertar()
+	void insertar(int dato)
 	{
-		NodoArbol *aux1, *aux2, *aux3;
+		NodoArbol *nuevo, *explorador, *padreNuevo;
 		int salir;
 		salir = 0; //Variable que controla el ingreso de nodos repetidos
-		aux1 = new NodoArbol;
-		aux2 = raiz;
-		aux3 = NULL;
+		nuevo = new NodoArbol(dato);
+		explorador = raiz;
+		padreNuevo = NULL;
 
-		cout << "Ingrese el dato del nodo a insertar: ";
-		cin >> aux1->info;
-		evaluar_repetido(raiz, aux1->info, salir);
+		evaluar_repetido(raiz, dato, salir);
 		if (salir != 1)
 		{
-			while (aux2 != NULL)
+			while (explorador != NULL)
 			{
-				aux3 = aux2;
-				if (aux1->info > aux2->info)
-					aux2 = aux2->der;
+				padreNuevo = explorador;
+				if (nuevo->getInfo() > explorador->getInfo())
+					explorador = explorador->der;
 				else
-					aux2 = aux2->izq;
+					explorador = explorador->izq;
 			}
-			if (aux3 == NULL)
+			if (padreNuevo == NULL)
 			{
-				raiz = aux1;
+				raiz = nuevo;
 			}
-			else if (aux1->info < aux3->info)
-				aux3->izq = aux1;
+			else if (nuevo->getInfo() < padreNuevo->getInfo())
+				padreNuevo->izq = nuevo;
 			else
-				aux3->der = aux1;
+				padreNuevo->der = nuevo;
 			factor_de_balanceo(raiz); //Asigna el factor de balance (fb) a //cada nodo del arbol
 			balancear(raiz);		  //Balancea el arbol
 			factor_de_balanceo(raiz); //Asigna el fb a cada nodo despues de      //balancear el arbol
@@ -110,7 +135,7 @@ public:
 		if (raiz != NULL)
 		{
 			evaluar_repetido(raiz->izq, valor, salir);
-			if (raiz->info == valor)
+			if (raiz->getInfo() == valor)
 			{
 				salir = 1;
 				cout << "\nEl nodo ya existe\n"
@@ -129,7 +154,7 @@ public:
 			nivelizq = nivel(raiz->izq);
 			nivelder = nivel(raiz->der);
 			diferencia = nivelizq - nivelder;
-			raiz->fb = diferencia;
+			raiz->setBalance(diferencia);
 			factor_de_balanceo(raiz->izq);
 			factor_de_balanceo(raiz->der);
 		}
@@ -162,15 +187,21 @@ public:
 			balancear(raiz->izq);
 			balancear(raiz->der);
 
-			if (raiz->fb == (-2))
+			if (raiz->getBalance() == (-2))
 			{
-				if (raiz->der->fb == -1)
+				cout << "Balanceo necesario! Raiz culpable:"<<raiz->getInfo()<<"["<<raiz->direccion<<"]"<< endl;
+				cout << "Imprimiendo arbol previo: " << endl;
+				
+				this->desplegarEstructura();
+				cout << "" << endl;
+
+				if (raiz->der->getBalance() == -1)
 				{
 					rotar_izq(raiz);
 				}
 				else
 				{
-					if (raiz->der->fb == 1)
+					if (raiz->der->getBalance() == 1)
 					{
 
 						rotar_der(raiz->der);
@@ -178,36 +209,48 @@ public:
 					}
 					else
 					{
-						if (raiz->der->fb == 0)
+						if (raiz->der->getBalance() == 0)
 						{
 							rotar_izq(raiz);
 						}
 					}
 				}
+
+				cout << "Arbol resultante:" << endl;
+				this->desplegarEstructura();
+				cout << "" << endl;
 			}
 
-			if (raiz->fb == 2)
+			if (raiz->getBalance() == 2)
 			{
+				cout << "Balanceo necesario! Raiz culpable:"<<raiz->getInfo()<<"["<<raiz->direccion<<"]"<< endl;
+				cout << "Imprimiendo arbol previo: " << endl;
+				this->desplegarEstructura();
+				cout << "" << endl;
 
-				if (raiz->izq->fb == 1)
+				if (raiz->izq->getBalance() == 1)
 				{
 					rotar_der(raiz);
 				}
 				else
 				{
-					if (raiz->izq->fb == -1)
+					if (raiz->izq->getBalance() == -1)
 					{
 						rotar_izq(raiz->izq);
 						rotar_der(raiz);
 					}
 					else
 					{
-						if (raiz->izq->fb == 0)
+						if (raiz->izq->getBalance() == 0)
 						{
 							rotar_der(raiz);
 						}
 					}
 				}
+
+				cout << "Arbol resultante:" << endl;
+				this->desplegarEstructura();
+				cout << "" << endl;
 			}
 		}
 	}
@@ -221,13 +264,13 @@ public:
 		int aux;
 		NodoArbol *apunt;
 		apunt = raiz->der;
-		aux = raiz->info;
+		aux = raiz->getInfo();
 		raiz->der = apunt->der;
 		apunt->der = apunt->izq;
 		apunt->izq = raiz->izq;
 		raiz->izq = apunt;
-		raiz->info = apunt->info;
-		apunt->info = aux;
+        raiz->setInfo(apunt->getInfo());
+		apunt->setInfo(aux);
 	}
 
 	void rotar_der(NodoArbol *raiz)
@@ -235,13 +278,13 @@ public:
 		int aux;
 		NodoArbol *apunt;
 		apunt = raiz->izq;
-		aux = raiz->info;
+		aux = raiz->getInfo();
 		raiz->izq = apunt->izq;
 		apunt->izq = apunt->der;
 		apunt->der = raiz->der;
 		raiz->der = apunt;
-		raiz->info = apunt->info;
-		apunt->info = aux;
+		raiz->setInfo(apunt->getInfo());
+		apunt->setInfo(aux);
 	}
 
 	//  DESPLIEGA EL ARBOL USANDO INORDEN - INCLUYE fb
@@ -250,7 +293,7 @@ public:
 		if (raiz != NULL)
 		{
 			despliega_inorden_fb(raiz->izq);
-			cout << raiz->info << "-> " << raiz->fb << endl;
+			cout << raiz->getInfo() << "-> " << raiz->getBalance() << endl;
 			despliega_inorden_fb(raiz->der);
 		}
 	}
@@ -259,7 +302,7 @@ public:
 	{
 		if (raiz != NULL)
 		{
-			cout << raiz->info << "    ";
+			cout << raiz->getInfo() << "    ";
 			despliega_preorden(raiz->izq);
 			despliega_preorden(raiz->der);
 		}
@@ -270,7 +313,7 @@ public:
 		if (raiz != NULL)
 		{
 			despliega_inorden(raiz->izq);
-			cout << raiz->info << "    ";
+			cout << raiz->getInfo() << "    ";
 			despliega_inorden(raiz->der);
 		}
 	}
@@ -281,7 +324,7 @@ public:
 		{
 			despliega_postorden(raiz->izq);
 			despliega_postorden(raiz->der);
-			cout << raiz->info << "    ";
+			cout << raiz->getInfo() << "    ";
 		}
 	}
 
@@ -299,7 +342,7 @@ public:
 			nodo *final, *temp, *nuevo;
 			NodoArbol *apunt;
 			nuevo = new nodo;
-			nuevo->dato = raiz->info;
+			nuevo->dato = raiz->getInfo();
 			final = nuevo;
 			temp = nuevo;
 			apunt = raiz;
@@ -311,14 +354,14 @@ public:
 				{
 					nuevo = new nodo;
 					final->sig = nuevo;
-					nuevo->dato = apunt->izq->info;
+					nuevo->dato = apunt->izq->getInfo();
 					final = nuevo;
 					final->sig = NULL;
 					if (apunt->der != NULL)
 					{
 						nuevo = new nodo;
 						final->sig = nuevo;
-						nuevo->dato = apunt->der->info;
+						nuevo->dato = apunt->der->getInfo();
 						final = nuevo;
 						final->sig = NULL;
 					}
@@ -329,7 +372,7 @@ public:
 					{
 						nuevo = new nodo;
 						final->sig = nuevo;
-						nuevo->dato = apunt->der->info;
+						nuevo->dato = apunt->der->getInfo();
 						final = nuevo;
 						final->sig = NULL;
 					}
@@ -356,7 +399,7 @@ public:
 		if (raiz != NULL)
 		{
 			comparar_nodo_a_nodo(raiz->izq, valor);
-			if (raiz->info == valor)
+			if (raiz->getInfo() == valor)
 			{
 				resultado = raiz;
 			}
@@ -365,20 +408,18 @@ public:
 		}
 	}
 	//eliminar
-	void eliminar_nodo()
+	void eliminar_nodo(int dato)
 	{
 		NodoArbol *aux1, *aux2, *temp;
 		bool b;
-		int valor;
-		cout << "-Entre el valor del nodo a eliminar: ";
-		cin >> valor;
+
 		//Inicia la busqueda del nodo a eliminar
 		aux1 = raiz;
 		aux2 = NULL;
-		while (aux1->info != valor)
+		while (aux1->getInfo() != dato)
 		{
 			aux2 = aux1;
-			if (valor < aux1->info)
+			if (dato < aux1->getInfo())
 				aux1 = aux1->izq;
 			else
 				aux1 = aux1->der;
@@ -393,13 +434,17 @@ public:
 		//en aux2 queda la direccion del nodo padre del nodo a eliminar
 		if (aux1 != NULL)
 		{
+			cout << "Arbol previo:" << endl;
+			this->desplegarEstructura();
+			cout << "" << endl;
+			
 			temp = aux1;
 			//cuando no tiene hijos
 			if ((aux1->izq == NULL) && (aux1->der == NULL))
 			{
 				if (aux2 != NULL)
 				{
-					if (aux1->info > aux2->info)
+					if (aux1->getInfo() > aux2->getInfo())
 						aux2->der = NULL;
 					else
 						aux2->izq = NULL;
@@ -428,7 +473,7 @@ public:
 							temp = temp->der;
 							b = false;
 						}
-						aux1->info = temp->info;
+						aux1->setInfo(temp->getInfo());
 						if (b == true)
 							aux1->izq = temp->izq;
 						else
@@ -452,7 +497,7 @@ public:
 								temp = temp->izq;
 								b = false;
 							}
-							aux1->info = temp->info;
+							aux1->setInfo(temp->getInfo());
 							if (b == true)
 								aux1->der = temp->der;
 							else
@@ -462,6 +507,9 @@ public:
 								else
 									aux2->izq = NULL;
 							}
+
+							cout << "Valor final de b: " <<b<< endl;
+							
 						}
 						else
 							cout << "La opcion no es correcta" << endl
@@ -475,7 +523,7 @@ public:
 					{
 						if (aux2 != NULL)
 						{
-							if (aux1->info < aux2->info)
+							if (aux1->getInfo() < aux2->getInfo())
 								aux2->izq = aux1->der;
 							else
 								aux2->der = aux1->der;
@@ -487,7 +535,7 @@ public:
 					{
 						if (aux2 != NULL)
 						{
-							if (aux1->info < aux2->info)
+							if (aux1->getInfo() < aux2->getInfo())
 								aux2->izq = aux1->izq;
 							else
 								aux2->der = aux1->izq;
@@ -503,7 +551,24 @@ public:
 			factor_de_balanceo(raiz); //aqui asigno el FB despues de //balancearlo
 			balancear(raiz);		  //aqui balanceo el arbol
 		}
-		system("pause");
+
+		if(aux1 != NULL){
+			cout << "Valor final de aux1: " <<aux1->direccion<< endl;
+		} else {
+			cout << "Valor final de aux1: " <<"NULL"<< endl;
+		}
+		
+		if(aux2 != NULL){
+			cout << "Valor final de aux2: " <<aux2->direccion<< endl;
+		} else {
+			cout << "Valor final de aux2: " <<"NULL"<< endl;
+		}
+		if(temp != NULL){
+			cout << "Valor final de temp: " <<temp->direccion<< endl;
+		} else {
+			cout << "Valor final de temp: " <<"NULL"<< endl;
+		}
+
 	}
 };
 
@@ -512,6 +577,8 @@ int main()
 	NodoArbol *raiz;
 	int opc;
 	AVL n;
+    bool haInsertadoNumero;
+
 
 	system("chcp 65001");
     system("cls");
@@ -532,19 +599,29 @@ int main()
 		cout << "*******************************************" << endl;
 		cin >> opc;
 		system("cls");
+		haInsertadoNumero = true;
 		switch (opc)
 		{
 		case 1:
-			//int resp;
-			char res;
-			do
-			{
-				n.insertar();
-				n.desplegarEstructura();
-				cout << "1. Desea agregar otro nodo (s/n) \n"
-					 << endl;
-				cin >> res;
-			} while (res == 's');
+
+            while(haInsertadoNumero){
+
+                string valor;
+                int valorNumerico;
+
+                cout << "Inserte el valor a insertar: ";
+                cin >> valor;
+                valorNumerico = (int) strtol(valor.c_str(), NULL, 10);
+
+                if (valorNumerico != 0){
+                    n.insertar(valorNumerico);
+                } else {
+                    haInsertadoNumero = false;
+                }
+
+                cout << "Arbol actual: " << endl;
+                n.desplegarEstructura();
+            }
 			break;
 		case 2:
 			if (raiz != NULL)
@@ -572,7 +649,24 @@ int main()
 			system("pause");
 			break;
 		case 6:
-			n.eliminar_nodo();
+			while(haInsertadoNumero){
+
+                string valor;
+                int valorNumerico;
+
+                cout << "Inserte el valor a eliminar: ";
+                cin >> valor;
+                valorNumerico = (int) strtol(valor.c_str(), NULL, 10);
+
+                if (valorNumerico != 0){
+                    n.eliminar_nodo(valorNumerico);
+                } else {
+                    haInsertadoNumero = false;
+                }
+
+                cout << "Arbol actual: " << endl;
+                n.desplegarEstructura();
+            }
 			break;
 		case 7:
 			//exit(0);
