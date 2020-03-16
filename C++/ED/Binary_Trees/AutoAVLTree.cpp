@@ -271,6 +271,9 @@ public:
 		raiz->izq = apunt;
         raiz->setInfo(apunt->getInfo());
 		apunt->setInfo(aux);
+
+		cout << "Rotacion izquierda realizada, raiz: "<<"["<<raiz->direccion<<"], apunt: "<<"["<<apunt->direccion<<"]"<< endl;
+		
 	}
 
 	void rotar_der(NodoArbol *raiz)
@@ -285,6 +288,7 @@ public:
 		raiz->der = apunt;
 		raiz->setInfo(apunt->getInfo());
 		apunt->setInfo(aux);
+		cout << "Rotacion derecha realizada, raiz: "<<"["<<raiz->direccion<<"], apunt: "<<"["<<apunt->direccion<<"]"<< endl;
 	}
 
 	//  DESPLIEGA EL ARBOL USANDO INORDEN - INCLUYE fb
@@ -545,28 +549,29 @@ public:
 					}
 				}
 			}
+
+			if(aux1 != NULL){
+			cout << "Valor final de aux1: " <<aux1->direccion<< endl;
+			} else {
+				cout << "Valor final de aux1: " <<"NULL"<< endl;
+			}
+			
+			if(aux2 != NULL){
+				cout << "Valor final de aux2: " <<aux2->direccion<< endl;
+			} else {
+				cout << "Valor final de aux2: " <<"NULL"<< endl;
+			}
+			if(temp != NULL){
+				cout << "Valor final de temp: " <<temp->direccion<< endl;
+			} else {
+				cout << "Valor final de temp: " <<"NULL"<< endl;
+			}
+
 			delete temp;
 			factor_de_balanceo(raiz); //aqui asigno el Factor de Balanceo //(fb) para el nuevo arbol
 			balancear(raiz);		  //aqui balanceo el arbol
 			factor_de_balanceo(raiz); //aqui asigno el FB despues de //balancearlo
 			balancear(raiz);		  //aqui balanceo el arbol
-		}
-
-		if(aux1 != NULL){
-			cout << "Valor final de aux1: " <<aux1->direccion<< endl;
-		} else {
-			cout << "Valor final de aux1: " <<"NULL"<< endl;
-		}
-		
-		if(aux2 != NULL){
-			cout << "Valor final de aux2: " <<aux2->direccion<< endl;
-		} else {
-			cout << "Valor final de aux2: " <<"NULL"<< endl;
-		}
-		if(temp != NULL){
-			cout << "Valor final de temp: " <<temp->direccion<< endl;
-		} else {
-			cout << "Valor final de temp: " <<"NULL"<< endl;
 		}
 
 	}
