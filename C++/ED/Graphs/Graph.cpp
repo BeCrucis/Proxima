@@ -163,29 +163,71 @@ class Graph {
             }
         }
 
-        for(Node *node : nodes){
-            cout <<"["<<node->label<<"] : "<<node->distance<< endl;
+        // Deteccion de ciclos negativos
+        bool hasNegativeCycle = false;
+        Node* negativeCycleNode;
+
+        for(int i = 0; i < edges.size()-1; i++){
+
+            for(int j = 0; j < edges.size(); j++){
+                
+                Edge* edge = edges.at(j);
+                double sourceDistance = edge->sourceNode->distance;
+                double destinationDistance = edge->destinationNode->distance;
+                double edgeDistance = edge->weight;
+
+                if(sourceDistance + edgeDistance < destinationDistance){
+                    edge->destinationNode->distance = sourceDistance + edgeDistance;
+                    edge->destinationNode->predecesor = edge->sourceNode;
+
+                    if(!hasNegativeCycle){
+                        hasNegativeCycle = true;
+                        negativeCycleNode = edge->sourceNode;
+                    } 
+                }
+            }
         }
 
         cout << endl << "Imprimiendo camino mas corto: " << endl;
         
-        Node *currentNode = secondNode;
-        
-        do {
-            cout << currentNode->label << "<-";
-            currentNode = currentNode->predecesor;
+        if(hasNegativeCycle){
+            cout << "El grafo tiene un ciclo negativo, no hay camino mas corto!" << endl;
+            cout << "Imprimiento ciclo negativo: " << endl;
 
-        } while (currentNode->predecesor != NULL);
+            Node *currentNode = negativeCycleNode;
 
-        cout << currentNode->label << endl;
+            do {
+
+                cout << currentNode->label << "<-";
+                currentNode = currentNode->predecesor;
+
+            } while(currentNode != negativeCycleNode);
+
+            cout << currentNode->label << " . . ."<< endl;         
+            
+        } else {
+            
+            Node *currentNode = secondNode;
         
+            do {
+                cout << currentNode->label << "<-";
+                currentNode = currentNode->predecesor;
+
+            } while (currentNode->predecesor != NULL);
+
+            cout << currentNode->label << endl;
+
+            cout << "Imprimiento distancias: " << endl;
+
+            for(Node *node : nodes){
+                cout <<"["<<node->label<<"] : "<<node->distance<< endl;
+            }
+                 
+        }        
     }
 };
 
-int main(){
-
-    cout << "Nodos!" << endl;
-    
+void demo1(){
     Graph grafo = Graph();
 
     grafo.addNode(1);
@@ -200,6 +242,7 @@ int main(){
     grafo.connectNode(grafo.getNode(1), grafo.getNode(3), 5);
     grafo.connectNode(grafo.getNode(1), grafo.getNode(4), 5);
     grafo.connectNode(grafo.getNode(2), grafo.getNode(5), -1);
+    grafo.connectNode(grafo.getNode(2), grafo.getNode(1), -10);
     grafo.connectNode(grafo.getNode(3), grafo.getNode(5), 1);
     grafo.connectNode(grafo.getNode(4), grafo.getNode(3), -2);
     grafo.connectNode(grafo.getNode(4), grafo.getNode(6), -1);
@@ -207,5 +250,13 @@ int main(){
     grafo.connectNode(grafo.getNode(6), grafo.getNode(7), 3);
 
     grafo.getShortestPath(grafo.getNode(1), grafo.getNode(7));
+}
+
+int main(){
+
+    cout << "Nodos!" << endl;
+    
+    demo1();
+    
     system("pause");
 }
