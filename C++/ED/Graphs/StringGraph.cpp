@@ -9,7 +9,7 @@ using namespace std;
 
 struct Node {
     public:
-    int label;
+    string label;
     float distance;
     Node *predecesor;
     vector<Node*> contiguousNodes;
@@ -21,7 +21,7 @@ struct Node {
         }
     }
 
-    void disconnectNode(int label){
+    void disconnectNode(string label){
 
         for(int i = 0; i < contiguousNodes.size(); i++){
             Node *currentNode = contiguousNodes.at(i);
@@ -33,7 +33,7 @@ struct Node {
         }
     }
 
-    Node* getContiguousNode(int label){
+    Node* getContiguousNode(string label){
         for(Node* node : contiguousNodes){
             if(node->label == label){
                 return node;
@@ -54,7 +54,7 @@ struct Edge {
 
     Edge(Node *sourceNode, Node *destinationNode, double weight){
 
-        label = "[" + to_string(sourceNode->label) + "]→[" + to_string(destinationNode->label) + "]";
+        label = "[" + sourceNode->label + "]→[" + destinationNode->label + "]";
         this->weight = weight;
         this->sourceNode = sourceNode;
         this->destinationNode = destinationNode;
@@ -78,7 +78,7 @@ class Graph {
         }
     }
 
-    void addNode(int label){
+    void addNode(string label){
 
         if(getNode(label) != NULL){
             cout << "El nodo ya existe!" << endl;
@@ -91,7 +91,7 @@ class Graph {
         this->nodes.push_back(newNode);
     }
 
-    void removeNode(int label){
+    void removeNode(string label){
 
         Node *target = getNode(label);
 
@@ -149,7 +149,7 @@ class Graph {
         }
     }
 
-    Node* getNode(int label){
+    Node* getNode(string label){
         
         for(Node* node: nodes){
             if (node->label == label){
@@ -293,76 +293,11 @@ class Graph {
     }
 };
 
-void demo(){
-    Graph graph = Graph();
-
-    graph.addNode(1);
-    graph.addNode(2);
-    graph.addNode(3);
-    graph.addNode(4);
-    graph.addNode(5);
-
-    graph.connectNodes(graph.getNode(1), graph.getNode(2), 4);
-    graph.connectNodes(graph.getNode(1), graph.getNode(3), 2);
-    graph.connectNodes(graph.getNode(2), graph.getNode(3), 3);
-    graph.connectNodes(graph.getNode(2), graph.getNode(4), 2);
-    graph.connectNodes(graph.getNode(2), graph.getNode(5), 3);
-    graph.connectNodes(graph.getNode(3), graph.getNode(2), 1);
-    graph.connectNodes(graph.getNode(3), graph.getNode(4), 4);
-    graph.connectNodes(graph.getNode(3), graph.getNode(5), 5);
-    graph.connectNodes(graph.getNode(5), graph.getNode(4), -5);
-
-    // Imprime la lista de incidencia
-    vector<Edge*> edges = graph.getEdges();
-
-    cout << "[";
-    
-    for(int i = 0; i < edges.size(); i++){
-        Edge* currentEdge = edges.at(i);
-
-        cout << " " <<currentEdge->label<<" ";
-        
-    }
-
-    cout << "]" << endl;
-
-    graph.getShortestPath(graph.getNode(1), graph.getNode(4));
-}
-
 void demo_uis(){
     Graph graph = Graph();
 
-    graph.addNode(1);
-    graph.addNode(2);
-    graph.addNode(3);
-    graph.addNode(4);
-    graph.addNode(5);
-
-    graph.connectNodes(graph.getNode(1), graph.getNode(2), 4);
-    graph.connectNodes(graph.getNode(1), graph.getNode(3), 2);
-    graph.connectNodes(graph.getNode(2), graph.getNode(3), 3);
-    graph.connectNodes(graph.getNode(2), graph.getNode(4), 2);
-    graph.connectNodes(graph.getNode(2), graph.getNode(5), 3);
-    graph.connectNodes(graph.getNode(3), graph.getNode(2), 1);
-    graph.connectNodes(graph.getNode(3), graph.getNode(4), 4);
-    graph.connectNodes(graph.getNode(3), graph.getNode(5), 5);
-    graph.connectNodes(graph.getNode(5), graph.getNode(4), -5);
-
-    // Imprime la lista de incidencia
-    vector<Edge*> edges = graph.getEdges();
-
-    cout << "[";
     
-    for(int i = 0; i < edges.size(); i++){
-        Edge* currentEdge = edges.at(i);
 
-        cout << " " <<currentEdge->label<<" ";
-        
-    }
-
-    cout << "]" << endl;
-
-    graph.getShortestPath(graph.getNode(1), graph.getNode(4));
 }
 
 void imprimirMenu(){
@@ -382,7 +317,7 @@ void imprimirMenu(){
     cout << "5 → Encontrar camino mas corto entre nodos" << endl;
     cout << "6 → Imprimir lista de adyacencia" << endl; 
     cout << "7 → Imprimir lista de incidencia" << endl;  
-    cout << "8 → Hacer demostracion" << endl; 
+    cout << "8 → Colocar nodos para demostracion" << endl; 
     cout << "99 → Salir" << endl; 
 
 }
@@ -405,7 +340,7 @@ int main(){
         system("cls");
 
         if(option == 1){
-            int label;
+            string label;
 
             cout << "Inserte el numero de nodo: ";
             cin >> label;
@@ -413,7 +348,7 @@ int main(){
             graph.addNode(label);
 
         } else if(option == 2){
-            int label;
+            string label;
 
             cout << "Inserte el numero de nodo: ";
             cin >> label;
@@ -422,6 +357,7 @@ int main(){
 
         } else if(option == 3){
             int input;
+            string label;
 
             vector<Node*> nodes = graph.getNodes();
             Node *sourceNode, *destinationNode;
@@ -433,10 +369,10 @@ int main(){
             }
 
             cout << endl << "Seleccione el nodo de origen: ";
-            cin >> input;
+            cin >> label;
             cout << endl;
 
-            sourceNode = graph.getNode(input);
+            sourceNode = graph.getNode(label);
 
             system("cls");
             cout << "Seleccion de nodos" << endl << endl;
@@ -446,10 +382,10 @@ int main(){
             }
 
             cout << endl << "Seleccione el nodo de destino: ";
-            cin >> input;
+            cin >> label;
             cout << endl;
 
-            destinationNode = graph.getNode(input);
+            destinationNode = graph.getNode(label);
 
             cout << "Inserte la distancia entre nodos: ";
             cin >> input;
@@ -459,6 +395,7 @@ int main(){
         } else if(option == 4){
             
             int input;
+            string label;
 
             vector<Node*> nodes = graph.getNodes();
             Node *sourceNode, *destinationNode;
@@ -470,10 +407,10 @@ int main(){
             }
 
             cout << "Seleccione el nodo de origen: ";
-            cin >> input;
+            cin >> label;
             cout << endl;
 
-            sourceNode = graph.getNode(input);
+            sourceNode = graph.getNode(label);
 
             system("cls");
 
@@ -482,16 +419,17 @@ int main(){
             }
 
             cout << "Seleccione el nodo de destino: ";
-            cin >> input;
+            cin >> label;
             cout << endl;
 
-            destinationNode = graph.getNode(input);
+            destinationNode = graph.getNode(label);
             
             graph.disconnectNodes(sourceNode, destinationNode);
 
         } else if(option == 5){
 
             int input;
+            string label;
 
             vector<Node*> nodes = graph.getNodes();
             Node *sourceNode, *destinationNode;
@@ -503,10 +441,10 @@ int main(){
             }
 
             cout << "Seleccione el nodo de origen: ";
-            cin >> input;
+            cin >> label;
             cout << endl;
 
-            sourceNode = graph.getNode(input);
+            sourceNode = graph.getNode(label);
 
             system("cls");
 
@@ -515,10 +453,10 @@ int main(){
             }
 
             cout << "Seleccione el nodo de destino: ";
-            cin >> input;
+            cin >> label;
             cout << endl;
 
-            destinationNode = graph.getNode(input);
+            destinationNode = graph.getNode(label);
             
             graph.getShortestPath(sourceNode, destinationNode);
 
@@ -558,7 +496,58 @@ int main(){
 
             cout << "]" << endl;
         } else if(option == 8){
-            demo();
+
+            graph.addNode("9A");
+            graph.addNode("10A");
+            graph.addNode("11A");
+            graph.addNode("9C");
+            graph.addNode("10B");
+            graph.addNode("11B");
+            graph.addNode("11C");
+            graph.addNode("27");
+            graph.addNode("SRC");
+            graph.addNode("GOAL");
+
+            graph.connectNodes(graph.getNode("SRC"), graph.getNode("10A"), 8);
+            graph.connectNodes(graph.getNode("9A"), graph.getNode("9C"), 8);
+            graph.connectNodes(graph.getNode("9A"), graph.getNode("10A"), 100);
+            graph.connectNodes(graph.getNode("10A"), graph.getNode("SRC"), 5);
+            graph.connectNodes(graph.getNode("10A"), graph.getNode("9A"), 8);
+            graph.connectNodes(graph.getNode("10A"), graph.getNode("11A"), 5);
+            graph.connectNodes(graph.getNode("10A"), graph.getNode("10B"), -5); 
+            graph.connectNodes(graph.getNode("11A"), graph.getNode("10A"), 5);
+            graph.connectNodes(graph.getNode("11A"), graph.getNode("11B"), 10);
+            graph.connectNodes(graph.getNode("9C"), graph.getNode("9A"), 100);
+            graph.connectNodes(graph.getNode("9C"), graph.getNode("10B"), 8);
+            graph.connectNodes(graph.getNode("9C"), graph.getNode("GOAL"), 20);
+            graph.connectNodes(graph.getNode("10B"), graph.getNode("10A"), 5);
+            graph.connectNodes(graph.getNode("10B"), graph.getNode("9C"), 8);
+            graph.connectNodes(graph.getNode("10B"), graph.getNode("11B"), 8);
+            graph.connectNodes(graph.getNode("11B"), graph.getNode("11A"), 5);
+            graph.connectNodes(graph.getNode("11B"), graph.getNode("10B"), 8);
+            graph.connectNodes(graph.getNode("11B"), graph.getNode("11C"), 5);
+            graph.connectNodes(graph.getNode("11C"), graph.getNode("11B"), 4);
+            graph.connectNodes(graph.getNode("11C"), graph.getNode("27"), 8);
+            graph.connectNodes(graph.getNode("GOAL"), graph.getNode("9C"), 10);
+            graph.connectNodes(graph.getNode("GOAL"), graph.getNode("27"), 5);
+            graph.connectNodes(graph.getNode("27"), graph.getNode("11C"), 5);
+            graph.connectNodes(graph.getNode("27"), graph.getNode("GOAL"), 5);
+
+            // Imprime la lista de incidencia
+            cout << "Nodos colocados, grafo actual (Lista de incidencia): " << endl;
+            
+            vector<Edge*> edges = graph.getEdges();
+
+            cout << "[";
+            
+            for(int i = 0; i < edges.size(); i++){
+                Edge* currentEdge = edges.at(i);
+
+                cout << " " <<currentEdge->label<<" ";
+                
+            }
+
+            cout << "]" << endl;
         }
 
         system("pause");
