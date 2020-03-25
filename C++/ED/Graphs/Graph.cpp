@@ -54,7 +54,7 @@ struct Edge {
 
     Edge(Node *sourceNode, Node *destinationNode, double weight){
 
-        label = "[" + to_string(sourceNode->label) + "]->[" + to_string(destinationNode->label) + "]";
+        label = "[" + to_string(sourceNode->label) + "]→[" + to_string(destinationNode->label) + "]";
         this->weight = weight;
         this->sourceNode = sourceNode;
         this->destinationNode = destinationNode;
@@ -196,6 +196,7 @@ class Graph {
                     edge->destinationNode->predecesor = edge->sourceNode;
                 }
             }
+
         }
 
         // Deteccion de ciclos negativos
@@ -240,7 +241,7 @@ class Graph {
             // Almacena el ciclo negativo en un vector
             do {
                     
-                negativeCycle.insert(negativeCycle.begin(), currentNode);
+                negativeCycle.push_back(currentNode);
                 currentNode = currentNode->predecesor;
 
             } while(currentNode != negativeCycleNode);
@@ -271,12 +272,12 @@ class Graph {
             // Imprime el vector
             cout << "Camino mas corto: " << endl;
             
-            cout << "[";
+            cout << "[" << currentNode->label << " → ";
             
-            for(int i = 0; i < shortestPath.size(); i++){
+            for(int i = 0; i < shortestPath.size()-1; i++){
                 cout << shortestPath.at(i)->label<< " → ";
             }
-            cout << currentNode->label << "]"<< endl;
+            cout << destinationNode->label << "]"<< endl;
 
             cout << "Imprimiendo distancias mas cortas: " << endl;
 
@@ -292,7 +293,7 @@ class Graph {
     }
 };
 
-void demo1(){
+void demo(){
     Graph graph = Graph();
 
     graph.addNode(1);
@@ -300,21 +301,32 @@ void demo1(){
     graph.addNode(3);
     graph.addNode(4);
     graph.addNode(5);
-    graph.addNode(6);
-    graph.addNode(7);
 
-    graph.connectNodes(graph.getNode(1), graph.getNode(2), 6);
-    graph.connectNodes(graph.getNode(1), graph.getNode(3), 5);
-    graph.connectNodes(graph.getNode(1), graph.getNode(4), 5);
-    graph.connectNodes(graph.getNode(2), graph.getNode(5), -1);
-    graph.connectNodes(graph.getNode(2), graph.getNode(1), -1);
-    graph.connectNodes(graph.getNode(3), graph.getNode(5), 1);
-    graph.connectNodes(graph.getNode(4), graph.getNode(3), -2);
-    graph.connectNodes(graph.getNode(4), graph.getNode(6), -1);
-    graph.connectNodes(graph.getNode(5), graph.getNode(7), 3);
-    graph.connectNodes(graph.getNode(6), graph.getNode(7), 3);
+    graph.connectNodes(graph.getNode(1), graph.getNode(2), 4);
+    graph.connectNodes(graph.getNode(1), graph.getNode(3), 2);
+    graph.connectNodes(graph.getNode(2), graph.getNode(3), 3);
+    graph.connectNodes(graph.getNode(2), graph.getNode(4), 2);
+    graph.connectNodes(graph.getNode(2), graph.getNode(5), 3);
+    graph.connectNodes(graph.getNode(3), graph.getNode(2), 1);
+    graph.connectNodes(graph.getNode(3), graph.getNode(4), 4);
+    graph.connectNodes(graph.getNode(3), graph.getNode(5), 5);
+    graph.connectNodes(graph.getNode(5), graph.getNode(4), -5);
 
-    graph.getShortestPath(graph.getNode(1), graph.getNode(7));
+    // Imprime la lista de incidencia
+    vector<Edge*> edges = graph.getEdges();
+
+    cout << "[";
+    
+    for(int i = 0; i < edges.size(); i++){
+        Edge* currentEdge = edges.at(i);
+
+        cout << " " <<currentEdge->label<<" ";
+        
+    }
+
+    cout << "]" << endl;
+
+    graph.getShortestPath(graph.getNode(1), graph.getNode(4));
 }
 
 void imprimirMenu(){
@@ -334,6 +346,7 @@ void imprimirMenu(){
     cout << "5 → Encontrar camino mas corto entre nodos" << endl;
     cout << "6 → Imprimir lista de adyacencia" << endl; 
     cout << "7 → Imprimir lista de incidencia" << endl;  
+    cout << "8 → Hacer demostracion" << endl; 
     cout << "99 → Salir" << endl; 
 
 }
@@ -346,24 +359,7 @@ int main(){
     int option = 0;
     Graph graph = Graph();
 
-    graph.addNode(1);
-    graph.addNode(2);
-    graph.addNode(3);
-    graph.addNode(4);
-    graph.addNode(5);
-    graph.addNode(6);
-    graph.addNode(7);
-
-    graph.connectNodes(graph.getNode(1), graph.getNode(2), 6);
-    graph.connectNodes(graph.getNode(1), graph.getNode(3), 5);
-    graph.connectNodes(graph.getNode(1), graph.getNode(4), 5);
-    graph.connectNodes(graph.getNode(2), graph.getNode(5), -1);
-    graph.connectNodes(graph.getNode(2), graph.getNode(1), -1);
-    graph.connectNodes(graph.getNode(3), graph.getNode(5), 1);
-    graph.connectNodes(graph.getNode(4), graph.getNode(3), -2);
-    graph.connectNodes(graph.getNode(4), graph.getNode(6), -1);
-    graph.connectNodes(graph.getNode(5), graph.getNode(7), 3);
-    graph.connectNodes(graph.getNode(6), graph.getNode(7), 3);
+    // graph.connectNodes(graph.getNode(3), graph.getNode(1), -10);
 
     while(option != 99){
         imprimirMenu();
@@ -525,14 +521,10 @@ int main(){
             }
 
             cout << "]" << endl;
+        } else if(option == 8){
+            demo();
         }
 
         system("pause");
     }
-    
-    
-    
-    demo1();
-
-    system("pause");
 }
