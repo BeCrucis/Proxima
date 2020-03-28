@@ -10,3 +10,6 @@ test.ini
 *.mp4
 PY/ETerm/Output.xlsx
 PY/ETerm/Semilleros_2020.xlsx
+__pycache__
+*.exe
+PY/ETerm/FaceScrapper/FriendScrapper.py

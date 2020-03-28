@@ -34,7 +34,9 @@ struct Node {
     }
 
     Node* getContiguousNode(string label){
-        for(Node* node : contiguousNodes){
+
+        for(int i = 0; i < contiguousNodes.size(); i++){
+            Node *node = contiguousNodes.at(i);
             if(node->label == label){
                 return node;
             }
@@ -151,11 +153,13 @@ class Graph {
 
     Node* getNode(string label){
         
-        for(Node* node: nodes){
+        for(int i = 0; i < nodes.size(); i++){
+            Node *node = nodes.at(i);
             if (node->label == label){
                 return node;
             }
         }
+        
         // cout << "Nodo no encontrado" << endl;
         return NULL;
     }
@@ -196,7 +200,6 @@ class Graph {
                     edge->destinationNode->predecesor = edge->sourceNode;
                 }
             }
-
         }
 
         // Deteccion de ciclos negativos
@@ -281,7 +284,8 @@ class Graph {
 
             cout << "Imprimiendo distancias mas cortas: " << endl;
 
-            for(Node *node : nodes){
+            for(int i = 0; i < nodes.size(); i++){
+                Node *node = nodes.at(i);
                 cout <<"["<<sourceNode->label<<"→"<<node->label<<"] : "<<node->distance<< endl;
             }
         
