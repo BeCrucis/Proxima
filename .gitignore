@@ -13,3 +13,5 @@ PY/ETerm/Semilleros_2020.xlsx
 __pycache__
 *.exe
 PY/ETerm/FaceScrapper/FriendScrapper.py
+PY/ETerm/FaceScrapper/Graphs
+PY/ETerm/FaceScrapper/AdjacencyLists
