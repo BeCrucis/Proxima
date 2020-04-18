@@ -134,7 +134,7 @@ def get_tangent_vector(proportion, curve, dx=0.001, scale=1, color = WHITE):
     return vector
 
 def main():
-    os.system("manim Ludwing.py FieldWithAxes -pl")
+    os.system(r"manim Ludwing.py FieldWithAxes -pl")
 
 if __name__ == "__main__":
     main()    

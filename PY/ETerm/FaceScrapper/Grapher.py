@@ -17,14 +17,16 @@ title = ''' _______  ______    _______  _______  __   __  _______  ______
 # pylint: disable=no-member
 # pylint: disable=not-an-iterable
 
-# CONFIGURACION
+# CONFIGURACION #######################################################################################################
 
 # Id de facebook del nodo principal (el que esta en el centro de todo)
-principal_vertex_id = 'YURMEL'
+principal_vertex_id = 'edwardpara'
 # Posicion del archivo que tiene la lista de adyacencia
-adjacency_list_path = f'adyacency_{principal_vertex_id}_l6.txt'
+adjacency_list_path = f'adyacency_{principal_vertex_id}_l7.txt'
 # Nombre de la carpeta en donde se van a colocar los grafos
 output_dir_name = f'{principal_vertex_id}_graphs'
+
+#######################################################################################################################
 
 def main():
 
@@ -101,6 +103,7 @@ def main():
 
         # Asigna el color y grandeza del vertice
         graph.vs[i]['color'] = temp_color
+        graph.vs[i]['frame_color'] = temp_color
         graph.vs[i]['size'] = 40
     
     print(f'[SUCCESS] {i+1} vertices procesados!')
@@ -141,6 +144,7 @@ def main():
         for edge in connected_edges:
             edge['color'] = edge_color
             edge['width'] = 3
+            edge['degree'] = edge_whiteness
     
     print(f'[SUCCESS] Aristas hechas!')
 
@@ -150,11 +154,11 @@ def main():
     
     graph_style = {}
     
-    graph_style['bbox'] = (4000, 4000)
+    graph_style['bbox'] = (5000, 5000)
     graph_style['margin'] = (200, 200, 200, 200)
-    graph_style['vertex_label_dist'] = 1.2
+    graph_style['vertex_label_dist'] = 1.1
     graph_style['vertex_label_angle'] = 4.7
-    graph_style['autocurve'] = True
+    # graph_style['autocurve'] = True
 
     print(f'[INFO] Parametros de dibujo')
     for key in graph_style:
@@ -170,16 +174,21 @@ def main():
 
     print(f'[PROCESS] Agregando algoritmos de posicionamiento . . .')
     layout_types = []
-    layout_types.append('fr')
-    layout_types.append('kk')
-    layout_types.append('large')
+    # layout_types.append('fr')
+    # layout_types.append('kk')
+    # layout_types.append('large')
+    layout_types.append('opt')
     print(f'[SUCCESS] {len(layout_types)} algoritmos agregados!')
     
     for layout_type in layout_types:
         print(f'[PROCESS] Dibujando grafo con algoritmo {layout_type} . . .')
 
         if layout_type == 'fr':
-            graph_style['layout'] = graph.layout_fruchterman_reingold(weights=None, niter=10000, seed=None, start_temp=5, minx=None, maxx=None, miny=None, maxy=None, minz=None, maxz=None, grid="nogrid")
+            graph_style['layout'] = graph.layout_fruchterman_reingold(weights='degree', niter=20000, seed=None, minx=None, maxx=None, miny=None, maxy=None, minz=None, maxz=None, grid="nogrid")
+        
+        elif layout_type == 'opt':
+            graph_style['layout'] = graph.layout_graphopt(niter=20000, node_charge=0.02, node_mass=30, spring_length=0, spring_constant=2, max_sa_movement=5, seed=None)
+
         else:
             graph_style['layout'] = graph.layout(layout_type)
 
@@ -206,6 +215,7 @@ def main():
         shutil.move(f'graph_{principal_vertex_id}_{layout_type}.png', output_dir_name)
         print(f'[SUCCESS] Grafo {graph_file_name} movido a {output_dir_name}!')
     print(f'[SUCCESS] Grafos movidos!')
+
     print(f'[SUCCESS] Grapher ha terminado exitosamente!')
 
 

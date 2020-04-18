@@ -5,8 +5,6 @@ class AdjacencyList:
 
     def __init__(self, path):
 
-        
-
         raw_data = []
 
         print('[INFO] Iniciando importacion de lista de adyacencia')
@@ -37,6 +35,7 @@ class AdjacencyList:
             
             line_raw_connections = line.split('{')[-1][:-1] 
             line_connections = line_raw_connections.replace('\'', '').split(',')
+
             line_connections = [line.strip() for line in line_connections]
             self.id_dictionary[host_id] = host_name
             # print(f'[INFO] ID {host_id} agregada al diccionario de nombres . . .')
@@ -63,10 +62,3 @@ class AdjacencyList:
                 # print(f'[INFO] ID {connection_id} agregado como conexion de {host_id} . . .')
         
         print(f'[SUCCESS] Datos procesados!')
-                
-
-
-
-        
-
-            

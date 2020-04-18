@@ -519,7 +519,7 @@ def get_tangent_vector(proportion, curve, dx=0.001, scale=1, color = WHITE):
 
 def main():
     
-    os.system("manim Manim.py CircleCircle -p")
+    os.system("manim Manim.py CircleCircle -pl")
 
 if __name__ == "__main__":
     main()    
