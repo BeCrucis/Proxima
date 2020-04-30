@@ -509,7 +509,7 @@ class CircleCircle(GraphScene):
 #     def construct():
 #         pass
 
-def get_tangent_vector(proportion, curve, dx=0.001, scale=1, color = WHITE):
+def get_tangent_vector(proportion, curve, dx=0.001, scale=1, color = COLOR_MAP['WHITE']):
         coord_i = curve.point_from_proportion(proportion)
         coord_f = curve.point_from_proportion(proportion + dx)
         reference_line = Line(coord_i,coord_f)
@@ -523,3 +523,5 @@ def main():
 
 if __name__ == "__main__":
     main()    
+
+Ellipse
