@@ -28,10 +28,10 @@ def exportToTXT(list):
     
     file.close()
 
-codigo = "20255"
+codigo = "22956"
 
 br = Browser()
-br.open("http://uis.edu.co/estudiantes/asignaturas_programadas/buscador.html")
+br.open("https://www.uis.edu.co/estudiantes/asignaturas_programadas/buscador.html")
 
 br.select_form(name = "form1") # pylint: disable=no-member
 
@@ -80,7 +80,7 @@ profesores = []
 
 for grupo in grupos:
 
-    customLink = F"http://uis.edu.co/estudiantes/asignaturas_programadas/horario_asignatura.jsp?codigo={codigo}&grupo={grupo}%20&nombre=CUSTOM"
+    customLink = F"https://www.uis.edu.co/estudiantes/asignaturas_programadas/horario_asignatura.jsp?codigo={codigo}&grupo={grupo}&nombre=CUSTOM"
     
     groupInfo = ulib.urlopen(customLink).read()
     groupSoup = bs.BeautifulSoup(groupInfo, "html.parser")

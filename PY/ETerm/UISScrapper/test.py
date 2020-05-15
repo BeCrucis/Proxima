@@ -1,13 +1,17 @@
-from Asignatura import Asignatura
+from Asignatura import *
 
-codigos = [20253, 20254, 20255]
+codigos = [20254]
 
 for codigo in codigos:
 
-    asig = Asignatura(codigo)
-    asig.sortGroups()
+    try:
+        asig = Asignatura(codigo)
+        asig.sort_groups()
+        
+    except InvalidSubjectCode:
+        continue
 
-    with open(F"{asig.nombre}.txt", "w") as f:
+    with open(F"{asig.name}.txt", "w") as f:
 
-        for grupo in asig.grupos:
+        for grupo in asig.groups:
             f.write(str(grupo) + "\n")

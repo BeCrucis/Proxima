@@ -8,7 +8,6 @@ from selenium.webdriver import ActionChains
 from bs4 import BeautifulSoup
 import time
 import timeit
-import pyautogui
 import urllib.request
 import mutagen
 from mutagen.mp3 import MP3
@@ -16,7 +15,7 @@ from mutagen.id3 import ID3, APIC, error
 from mutagen.easyid3 import EasyID3
 import youtube_dl
 
-BANDCAMP_URL = "https://mrkittydm.bandcamp.com/album/time"
+BANDCAMP_URL = "https://curtisschweitzer.bandcamp.com/album/starbound-original-soundtrack"
 KHINSIDER_URL = "https://downloads.khinsider.com/game-soundtracks/album/rimworld"
 # YOUTUBE_URL = ""
 
@@ -46,8 +45,21 @@ def bandcamp(driver, URL):
     for track_name in track_names:
 
         track_number += 1
+
+        track_name = track_name.replace('(', '').replace(')', '')
+        track_name = track_name.replace(':', '')
+        track_name = track_name.replace('[', '').replace(']', '')
+
+        print(f'[INFO] Importando cancion {track_name}')
+
+        if os.path.exists(f'{track_name}.mp3'):
+            print(f'[INFO] Cancion {track_name} ya existente, continuando . . .')
+            continue
+
         track = track_name.replace(" ", "-")
         driver.get(f"{bandcamp_artist_url}/track/{track}")
+
+        
 
         driver.find_elements_by_class_name("playbutton")[0].click()
         driver.find_elements_by_class_name("playbutton")[0].click()

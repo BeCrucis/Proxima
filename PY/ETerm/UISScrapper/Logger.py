@@ -18,11 +18,11 @@ infoTag = tags[0]
 courseTag = tags[1]
 errorTag = tags[2]
 
-def infoLog(argument):
+def info_log(argument):
     print(f"{infoTag} {argument}")
 
-def courseLog(argument):
+def course_log(argument):
     print(f"{courseTag} {argument} . . .")
 
-def errorLog(argument):
+def error_log(argument):
     print(f"{errorTag} {argument}")

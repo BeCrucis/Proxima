@@ -1,38 +1,38 @@
 from mechanize import Browser
 import bs4 as bs
 import urllib.request as ulib
-from Grupo import Grupo
-from Logger import *
+from Grupo import Group
+import Logger as log
 
-class Asignatura:
+class Subject:
 
-    def __init__(self, subjectCode):
+    def __init__(self, subject_code, logging=True):
 
-        self.subjectcode = str(subjectCode)
+        self.subject_code = str(subject_code)
 
         #Las funciones que terminan en Log simplemente imprimen textos en formatos 
         #predeterminados para propositos de debugging
 
         print()
-        courseLog(f"Detectando asignatura de codigo : {self.subjectcode}")
+        log.course_log(f"Detectando asignatura de codigo : {self.subject_code}")
 
-        self.HTMLLines = self.getSubjectHTML()
+        self.html_lines = self.get_subjectHTML()
 
-        infoLog("Asignatura detectada!")
+        log.info_log("Asignatura detectada!")
 
-        self.name = str(self.HTMLLines[45]).strip()
+        self.name = str(self.html_lines[45]).strip()
 
-        infoLog(f"Nombre de la asignatura [{self.subjectcode}] : {self.name}")
-        courseLog(f"Obteniendo grupos de {self.name} . . .")
+        log.info_log(f"Nombre de la asignatura [{self.subject_code}] : {self.name}")
+        log.course_log(f"Obteniendo grupos de {self.name} . . .")
 
-        self.groups = self.getGroups(self.HTMLLines)
+        self.groups = self.get_groups(self.html_lines, logging)
 
-    def getSubjectHTML(self):
+    def get_subjectHTML(self):
 
         br = Browser()
-        br.open("http://uis.edu.co/estudiantes/asignaturas_programadas/buscador.html")
+        br.open("https://www.uis.edu.co/estudiantes/asignaturas_programadas/buscador.html")
         br.select_form(name = "form1") # pylint: disable=no-member
-        br.form['codigo'] = self.subjectcode # pylint: disable=no-member
+        br.form['codigo'] = self.subject_code # pylint: disable=no-member
         br.submit() # pylint: disable=no-member
 
         soup = bs.BeautifulSoup(br.response().read(), "html.parser") # pylint: disable=no-member
@@ -42,34 +42,37 @@ class Asignatura:
         #Se descubrio que si existe un parametro invalido, la respuesta del
         #servidor sera menor a 60 lineas de HTML
         if len(html) < 60: 
-            errorLog("Asignatura no detectada")
+            log.error_log("Asignatura no detectada")
             raise InvalidSubjectCode()
             
         return html
 
-    def getGroups(self, HTMLCode):
+    def get_groups(self, html_code, logging=True):
 
         index = 0
         groups = []
 
-        for line in HTMLCode:
+        for line in html_code:
 
             line = str(line).strip()
 
             if "Grupo" in line:
-                groupCode = line[7:]
+                group_code = line[7:]
 
-                infoLog(f"Grupo de {self.name} detectado: {groupCode}")
-                courseLog(f"[{groupCode}] Detectando información . . .")
+                if logging:
+                    log.info_log(f"Grupo de {self.name} detectado: {group_code}")
+                    log.course_log(f"[{group_code}] Detectando información . . .")
                 
-                groupCapacity = int(str(HTMLCode[index + 13]).strip())
-                groupStudents = int(str(HTMLCode[index + 20]).strip())
+                group_capacity = int(str(html_code[index + 13]).strip())
+                group_students = int(str(html_code[index + 20]).strip())
 
-                infoLog(f"[{groupCode}] Capacidad : {groupCapacity} -- Matriculados: {groupStudents}")
+                if logging:
+                    log.info_log(f"[{group_code}] Capacidad : {group_capacity} -- Matriculados: {group_students}")
 
-                group = Grupo(self.subjectcode, groupCode, groupCapacity, groupStudents)
+                group = Group(self.subject_code, self.name,  group_code, group_capacity, group_students, logging=logging)
 
-                print() #Deja un espacio para facilitar el logging entre grupos
+                if logging:
+                    print() #Deja un espacio para facilitar el logging entre grupos
 
                 groups.append(group)
 
@@ -77,9 +80,18 @@ class Asignatura:
         
         return groups
     
-    def sortGroups(self):
+    def get_group_by_code(self, group_code):
 
-        self.groups.sort(key=lambda x: x.deathIndex, reverse=False)
+        for group in self.groups:
+            if group.group_code == group_code:
+                return group
+        
+        log.error_log(f'Grupo {group_code} no encontrado')
+        return None
+    
+    def sort_groups(self):
+
+        self.groups.sort(key=lambda x: x.death_index, reverse=False)
 
 class InvalidSubjectCode(Exception):
     pass

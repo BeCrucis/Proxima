@@ -1,34 +1,41 @@
 import bs4 as bs
 import urllib.request as ulib
-from Logger import *
+import Logger as log
 import os
 
-class Grupo:
+class Group:
 
-    def __init__(self, subjectCode, groupCode, capacity: int, studentQuantity: int):
+    def __init__(self, subject_code, subject_name, group_code, capacity: int, student_quantity: int, logging=True):
 
-        self.subjectCode = subjectCode
-        self.groupCode = groupCode
+        self.subject_code = subject_code
+        self.subject_name = subject_name
+        self.group_code = group_code
         self.capacity = capacity
-        self.studentQuantity = studentQuantity
+        self.student_quantity = student_quantity
 
-        if studentQuantity >= capacity:
-            self.isFull = True
-            infoLog(f"[{self.groupCode}] Grupo lleno!")
+        if student_quantity >= capacity:
+            self.is_full = True
+            if logging:
+                log.info_log(f"[{self.group_code}] Grupo lleno!")
         else:
-            self.isFull = False
+            self.is_full = False
         
         # El link debajo es la base para obtener la informacion del grupo.
         # Para ello se usa web scraping en el link designado para el grupo
         # obtenido con el codigo de asignatura y codigo de grupo
 
-        customLink = f"http://uis.edu.co/estudiantes/asignaturas_programadas/horario_asignatura.jsp?codigo={self.subjectCode}&grupo={self.groupCode}%20&nombre=CUSTOM"
-        groupInfo = ulib.urlopen(customLink).read()
-        groupSoup = bs.BeautifulSoup(groupInfo, "html.parser")
-        self.html = groupSoup.prettify().split("\n")
+        # custom_link = f"http://uis.edu.co/estudiantes/asignaturas_programadas/horario_asignatura.jsp?codigo={self.subject_code}&grupo={self.group_code}%20&nombre=CUSTOM"
 
-        self.profesores = self.getTeachers()
-        infoLog(f"[{self.groupCode}] Profesores: {self.profesores}")
+        custom_link = f'https://www.uis.edu.co/estudiantes/asignaturas_programadas/horario_asignatura.jsp?codigo={self.subject_code}&grupo={self.group_code}&nombre=CUSTOM' 
+
+        group_info = ulib.urlopen(custom_link).read()
+        group_soup = bs.BeautifulSoup(group_info, "html.parser")
+        self.html = group_soup.prettify().split("\n")
+
+        self.teachers = self.get_teachers()
+
+        if logging:
+            log.info_log(f"[{self.group_code}] Profesores: {self.teachers}")
 
         # Se calcula el indice de muerte o bolsa en relacion a la cantidad de
         # estudiantes matriculados respecto a la capacidad del grupo, pues
@@ -37,23 +44,25 @@ class Grupo:
         # las referencias de DetodoUIS si averiguo como sacar las referencias de ahi
 
         try:
-            self.deathIndex = round(capacity/studentQuantity, 2) 
+            self.death_index = round(capacity/student_quantity, 2) 
         except:
-            self.deathIndex = 99
+            self.death_index = 99
 
-        self.schedule = self.getSchedule()
-        infoLog(f"[{self.groupCode}] Horario: {self.schedule}")
+        self.schedule = self.get_schedule()
+        
+        if logging:        
+            log.info_log(f"[{self.group_code}] Horario: {self.schedule}")
     
-    def getTeachers(self):
+    def get_teachers(self):
 
         teachers = []
 
-        lineIndex = 0
+        line_index = 0
 
         for line in self.html:
 
             if "profesor" in line.lower():
-                teacher = self.html[lineIndex + 3]
+                teacher = self.html[line_index + 3]
 
                 # En caso de que no haya un profesor designado, aparecera el string
                 # </td> en la variable teacher, se verifica que no este este string con 
@@ -66,58 +75,58 @@ class Grupo:
                     if not teachers:
                         teachers.append("Sin profesor")
 
-            lineIndex += 1
+            line_index += 1
 
         teachers = list(dict.fromkeys(teachers)) #Elimina los profesores duplicados
 
         return teachers
     
-    def getSchedule(self):
+    def get_schedule(self):
 
         schedule = {}
 
-        lineIndex = 0
+        line_index = 0
 
         for line in self.html:
 
             if "día" in line.lower():
 
-                day = self.html[lineIndex + 4].strip()
+                day = self.html[line_index + 4].strip()
                 schedule.setdefault(day, [])
 
-                hours = self.html[lineIndex + 14].strip()
+                hours = self.html[line_index + 14].strip()
 
                 schedule[day].append(hours)
 
-            lineIndex += 1
+            line_index += 1
 
         return schedule
 
     # Este es el formato que se usa en el archivo de texto creado para la asignatura pero
     # con colores, sin embargo parece no funcionar bien en la consola de Windows
-    def prettyPrint(self):
+    def pretty_print(self):
         
-        groupInfo = F"Grupo: [{self.groupCode}] // #: {self.studentQuantity} !: {self.capacity}"
-        groupTeachers = F"Profesores: {self.profesores} IB: {self.deathIndex}"
-        formattedString = F"{groupInfo}\n{groupTeachers}"
+        group_info = F"Grupo: [{self.group_code}] // #: {self.student_quantity} !: {self.capacity}"
+        group_teachers = F"Profesores: {self.teachers} IB: {self.death_index}"
+        formatted_string = F"{group_info}\n{group_teachers}"
 
-        if self.isFull:
-            formattedString = bcolors.FAIL + formattedString + bcolors.ENDC
+        if self.is_full:
+            formatted_string = bcolors.FAIL + formatted_string + bcolors.ENDC
 
-        print(formattedString)
+        print(formatted_string)
 
     # Este es el formato que se usa en el archivo de texto creado para la asignatura
     def __repr__(self):
         
-        groupInfo = F"Grupo: [{self.groupCode}] // #: {self.studentQuantity} !: {self.capacity}"
-        groupTeachers = F"Profesores: {self.profesores} IB: {self.deathIndex}"
-        groupSchedule = F"Horario: {self.schedule}"
-        formattedString = F"{groupInfo}\n{groupTeachers}\n{groupSchedule}\n"
+        group_info = F"Grupo: [{self.group_code}] // #: {self.student_quantity} !: {self.capacity}"
+        group_teachers = F"Profesores: {self.teachers} IB: {self.death_index}"
+        group_schedule = F"Horario: {self.schedule}"
+        formatted_string = F"{group_info}\n{group_teachers}\n{group_schedule}\n"
 
-        if self.isFull:
-            formattedString = formattedString + "||||||||||||||||||||||||||||||||||||||||"
+        if self.is_full:
+            formatted_string = formatted_string + "||||||||||||||||||||||||||||||||||||||||"
 
-        return formattedString
+        return formatted_string
 
 class bcolors:
     HEADER = '\033[95m'
