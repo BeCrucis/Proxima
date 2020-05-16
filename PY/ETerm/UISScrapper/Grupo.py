@@ -26,7 +26,7 @@ class Group:
 
         # custom_link = f"http://uis.edu.co/estudiantes/asignaturas_programadas/horario_asignatura.jsp?codigo={self.subject_code}&grupo={self.group_code}%20&nombre=CUSTOM"
 
-        custom_link = f'https://www.uis.edu.co/estudiantes/asignaturas_programadas/horario_asignatura.jsp?codigo={self.subject_code}&grupo={self.group_code}&nombre=CUSTOM' 
+        custom_link = f'https://www.uis.edu.co/estudiantes/asignaturas_programadas/horario_asignatura.jsp?codigo={self.subject_code}&grupo={self.group_code}&nombre=Gamma' 
 
         group_info = ulib.urlopen(custom_link).read()
         group_soup = bs.BeautifulSoup(group_info, "html.parser")
@@ -114,6 +114,9 @@ class Group:
             formatted_string = bcolors.FAIL + formatted_string + bcolors.ENDC
 
         print(formatted_string)
+    
+    def get_schedule_representation(self):
+        return f'{self.subject_code} {self.group_code}'
 
     # Este es el formato que se usa en el archivo de texto creado para la asignatura
     def __repr__(self):

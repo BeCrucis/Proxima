@@ -6,7 +6,7 @@ import Logger as log
 
 class Subject:
 
-    def __init__(self, subject_code, specific_group=None, logging=True):
+    def __init__(self, subject_code, logging=True):
 
         self.subject_code = str(subject_code)
 
@@ -20,14 +20,8 @@ class Subject:
         self.name = str(self.html_lines[45]).strip()
 
         log.info_log(f"Nombre de la asignatura [{self.subject_code}] : {self.name}")
-        log.course_log(f"Obteniendo grupos de {self.name} . . .")
 
-        self.groups = []
-
-        if not specific_group:
-            self.groups.append(self.import_all_groups(self.html_lines, logging))
-        else:
-            self.groups.append(self.import_specific_group(self.html_lines, specific_group, logging))
+        self.groups = {}
 
     def get_subjectHTML(self):
 
@@ -49,12 +43,14 @@ class Subject:
             
         return html
 
-    def import_all_groups(self, html_code, logging=True):
+    def import_all_groups(self, logging=True):
+
+        if logging:
+            log.course_log(f"Obteniendo grupos de {self.name} . . .")
 
         index = 0
-        groups = []
 
-        for line in html_code:
+        for line in self.html_lines:
 
             line = str(line).strip()
 
@@ -65,8 +61,8 @@ class Subject:
                     log.info_log(f"Grupo de {self.name} detectado: {group_code}")
                     log.course_log(f"[{group_code}] Detectando información . . .")
                 
-                group_capacity = int(str(html_code[index + 13]).strip())
-                group_students = int(str(html_code[index + 20]).strip())
+                group_capacity = int(str(self.html_lines[index + 13]).strip())
+                group_students = int(str(self.html_lines[index + 20]).strip())
 
                 if logging:
                     log.info_log(f"[{group_code}] Capacidad : {group_capacity} -- Matriculados: {group_students}")
@@ -76,45 +72,54 @@ class Subject:
                 if logging:
                     print() #Deja un espacio para facilitar el logging entre grupos
 
-                groups.append(group)
+                self.groups[group_code] = group
 
             index += 1
         
-        return groups
+        return True
+        
     
-    def import_specific_group(self, html_code, specific_group_code, logging=False):
+    def import_group(self, group_code, logging=False):
+
+        if logging:
+            log.course_log(f"Obteniendo grupo {group_code} de {self.name} . . .")
 
         index = 0
         groups = []
 
-        for line in html_code:
+        for line in self.html_lines:
 
             line = str(line).strip()
 
             if "Grupo" in line:
-                group_code = line[7:]
+                current_group_code = line[7:]
+
+                if logging:
+                    log.info_log(f"Grupo de {self.name} detectado: {group_code}")
+                    log.course_log(f"[{group_code}] Detectando información . . .")
                 
-                group_capacity = int(str(html_code[index + 13]).strip())
-                group_students = int(str(html_code[index + 20]).strip())
+                group_capacity = int(str(self.html_lines[index + 13]).strip())
+                group_students = int(str(self.html_lines[index + 20]).strip())
+
+                if logging:
+                    log.info_log(f"[{group_code}] Capacidad : {group_capacity} -- Matriculados: {group_students}")
                 
-                if group_code == specific_group_code:
+                if current_group_code == group_code:
                     group = Group(self.subject_code, self.name,  group_code, group_capacity, group_students, logging=logging)
-                    return group
+                    self.groups[group_code] = group
+                    return True
             
             index += 1
+        
+        return False
     
     def get_group_by_code(self, group_code):
 
-        for group in self.groups:
-            if group.group_code == group_code:
-                return group
+        if group_code in self.groups:
+            return self.groups[group_code]
         
         log.error_log(f'Grupo {group_code} no encontrado')
         return None
-    
-    def sort_groups(self):
-
-        self.groups.sort(key=lambda x: x.death_index, reverse=False)
 
 class InvalidSubjectCode(Exception):
     pass

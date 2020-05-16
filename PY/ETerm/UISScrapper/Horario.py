@@ -6,12 +6,12 @@ class Horario:
     def __init__(self):
         
         self.days = {}
-        self.days['LUNES'] = ['']*24
-        self.days['MARTES'] = ['']*24
-        self.days['MIERCOLES'] = ['']*24
-        self.days['JUEVES'] = ['']*24
-        self.days['VIERNES'] = ['']*24
-        self.days['SABADO'] = ['']*24
+        self.days['LUNES'] = {hour : None for hour in range(0,24)}
+        self.days['MARTES'] = {hour : None for hour in range(0,24)}
+        self.days['MIERCOLES'] = {hour : None for hour in range(0,24)}
+        self.days['JUEVES'] = {hour : None for hour in range(0,24)}
+        self.days['VIERNES'] = {hour : None for hour in range(0,24)}
+        self.days['SABADO'] = {hour : None for hour in range(0,24)}
 
         self.start_hour = 6
         self.finish_hour = 22
@@ -22,12 +22,12 @@ class Horario:
     def add_group(self, group):
 
         log.course_log(f'Agregando grupo {group.group_code} de {group.subject_name}')
-        group_schedule = group.schedule
+
         temp_days = self.days.copy()
         
-        for day in group_schedule:
+        for day in group.schedule:
 
-            for lesson in group_schedule[day]:
+            for lesson in group.schedule[day]:
                 lesson_hours = lesson
                 lesson_hour_data = [int(hour.strip()) for hour in lesson_hours.split('-')]
                 lesson_start_hour = lesson_hour_data[0]
@@ -38,7 +38,8 @@ class Horario:
                     log.error_log('Grupo no compatible')
                     return False
 
-                temp_days[day][lesson_start_hour:lesson_finish_hour] = [f'{group.subject_code} {group.group_code}']*lesson_duration
+                for hour in range(lesson_start_hour, lesson_finish_hour):
+                    temp_days[day][hour] = group
         
         self.days = temp_days
         
@@ -67,14 +68,13 @@ class Horario:
         log.course_log(f'Detectando horarios compatibles de {subject.name}')
         compatible_groups = []
 
-        for group in subject.groups:
+        for group in subject.groups.values():
 
             is_compatible = True
-            group_schedule = group.schedule
             
-            for day in group_schedule:
+            for day in group.schedule:
 
-                for lesson in group_schedule[day]:
+                for lesson in group.schedule[day]:
                     lesson_hours = lesson
                     lesson_hour_data = [int(hour.strip()) for hour in lesson_hours.split('-')]
                     lesson_start_hour = lesson_hour_data[0]
@@ -121,7 +121,14 @@ class Horario:
 
             print(f'{hour}'.ljust(3), end='')
             for day in self.days:
-                print('|' + f'{self.days[day][hour]}'.center(justify_length-2) + '|', end='')   
+
+                hour_content = self.days[day][hour]
+                if  hour_content is not None:
+                    hour_info = hour_content.get_schedule_representation()
+                else:
+                    hour_info = ''
+
+                print('|' + f'{hour_info}'.center(justify_length-2) + '|', end='')   
             print()
         
         # Lineas separadoras verticales

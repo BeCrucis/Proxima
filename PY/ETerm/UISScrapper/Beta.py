@@ -8,20 +8,25 @@ codigos = [20255,22957,22958,22959]
 
 horario = Horario()
 
-equations = Subject(20255, False, 'A4')
-horario.add_group(equations.groups[0])
+equations = Subject(20255)
+equations.import_group('A4')
+horario.add_group(equations.get_group_by_code('A4'))
 
-physics = Subject(22956, False, 'A4A')
-horario.add_group(physics.groups[0])
+physics = Subject(22956)
+physics.import_group('A4A')
+horario.add_group(physics.get_group_by_code('A4A'))
 
-electricity = Subject(22957, False, 'D1')
-horario.add_group(electricity.groups[0])
+electricity = Subject(22957)
+electricity.import_group('D1')
+horario.add_group(electricity.get_group_by_code('D1'))
 
-automats = Subject(22958, False, 'H2')
-horario.add_group(automats.groups[0])
+automats = Subject(22958)
+automats.import_group('H2')
+horario.add_group(automats.get_group_by_code('H2'))
 
-databases = Subject(22959, False, 'B1')
-horario.add_group(databases.groups[0])
+databases = Subject(22959)
+databases.import_group('B1')
+horario.add_group(databases.get_group_by_code('B1'))
 
 # dif = Subject(22956, logging=False)
 # print(f'Cantidad de grupos disponibles: {len(dif.groups)}')
