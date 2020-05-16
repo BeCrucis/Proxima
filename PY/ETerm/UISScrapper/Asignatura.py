@@ -6,12 +6,9 @@ import Logger as log
 
 class Subject:
 
-    def __init__(self, subject_code, logging=True):
+    def __init__(self, subject_code, specific_group=None, logging=True):
 
         self.subject_code = str(subject_code)
-
-        #Las funciones que terminan en Log simplemente imprimen textos en formatos 
-        #predeterminados para propositos de debugging
 
         print()
         log.course_log(f"Detectando asignatura de codigo : {self.subject_code}")
@@ -25,7 +22,12 @@ class Subject:
         log.info_log(f"Nombre de la asignatura [{self.subject_code}] : {self.name}")
         log.course_log(f"Obteniendo grupos de {self.name} . . .")
 
-        self.groups = self.get_groups(self.html_lines, logging)
+        self.groups = []
+
+        if not specific_group:
+            self.groups.append(self.import_all_groups(self.html_lines, logging))
+        else:
+            self.groups.append(self.import_specific_group(self.html_lines, specific_group, logging))
 
     def get_subjectHTML(self):
 
@@ -47,7 +49,7 @@ class Subject:
             
         return html
 
-    def get_groups(self, html_code, logging=True):
+    def import_all_groups(self, html_code, logging=True):
 
         index = 0
         groups = []
@@ -79,6 +81,27 @@ class Subject:
             index += 1
         
         return groups
+    
+    def import_specific_group(self, html_code, specific_group_code, logging=False):
+
+        index = 0
+        groups = []
+
+        for line in html_code:
+
+            line = str(line).strip()
+
+            if "Grupo" in line:
+                group_code = line[7:]
+                
+                group_capacity = int(str(html_code[index + 13]).strip())
+                group_students = int(str(html_code[index + 20]).strip())
+                
+                if group_code == specific_group_code:
+                    group = Group(self.subject_code, self.name,  group_code, group_capacity, group_students, logging=logging)
+                    return group
+            
+            index += 1
     
     def get_group_by_code(self, group_code):
 
