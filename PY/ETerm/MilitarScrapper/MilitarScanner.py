@@ -8,6 +8,15 @@ import time
 import openpyxl
 from Student import Student
 import unidecode
+import asyncio
+import copy
+
+WD_PATH = 'F:/Downloads/Carpetas/Utility/Temp/chromedriver83.exe'
+TERM_NUMBER = 2
+TERM_NAME = 'Segundo'
+YEAR = '2020'
+OED_PAGE = 'https://colmilgeneralsantander.phidias.co/poll/consolidate/people?poll=32'
+ED_PAGE = 'https://colmilgeneralsantander.phidias.co/poll/consolidate/people?poll=4'
 
 def click_course(driver, observer_link, course_name):
 
@@ -46,53 +55,7 @@ def get_links_from_course(driver):
 
 	return links
 
-def import_student_info_oed(driver, student_link):
-
-	driver.get(student_link)
-
-	studentInfo = driver.find_elements_by_css_selector("span[person_role=\"estudiante\"]")[0]
-
-	studentName = studentInfo.get_attribute("innerHTML")
-
-	current_student = Student(studentName)
-
-	fechas = driver.find_elements_by_css_selector("td[class =\"poll record fixedrow sel\"]")
-	
-	if fechas:
-
-		soup = BeautifulSoup(driver.page_source, features="lxml")
-		elements = soup.find_all("tr")
-
-		observerEntries = elements[4:]
-		
-		for entry in observerEntries:
-			entryData = entry.findChildren("td" , recursive=False)
-			if entryData[5].text.upper() == "Primer Periodo".upper():
-				rawFecha = entryData[2].text
-				formattedFecha = rawFecha[:10]
-
-				current_student.add_oed_observation(formattedFecha, '2020')
-
-	return current_student
-
-# def import_observer_info(driver, observerLink, observerName, courseName):
-
-# 	click_course(driver, observerLink, courseName)
-
-# 	time.sleep(2)
-	
-# 	links = get_links_from_course(driver)
-
-# 	students = []
-	
-# 	for link in links:
-
-# 		student = import_student_info_oed(driver, link)
-# 		students.append(student)
-
-# 	return students
-
-def get_course_students_oed(driver, observer_link, course_name):
+def get_course_students_oed(driver, observer_link, course_name, year, term_name):
 
 	click_course(driver, observer_link, course_name)
 	time.sleep(2)
@@ -103,12 +66,41 @@ def get_course_students_oed(driver, observer_link, course_name):
 
 	for link in links:
 		current_student = Student()
-		current_student.import_oed_info(driver, link, '2020', 'Primer')
+		current_student.import_oed_info(driver, link, year, term_name)
 		students.append(current_student)
 	
 	return students
 
-def update_students_ed_info(driver, observer_link, course_name, student_list):
+def get_async_course_students_oed(driver, observer_link, course_name, year, term_name):
+
+	click_course(driver, observer_link, course_name)
+	time.sleep(2)
+
+	links = get_links_from_course(driver)
+
+	tasks = []
+	loop = asyncio.get_event_loop()
+
+	for link in links:
+
+		group_creator = loop.run_in_executor(None, create_student, driver, link, year, term_name)
+		tasks.append(group_creator)
+	
+	students = loop.run_until_complete(asyncio.gather(*tasks))
+	
+	return students
+
+
+def create_student(driver, link, year, term):
+
+	current_student = Student()
+	driver_copy = copy.copy(driver)
+	current_student.import_oed_info(driver_copy, link, year, term)
+	
+	return current_student
+	
+
+def update_students_ed_info(driver, observer_link, course_name, student_list, year, term_number):
 
 	click_course(driver, observer_link, course_name)
 	time.sleep(2)
@@ -123,7 +115,7 @@ def update_students_ed_info(driver, observer_link, course_name, student_list):
 
 		for student in student_list:
 			if student.id == student_id:
-				student.import_ed_info(driver, link, '2020')
+				student.import_ed_info(driver, link, year, term_number)
 
 def write_to_excel(driver, course_link, course_name, student_list, term):
 	
@@ -201,10 +193,10 @@ def main(headless = False):
 
 		options = Options()
 		options.headless = True
-		driver = webdriver.Chrome("F:/Downloads/Carpetas/Utility/Temp/chromedriver.exe", options=options)
+		driver = webdriver.Chrome(WD_PATH, options=options)
 	
 	else:
-		driver = webdriver.Chrome("F:/Downloads/Carpetas/Utility/Temp/chromedriver.exe")
+		driver = webdriver.Chrome(WD_PATH)
 		print("Usando Chrome con cabeza")
 
 	driver.get("https://colmilgeneralsantander.phidias.co/")
@@ -219,20 +211,20 @@ def main(headless = False):
 
 	courses = {}
 
-	# courses["PREJARDIN"] = ["PREJARDIN 1"]
-	# courses["JARDIN"] = ["JARDIN 1"]
+	courses["PREJARDIN"] = ["PREJARDIN 1"]
+	courses["JARDIN"] = ["JARDIN 1"]
 	courses["TRANSICION"] = ["TRANSICION 1"]
 	courses["PRIMERO"] = ["PRIMERO 1"]
 	courses["SEGUNDO"] = ["SEGUNDO 1"]
 	courses["TERCERO"] = ["TERCERO 1"]
-	courses["CUARTO"] = ["CUARTO 1"]
-	courses["QUINTO"] = ["QUINTO 1"]
-	courses["SEXTO"] = ["SEXTO 1", "SEXTO 2"]
-	courses["SEPTIMO"] = ["SEPTIMO 1", "SEPTIMO 2"]
-	courses["OCTAVO"] = ["OCTAVO 1", "OCTAVO 2", "OCTAVO 3"]
-	courses["NOVENO"] = ["NOVENO 1", "NOVENO 2"]
-	courses["DECIMO"] = ["DECIMO 1", "DECIMO 2"]
-	courses["UNDECIMO"] = ["UNDECIMO 1"]
+	# courses["CUARTO"] = ["CUARTO 1"]
+	# courses["QUINTO"] = ["QUINTO 1"]
+	# courses["SEXTO"] = ["SEXTO 1", "SEXTO 2"]
+	# courses["SEPTIMO"] = ["SEPTIMO 1", "SEPTIMO 2"]
+	# courses["OCTAVO"] = ["OCTAVO 1", "OCTAVO 2", "OCTAVO 3"]
+	# courses["NOVENO"] = ["NOVENO 1", "NOVENO 2"]
+	# courses["DECIMO"] = ["DECIMO 1", "DECIMO 2"]
+	# courses["UNDECIMO"] = ["UNDECIMO 1"]
 
 	for courseGrade in courses:
 
@@ -240,35 +232,10 @@ def main(headless = False):
 
 			courseName = F"{courseGrade} {course}"
 
-			students = get_course_students_oed(driver, "https://colmilgeneralsantander.phidias.co/poll/consolidate/people?poll=32", courseName)
-			update_students_ed_info(driver, 'https://colmilgeneralsantander.phidias.co/poll/consolidate/people?poll=4', courseName, students)
+			students = get_course_students_oed(driver, OED_PAGE, courseName, YEAR, TERM_NAME)
+			update_students_ed_info(driver, ED_PAGE, courseName, students, YEAR, TERM_NUMBER)
 
-			write_to_excel(driver, 'https://colmilgeneralsantander.phidias.co/person/printables/checklist', courseName, students, 1)
-
-			# with open(F"{courseName}.txt", "w") as f:
-
-			# 	infoFile = open(F"{courseName}INFO.txt", "w")
-			# 	califFile = open(F"{courseName}GRADES.txt", "w")
-			# 	nameFile = open(F"{courseName}NAMES.txt", "w")
-
-			# 	print(courseName)
-
-			# 	for student in students:
-					
-			# 		student_oed_observations = [f'OED {observation}' for observation in student.oed_observations]
-
-			# 		print(F"{student}: {student_oed_observations}")
-			# 		print()
-
-			# 		f.write(F"{student} : {(100-(len(student_oed_observations)*5))/10} : {' '.join(student_oed_observations) }\n")
-			# 		califFile.write(F"{(98-(len(student_oed_observations)*3))/10}\n")
-					
-			# 		infoFile.write(F"{' '.join(student_oed_observations) }\n")
-			# 		nameFile.write(F"{str(student).upper()}\n")
-
-			# 	infoFile.close()
-			# 	califFile.close()
-			# 	nameFile.close()
+			write_to_excel(driver, 'https://colmilgeneralsantander.phidias.co/person/printables/checklist', courseName, students, TERM_NUMBER)
 			
 
 main()

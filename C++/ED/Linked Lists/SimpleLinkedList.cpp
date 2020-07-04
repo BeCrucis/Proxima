@@ -8,43 +8,18 @@ struct nodo
 	nodo *sig;
 };
 
-class linkedList{
+class Vector{
 
     nodo *firstNode, *lastNode;
     int lenght;
 
     public:
 
-    linkedList(){
+    Vector(){
 
         this->firstNode = NULL;
         this->lastNode = NULL;
         this->lenght = 0;
-    }
-
-    ~linkedList(){
-        
-        int i = 0;
-
-        while(this->firstNode != this->lastNode){
-
-            nodo *previousNode = this->firstNode;
-            this->firstNode = this->firstNode->sig;
-            cout << "Borrando " << previousNode->data << " en la posicion " << "["<<i<<"]"<<endl;
-
-            this->lenght -= 1;
-            i += 1;
-
-            delete previousNode;
-
-        }
-
-        if(this->lenght > 0){
-            cout << "Borrando " << firstNode->data << " en la posicion " << "["<<i<<"]"<<endl;
-            this->lenght -= 1;
-            delete this->firstNode;
-            cout << "Borrando lista encadenada" <<endl;
-        } 
     }
 
     void add(int data){
@@ -145,6 +120,7 @@ class linkedList{
         return currentNode->data;
     }
 
+    // Leer vector
     string to_string(){
 
         string out = "[";
@@ -166,7 +142,7 @@ class linkedList{
 
 int main(){
 
-    linkedList list;
+    Vector list;
 
     for (int i = 1; i <= 10; i++){
 

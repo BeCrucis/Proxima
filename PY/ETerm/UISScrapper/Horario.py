@@ -16,38 +16,34 @@ class Horario:
         self.start_hour = 6
         self.finish_hour = 22
 
-        self.teachers = []
-        self.subject_info = {}
+        self.teachers = {}
+        self.subjects = {}
+        self.groups = {}
     
     def add_group(self, group):
 
-        log.course_log(f'Agregando grupo {group.group_code} de {group.subject_name}')
+        log.course_log(f'Agregando grupo {group.code} de {group.subject.name}')
 
         temp_days = self.days.copy()
         
         for day in group.schedule:
 
-            for lesson in group.schedule[day]:
-                lesson_hours = lesson
-                lesson_hour_data = [int(hour.strip()) for hour in lesson_hours.split('-')]
-                lesson_start_hour = lesson_hour_data[0]
-                lesson_finish_hour = lesson_hour_data[1]
-                lesson_duration = lesson_finish_hour - lesson_start_hour
+            for hour in group.schedule[day]:
 
-                if not self.check_schedule(day, lesson_start_hour) or not self.check_schedule(day, lesson_finish_hour-1):
+                if not self.check_schedule(day, hour):
                     log.error_log('Grupo no compatible')
                     return False
 
-                for hour in range(lesson_start_hour, lesson_finish_hour):
-                    temp_days[day][hour] = group
+                temp_days[day][hour] = group                
         
         self.days = temp_days
+        self.teachers[group.subject.code] = []
+        self.subjects[group.subject.code] = group.subject.name
+        self.groups[group.subject.code] = group.code
         
         for teacher in group.teachers:
             if teacher != 'Sin profesor':
-                self.teachers.append(teacher)
-        
-        self.subject_info[group.subject_name] = group.subject_code
+                self.teachers[group.subject.code].append(teacher)   
 
         return True
     
@@ -74,19 +70,14 @@ class Horario:
             
             for day in group.schedule:
 
-                for lesson in group.schedule[day]:
-                    lesson_hours = lesson
-                    lesson_hour_data = [int(hour.strip()) for hour in lesson_hours.split('-')]
-                    lesson_start_hour = lesson_hour_data[0]
-                    lesson_finish_hour = lesson_hour_data[1]
-                    lesson_duration = lesson_finish_hour - lesson_start_hour
+                for hour in group.schedule[day]:
 
-                    if not self.check_schedule(day, lesson_start_hour) or not self.check_schedule(day, lesson_finish_hour-1):
+                    if not self.check_schedule(day, hour):
                         is_compatible = False
                         break
             
             if is_compatible:
-                compatible_groups.append(group.group_code)
+                compatible_groups.append(group.code)
         
         return compatible_groups
 

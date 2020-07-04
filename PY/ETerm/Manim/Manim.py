@@ -505,6 +505,8 @@ class CircleCircle(GraphScene):
             )
         self.wait()
 
+        Vector
+
 # class Test():
 #     def construct():
 #         pass

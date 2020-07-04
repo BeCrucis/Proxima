@@ -5,55 +5,50 @@ import os
 
 class Group:
 
-    def __init__(self, subject_code, subject_name, group_code, capacity: int, student_quantity: int, logging=True):
+    def __init__(self, subject, group_code, capacity: int, student_quantity: int, logging=True):
 
-        self.subject_code = subject_code
-        self.subject_name = subject_name
-        self.group_code = group_code
+        self.subject = subject
+        self.code = group_code
         self.capacity = capacity
         self.student_quantity = student_quantity
 
         if student_quantity >= capacity:
             self.is_full = True
             if logging:
-                log.info_log(f"[{self.group_code}] Grupo lleno!")
+                log.info_log(f"[{self.code}] Grupo lleno!")
         else:
             self.is_full = False
         
+        self.html = self._get_html()
+        self.teachers = self._get_teachers(logging)
+
+        try:
+            self.capacity_index = round(capacity/student_quantity, 2) 
+        except:
+            self.capacity_index = 99
+
+        self.raw_schedule = self._get_schedule()
+        self.schedule = self._parse_raw_schedule()
+        
+        if logging:        
+            log.info_log(f"[{self.code}] Horario: {self.schedule}")
+    
+
+    def _get_html(self):
+
         # El link debajo es la base para obtener la informacion del grupo.
         # Para ello se usa web scraping en el link designado para el grupo
         # obtenido con el codigo de asignatura y codigo de grupo
-
-        # custom_link = f"http://uis.edu.co/estudiantes/asignaturas_programadas/horario_asignatura.jsp?codigo={self.subject_code}&grupo={self.group_code}%20&nombre=CUSTOM"
-
-        custom_link = f'https://www.uis.edu.co/estudiantes/asignaturas_programadas/horario_asignatura.jsp?codigo={self.subject_code}&grupo={self.group_code}&nombre=Gamma' 
+        custom_link = f'https://www.uis.edu.co/estudiantes/asignaturas_programadas/horario_asignatura.jsp?codigo={self.subject.code}&grupo={self.code}&nombre=Gamma' 
 
         group_info = ulib.urlopen(custom_link).read()
         group_soup = bs.BeautifulSoup(group_info, "html.parser")
-        self.html = group_soup.prettify().split("\n")
 
-        self.teachers = self.get_teachers()
+        prettified_soup = group_soup.prettify().split("\n")
+        return prettified_soup
 
-        if logging:
-            log.info_log(f"[{self.group_code}] Profesores: {self.teachers}")
 
-        # Se calcula el indice de muerte o bolsa en relacion a la cantidad de
-        # estudiantes matriculados respecto a la capacidad del grupo, pues
-        # me da pereza sacar un algoritmo mas complejo para algo tan subjetivo
-        # como ver si el profesor es coche o bolsa, quiza algun dia lo saque de
-        # las referencias de DetodoUIS si averiguo como sacar las referencias de ahi
-
-        try:
-            self.death_index = round(capacity/student_quantity, 2) 
-        except:
-            self.death_index = 99
-
-        self.schedule = self.get_schedule()
-        
-        if logging:        
-            log.info_log(f"[{self.group_code}] Horario: {self.schedule}")
-    
-    def get_teachers(self):
+    def _get_teachers(self, logging=True):
 
         teachers = []
 
@@ -79,9 +74,12 @@ class Group:
 
         teachers = list(dict.fromkeys(teachers)) #Elimina los profesores duplicados
 
+        if logging:
+            log.info_log(f"[{self.code}] Profesores: {teachers}")
+
         return teachers
     
-    def get_schedule(self):
+    def _get_schedule(self):
 
         schedule = {}
 
@@ -101,13 +99,31 @@ class Group:
             line_index += 1
 
         return schedule
+    
+    def _parse_raw_schedule(self):
+
+        schedule = {}
+
+        for day in self.raw_schedule:
+
+            schedule[day] = []
+            
+            for lesson in self.raw_schedule[day]:
+                lesson_hours = lesson
+                lesson_hour_data = [int(hour.strip()) for hour in lesson_hours.split('-')]
+                lesson_start_hour = lesson_hour_data[0]
+                lesson_finish_hour = lesson_hour_data[1]
+
+                schedule[day].extend(list(range(lesson_start_hour, lesson_finish_hour)))
+        
+        return schedule
 
     # Este es el formato que se usa en el archivo de texto creado para la asignatura pero
     # con colores, sin embargo parece no funcionar bien en la consola de Windows
     def pretty_print(self):
         
-        group_info = F"Grupo: [{self.group_code}] // #: {self.student_quantity} !: {self.capacity}"
-        group_teachers = F"Profesores: {self.teachers} IB: {self.death_index}"
+        group_info = F"Grupo: [{self.code}] // #: {self.student_quantity} !: {self.capacity}"
+        group_teachers = F"Profesores: {self.teachers} IB: {self.capacity_index}"
         formatted_string = F"{group_info}\n{group_teachers}"
 
         if self.is_full:
@@ -116,14 +132,14 @@ class Group:
         print(formatted_string)
     
     def get_schedule_representation(self):
-        return f'{self.subject_code} {self.group_code}'
+        return f'{self.subject.code} {self.code}'
 
     # Este es el formato que se usa en el archivo de texto creado para la asignatura
     def __repr__(self):
         
-        group_info = F"Grupo: [{self.group_code}] // #: {self.student_quantity} !: {self.capacity}"
-        group_teachers = F"Profesores: {self.teachers} IB: {self.death_index}"
-        group_schedule = F"Horario: {self.schedule}"
+        group_info = F"Grupo: [{self.code}] // #: {self.student_quantity} !: {self.capacity}"
+        group_teachers = F"Profesores: {self.teachers} IB: {self.capacity_index}"
+        group_schedule = F"Horario: {self.raw_schedule}"
         formatted_string = F"{group_info}\n{group_teachers}\n{group_schedule}\n"
 
         if self.is_full:
